@@ -1,0 +1,178 @@
+{
+  "carts": [
+    {
+      "cart_id": "CART-BUYER001",
+      "customer_id": "BUYER001",
+      "items": [],
+      "subtotal": 0.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 0.00,
+      "last_updated": "2024-12-18T10:30:00Z",
+      "session_id": "sess_abc123xyz"
+    },
+    {
+      "cart_id": "CART-BUYER002",
+      "customer_id": "BUYER002",
+      "items": [
+        {
+          "cart_item_id": "CI001",
+          "product_id": "PROD006",
+          "part_number": "ACF50-13OZ",
+          "product_name": "ACF-50 Anti-Corrosion Spray (13 oz)",
+          "quantity": 10,
+          "unit_price": 40.38,
+          "total_price": 403.80,
+          "added_date": "2024-12-17T14:20:00Z"
+        },
+        {
+          "cart_item_id": "CI002",
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 5,
+          "unit_price": 26.68,
+          "total_price": 133.40,
+          "added_date": "2024-12-17T14:25:00Z"
+        }
+      ],
+      "subtotal": 537.20,
+      "tax": 53.72,
+      "shipping": 45.00,
+      "total_amount": 635.92,
+      "last_updated": "2024-12-17T14:25:00Z",
+      "session_id": "sess_ghi789rst"
+    },
+    {
+      "cart_id": "CART-BUYER003",
+      "customer_id": "BUYER003",
+      "items": [],
+      "subtotal": 0.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 0.00,
+      "last_updated": "2024-12-15T09:00:00Z",
+      "session_id": "sess_jkl012mno"
+    },
+    {
+      "cart_id": "CART-BUYER004",
+      "customer_id": "BUYER004",
+      "items": [],
+      "subtotal": 0.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 0.00,
+      "last_updated": "2024-12-18T08:15:00Z",
+      "session_id": "sess_vwx678yza"
+    },
+    {
+      "cart_id": "CART-BUYER005",
+      "customer_id": "BUYER005",
+      "items": [
+        {
+          "cart_item_id": "CI003",
+          "product_id": "PROD010",
+          "part_number": "BEARING-SET-200",
+          "product_name": "Precision Aircraft Bearing Set",
+          "quantity": 3,
+          "unit_price": 403.75,
+          "total_price": 1211.25,
+          "added_date": "2024-12-18T11:00:00Z"
+        }
+      ],
+      "subtotal": 1211.25,
+      "tax": 121.13,
+      "shipping": 65.00,
+      "total_amount": 1397.38,
+      "last_updated": "2024-12-18T11:00:00Z",
+      "session_id": "sess_bcd901efg"
+    },
+    {
+      "cart_id": "CART-BUYER006",
+      "customer_id": "BUYER006",
+      "items": [],
+      "subtotal": 0.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 0.00,
+      "last_updated": "2024-12-12T16:30:00Z",
+      "session_id": "sess_hij234klm"
+    },
+    {
+      "cart_id": "CART-BUYER007",
+      "customer_id": "BUYER007",
+      "items": [
+        {
+          "cart_item_id": "CI004",
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 5,
+          "unit_price": 850.45,
+          "total_price": 4252.25,
+          "added_date": "2024-12-18T09:30:00Z"
+        }
+      ],
+      "subtotal": 4252.25,
+      "tax": 425.23,
+      "shipping": 85.00,
+      "total_amount": 4762.48,
+      "last_updated": "2024-12-18T09:30:00Z",
+      "session_id": "sess_nop567qrs"
+    },
+    {
+      "cart_id": "CART-BUYER008",
+      "customer_id": "BUYER008",
+      "items": [],
+      "subtotal": 0.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 0.00,
+      "last_updated": "2024-12-14T13:45:00Z",
+      "session_id": "sess_tuv890wxy"
+    },
+    {
+      "cart_id": "CART-BUYER009",
+      "customer_id": "BUYER009",
+      "items": [
+        {
+          "cart_item_id": "CI005",
+          "product_id": "PROD007",
+          "part_number": "ACF50-KIT",
+          "product_name": "ACF-50 Starter Kit with Applicator",
+          "quantity": 2,
+          "unit_price": 118.75,
+          "total_price": 237.50,
+          "added_date": "2024-12-18T10:00:00Z"
+        },
+        {
+          "cart_item_id": "CI006",
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 10,
+          "unit_price": 26.68,
+          "total_price": 266.80,
+          "added_date": "2024-12-18T10:05:00Z"
+        }
+      ],
+      "subtotal": 504.30,
+      "tax": 50.43,
+      "shipping": 45.00,
+      "total_amount": 599.73,
+      "last_updated": "2024-12-18T10:05:00Z",
+      "session_id": "sess_aaa111bbb"
+    },
+    {
+      "cart_id": "CART-BUYER010",
+      "customer_id": "BUYER010",
+      "items": [],
+      "subtotal": 0.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 0.00,
+      "last_updated": "2024-12-17T15:20:00Z",
+      "session_id": "sess_ccc222ddd"
+    }
+  ]
+}

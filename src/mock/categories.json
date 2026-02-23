@@ -1,0 +1,164 @@
+{
+  "categories": [
+    {
+      "category_id": "CAT001",
+      "name": "Pilot Supplies",
+      "description": "Essential supplies and equipment for pilots",
+      "sub_categories": [
+        {
+          "sub_category_id": "SUBCAT001",
+          "name": "Safety / Survival",
+          "description": "Safety equipment and survival gear"
+        },
+        {
+          "sub_category_id": "SUBCAT002",
+          "name": "ELT Emergency Locator Transmitter",
+          "description": "Emergency locator transmitters and accessories"
+        },
+        {
+          "sub_category_id": "SUBCAT003",
+          "name": "First Aid Kit",
+          "description": "Aviation first aid kits and medical supplies"
+        }
+      ],
+      "icon": "pilot-icon.png",
+      "display_order": 1
+    },
+    {
+      "category_id": "CAT002",
+      "name": "Hardware",
+      "description": "Aircraft hardware components and parts",
+      "sub_categories": [
+        {
+          "sub_category_id": "SUBCAT004",
+          "name": "Screws",
+          "description": "Aviation grade screws and fasteners"
+        },
+        {
+          "sub_category_id": "SUBCAT005",
+          "name": "Nuts",
+          "description": "Aircraft nuts and locking hardware"
+        },
+        {
+          "sub_category_id": "SUBCAT006",
+          "name": "Washers",
+          "description": "Washers and spacing hardware"
+        },
+        {
+          "sub_category_id": "SUBCAT007",
+          "name": "Fittings",
+          "description": "Hydraulic and pneumatic fittings"
+        },
+        {
+          "sub_category_id": "SUBCAT008",
+          "name": "Bushings",
+          "description": "Bushings and sleeves"
+        },
+        {
+          "sub_category_id": "SUBCAT009",
+          "name": "Bearings",
+          "description": "Aircraft bearings and related components"
+        },
+        {
+          "sub_category_id": "SUBCAT010",
+          "name": "Dies",
+          "description": "Precision dies and tooling"
+        },
+        {
+          "sub_category_id": "SUBCAT011",
+          "name": "Hydraulic Systems",
+          "description": "Hydraulic pumps, valves, and components"
+        }
+      ],
+      "icon": "hardware-icon.png",
+      "display_order": 2
+    },
+    {
+      "category_id": "CAT003",
+      "name": "Miscellaneous Chemicals",
+      "description": "Aviation chemicals and maintenance products",
+      "sub_categories": [
+        {
+          "sub_category_id": "SUBCAT012",
+          "name": "Corrosion Prevention",
+          "description": "Anti-corrosion treatments and compounds"
+        },
+        {
+          "sub_category_id": "SUBCAT013",
+          "name": "Cleaners",
+          "description": "Aviation cleaners and degreasers"
+        },
+        {
+          "sub_category_id": "SUBCAT014",
+          "name": "Lubricants",
+          "description": "Aviation lubricants and oils"
+        },
+        {
+          "sub_category_id": "SUBCAT015",
+          "name": "Sealants",
+          "description": "Aviation grade sealants and adhesives"
+        },
+        {
+          "sub_category_id": "SUBCAT016",
+          "name": "Paints & Coatings",
+          "description": "Aircraft paints and protective coatings"
+        }
+      ],
+      "icon": "chemicals-icon.png",
+      "display_order": 3
+    },
+    {
+      "category_id": "CAT004",
+      "name": "Tools",
+      "description": "Aviation maintenance tools and equipment",
+      "sub_categories": [
+        {
+          "sub_category_id": "SUBCAT017",
+          "name": "Hand Tools",
+          "description": "General hand tools for aircraft maintenance"
+        },
+        {
+          "sub_category_id": "SUBCAT018",
+          "name": "Power Tools",
+          "description": "Electric and pneumatic power tools"
+        },
+        {
+          "sub_category_id": "SUBCAT019",
+          "name": "Torque Tools",
+          "description": "Torque wrenches and calibrated tools"
+        },
+        {
+          "sub_category_id": "SUBCAT020",
+          "name": "Safety Wire Tools",
+          "description": "Safety wire pliers and twisters"
+        }
+      ],
+      "icon": "tools-icon.png",
+      "display_order": 4
+    },
+    {
+      "category_id": "CAT005",
+      "name": "Electronics",
+      "description": "Aviation electronics and avionics",
+      "sub_categories": [
+        {
+          "sub_category_id": "SUBCAT021",
+          "name": "Avionics",
+          "description": "Aircraft avionics systems"
+        },
+        {
+          "sub_category_id": "SUBCAT022",
+          "name": "Instruments",
+          "description": "Flight instruments and gauges"
+        },
+        {
+          "sub_category_id": "SUBCAT023",
+          "name": "Communication",
+          "description": "Radio and communication equipment"
+        }
+      ],
+      "icon": "electronics-icon.png",
+      "display_order": 5
+    }
+  ]
+}

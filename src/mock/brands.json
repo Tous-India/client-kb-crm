@@ -1,0 +1,164 @@
+{
+  "brands": [
+    {
+      "brand_id": "BRN001",
+      "name": "Beechcraft",
+      "logo_url": "/images/brands/beechcraft.png",
+      "description": "Leading aircraft manufacturer",
+      "website": "https://beechcraft.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN002",
+      "name": "Piper",
+      "logo_url": "/images/brands/piper.png",
+      "description": "General aviation aircraft manufacturer",
+      "website": "https://piper.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN003",
+      "name": "Lycoming",
+      "logo_url": "/images/brands/lycoming.png",
+      "description": "Aircraft engine manufacturer",
+      "website": "https://lycoming.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN004",
+      "name": "Continental",
+      "logo_url": "/images/brands/continental.png",
+      "description": "Aviation engine and systems",
+      "website": "https://continentalmotors.aero",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN005",
+      "name": "ACF-50",
+      "logo_url": "/images/brands/acf50.png",
+      "description": "Anti-corrosion formula manufacturer",
+      "website": "https://acf-50.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN006",
+      "name": "McFarlane",
+      "logo_url": "/images/brands/mcfarlane.png",
+      "description": "Aircraft parts and components",
+      "website": "https://mcfarlaneaviation.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN007",
+      "name": "ACK Technologies",
+      "logo_url": "/images/brands/ack.png",
+      "description": "Emergency locator transmitters",
+      "website": "https://ackavionics.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN008",
+      "name": "Concorde",
+      "logo_url": "/images/brands/concorde.png",
+      "description": "Aircraft batteries",
+      "website": "https://concordebattery.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN009",
+      "name": "Aeroshell",
+      "logo_url": "/images/brands/aeroshell.png",
+      "description": "Aviation lubricants and oils",
+      "website": "https://shell.com/aeroshell",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN010",
+      "name": "Champion Aerospace",
+      "logo_url": "/images/brands/champion.png",
+      "description": "Spark plugs and ignition systems",
+      "website": "https://championaerospace.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN011",
+      "name": "Alcor",
+      "logo_url": "/images/brands/alcor.png",
+      "description": "Aircraft instruments and gauges",
+      "website": "https://alcor.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN012",
+      "name": "Bose Aviation",
+      "logo_url": "/images/brands/bose.png",
+      "description": "Aviation headsets and communication",
+      "website": "https://bose.com/aviation",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN013",
+      "name": "BatteryMINDer",
+      "logo_url": "/images/brands/batteryminder.png",
+      "description": "Battery chargers and maintainers",
+      "website": "https://batteryminders.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN014",
+      "name": "Bruce's Custom Covers",
+      "logo_url": "/images/brands/bruces.png",
+      "description": "Aircraft covers and protection",
+      "website": "https://bruceaircraftcovers.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN015",
+      "name": "Continental Motors",
+      "logo_url": "/images/brands/continental-motors.png",
+      "description": "Aircraft engines and parts",
+      "website": "https://continentalmotors.aero",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN016",
+      "name": "Hartzell",
+      "logo_url": "/images/brands/hartzell.png",
+      "description": "Aircraft propellers",
+      "website": "https://hartzellprop.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN017",
+      "name": "Heat Factory",
+      "logo_url": "/images/brands/heatfactory.png",
+      "description": "Emergency heat and survival products",
+      "website": "https://heatfactory.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN018",
+      "name": "Aero-Lites",
+      "logo_url": "/images/brands/aerolites.png",
+      "description": "Aircraft lighting systems",
+      "website": "https://aerolites.com",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN019",
+      "name": "3M Aviation",
+      "logo_url": "/images/brands/3m.png",
+      "description": "Aviation adhesives and sealants",
+      "website": "https://3m.com/aviation",
+      "is_active": true
+    },
+    {
+      "brand_id": "BRN020",
+      "name": "SKF Aviation",
+      "logo_url": "/images/brands/skf.png",
+      "description": "Aircraft bearings and seals",
+      "website": "https://skf.com",
+      "is_active": true
+    }
+  ]
+}

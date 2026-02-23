@@ -1,0 +1,342 @@
+{
+  "supplierOrders": [
+    {
+      "spo_id": "SPO-2026-001",
+      "spo_number": "SP260001",
+      "supplier_id": "SUP001",
+      "supplier_name": "ATS Manufacturing Co.",
+      "order_date": "2026-01-10T10:00:00Z",
+      "expected_delivery": "2026-01-24T00:00:00Z",
+      "status": "ORDERED",
+      "currency": "USD",
+      "exchange_rate": 83.50,
+      "items": [
+        {
+          "item_id": "SPO-ITEM-001",
+          "product_id": "PROD008",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Aircraft Hydraulic Pump Assembly",
+          "quantity": 3,
+          "unit_cost": 2200.00,
+          "total_cost": 6600.00,
+          "received_qty": 0,
+          "pi_allocations": [
+            {
+              "pi_id": "PI-2024-010",
+              "pi_number": "PI240010",
+              "pi_item_id": "PI-ITEM-001",
+              "allocated_qty": 3
+            }
+          ]
+        }
+      ],
+      "subtotal": 6600.00,
+      "tax": 0.00,
+      "shipping": 250.00,
+      "total_amount": 6850.00,
+      "total_amount_inr": 571975.00,
+      "payment_status": "PARTIAL",
+      "amount_paid": 3425.00,
+      "balance_due": 3425.00,
+      "payment_history": [
+        {
+          "payment_id": "SPAY-001",
+          "amount": 3425.00,
+          "payment_date": "2026-01-10",
+          "payment_method": "WIRE_TRANSFER",
+          "reference": "TXN-SPO-001",
+          "notes": "50% advance payment"
+        }
+      ],
+      "receiving_status": "PENDING",
+      "received_items": [],
+      "shipping_address": {
+        "street": "Plot No 145, Pocket 25",
+        "city": "Rohini",
+        "state": "Delhi",
+        "zip": "110085",
+        "country": "India"
+      },
+      "notes": "Urgent order for customer PI240010",
+      "created_by": "Admin User",
+      "created_at": "2026-01-10T10:00:00Z"
+    },
+    {
+      "spo_id": "SPO-2026-002",
+      "spo_number": "SP260002",
+      "supplier_id": "SUP002",
+      "supplier_name": "Global Parts International",
+      "order_date": "2026-01-12T09:00:00Z",
+      "expected_delivery": "2026-01-22T00:00:00Z",
+      "status": "PARTIAL_RECEIVED",
+      "currency": "USD",
+      "exchange_rate": 83.75,
+      "items": [
+        {
+          "item_id": "SPO-ITEM-002",
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 15,
+          "unit_cost": 680.00,
+          "total_cost": 10200.00,
+          "received_qty": 10,
+          "pi_allocations": [
+            {
+              "pi_id": "PI-2024-011",
+              "pi_number": "PI240011",
+              "pi_item_id": "PI-ITEM-002",
+              "allocated_qty": 15
+            }
+          ]
+        }
+      ],
+      "subtotal": 10200.00,
+      "tax": 0.00,
+      "shipping": 180.00,
+      "total_amount": 10380.00,
+      "total_amount_inr": 869325.00,
+      "payment_status": "PAID",
+      "amount_paid": 10380.00,
+      "balance_due": 0.00,
+      "payment_history": [
+        {
+          "payment_id": "SPAY-002",
+          "amount": 5190.00,
+          "payment_date": "2026-01-12",
+          "payment_method": "WIRE_TRANSFER",
+          "reference": "TXN-SPO-002-ADV",
+          "notes": "50% advance"
+        },
+        {
+          "payment_id": "SPAY-003",
+          "amount": 5190.00,
+          "payment_date": "2026-01-20",
+          "payment_method": "WIRE_TRANSFER",
+          "reference": "TXN-SPO-002-FIN",
+          "notes": "Balance payment on partial delivery"
+        }
+      ],
+      "receiving_status": "PARTIAL",
+      "received_items": [
+        {
+          "received_id": "RCV-001",
+          "received_date": "2026-01-20",
+          "item_id": "SPO-ITEM-002",
+          "quantity_received": 10,
+          "condition": "GOOD",
+          "notes": "First batch received"
+        }
+      ],
+      "shipping_address": {
+        "street": "Plot No 145, Pocket 25",
+        "city": "Rohini",
+        "state": "Delhi",
+        "zip": "110085",
+        "country": "India"
+      },
+      "notes": "Order for PI240011 - ACF-50 bulk order",
+      "created_by": "Admin User",
+      "created_at": "2026-01-12T09:00:00Z"
+    },
+    {
+      "spo_id": "SPO-2026-003",
+      "spo_number": "SP260003",
+      "supplier_id": "SUP003",
+      "supplier_name": "Precision Parts Solutions",
+      "order_date": "2026-01-05T11:00:00Z",
+      "expected_delivery": "2026-01-26T00:00:00Z",
+      "status": "RECEIVED",
+      "currency": "USD",
+      "exchange_rate": 83.25,
+      "items": [
+        {
+          "item_id": "SPO-ITEM-003",
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 20,
+          "unit_cost": 18.50,
+          "total_cost": 370.00,
+          "received_qty": 20,
+          "pi_allocations": [
+            {
+              "pi_id": "PI-2024-010",
+              "pi_number": "PI240010",
+              "pi_item_id": "PI-ITEM-002",
+              "allocated_qty": 20
+            }
+          ]
+        }
+      ],
+      "subtotal": 370.00,
+      "tax": 0.00,
+      "shipping": 45.00,
+      "total_amount": 415.00,
+      "total_amount_inr": 34548.75,
+      "payment_status": "PAID",
+      "amount_paid": 415.00,
+      "balance_due": 0.00,
+      "payment_history": [
+        {
+          "payment_id": "SPAY-004",
+          "amount": 207.50,
+          "payment_date": "2026-01-05",
+          "payment_method": "WIRE_TRANSFER",
+          "reference": "TXN-SPO-003-ADV",
+          "notes": "50% advance as per terms"
+        },
+        {
+          "payment_id": "SPAY-005",
+          "amount": 207.50,
+          "payment_date": "2026-01-08",
+          "payment_method": "WIRE_TRANSFER",
+          "reference": "TXN-SPO-003-FIN",
+          "notes": "Balance payment"
+        }
+      ],
+      "receiving_status": "COMPLETE",
+      "received_items": [
+        {
+          "received_id": "RCV-002",
+          "received_date": "2026-01-08",
+          "item_id": "SPO-ITEM-003",
+          "quantity_received": 20,
+          "condition": "GOOD",
+          "notes": "All items received in good condition"
+        }
+      ],
+      "shipping_address": {
+        "street": "Plot No 145, Pocket 25",
+        "city": "Rohini",
+        "state": "Delhi",
+        "zip": "110085",
+        "country": "India"
+      },
+      "notes": "Safety wire twisters for PI240010",
+      "created_by": "Admin User",
+      "created_at": "2026-01-05T11:00:00Z"
+    },
+    {
+      "spo_id": "SPO-2026-004",
+      "spo_number": "SP260004",
+      "supplier_id": "SUP004",
+      "supplier_name": "Ace Supplies Ltd",
+      "order_date": "2026-02-01T08:00:00Z",
+      "expected_delivery": "2026-02-08T00:00:00Z",
+      "status": "DRAFT",
+      "currency": "USD",
+      "exchange_rate": 83.50,
+      "items": [
+        {
+          "item_id": "SPO-ITEM-004",
+          "product_id": "PROD001",
+          "part_number": "ATS-M1-S5",
+          "product_name": "DIE, STR. SHANK 5/32 (M1-K)",
+          "quantity": 10,
+          "unit_cost": 850.00,
+          "total_cost": 8500.00,
+          "received_qty": 0,
+          "pi_allocations": []
+        }
+      ],
+      "subtotal": 8500.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 8500.00,
+      "total_amount_inr": 709750.00,
+      "payment_status": "UNPAID",
+      "amount_paid": 0.00,
+      "balance_due": 8500.00,
+      "payment_history": [],
+      "receiving_status": "PENDING",
+      "received_items": [],
+      "shipping_address": {
+        "street": "Plot No 145, Pocket 25",
+        "city": "Rohini",
+        "state": "Delhi",
+        "zip": "110085",
+        "country": "India"
+      },
+      "notes": "Draft order - pending approval",
+      "created_by": "Admin User",
+      "created_at": "2026-02-01T08:00:00Z"
+    },
+    {
+      "spo_id": "SPO-2026-005",
+      "spo_number": "SP260005",
+      "supplier_id": "SUP001",
+      "supplier_name": "ATS Manufacturing Co.",
+      "order_date": "2026-02-05T14:00:00Z",
+      "expected_delivery": "2026-02-19T00:00:00Z",
+      "status": "ORDERED",
+      "currency": "USD",
+      "exchange_rate": 83.60,
+      "items": [
+        {
+          "item_id": "SPO-ITEM-005",
+          "product_id": "PROD008",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Aircraft Hydraulic Pump Assembly",
+          "quantity": 5,
+          "unit_cost": 2150.00,
+          "total_cost": 10750.00,
+          "received_qty": 0,
+          "pi_allocations": [
+            {
+              "pi_id": "PI-2024-012",
+              "pi_number": "PI240012",
+              "pi_item_id": "PI-ITEM-003",
+              "allocated_qty": 5
+            }
+          ]
+        },
+        {
+          "item_id": "SPO-ITEM-006",
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 50,
+          "unit_cost": 17.00,
+          "total_cost": 850.00,
+          "received_qty": 0,
+          "pi_allocations": [
+            {
+              "pi_id": "PI-2024-012",
+              "pi_number": "PI240012",
+              "pi_item_id": "PI-ITEM-004",
+              "allocated_qty": 30
+            },
+            {
+              "pi_id": "PI-2024-013",
+              "pi_number": "PI240013",
+              "pi_item_id": "PI-ITEM-005",
+              "allocated_qty": 20
+            }
+          ]
+        }
+      ],
+      "subtotal": 11600.00,
+      "tax": 0.00,
+      "shipping": 320.00,
+      "total_amount": 11920.00,
+      "total_amount_inr": 996512.00,
+      "payment_status": "UNPAID",
+      "amount_paid": 0.00,
+      "balance_due": 11920.00,
+      "payment_history": [],
+      "receiving_status": "PENDING",
+      "received_items": [],
+      "shipping_address": {
+        "street": "Plot No 145, Pocket 25",
+        "city": "Rohini",
+        "state": "Delhi",
+        "zip": "110085",
+        "country": "India"
+      },
+      "notes": "Consolidated order for multiple PIs",
+      "created_by": "Admin User",
+      "created_at": "2026-02-05T14:00:00Z"
+    }
+  ]
+}

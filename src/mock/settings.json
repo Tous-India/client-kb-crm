@@ -1,0 +1,78 @@
+{
+  "company": {
+    "name": "KB Solutions Pvt Ltd",
+    "address": {
+      "street": "123 Industrial Park, Sector 5",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "zip": "400001",
+      "country": "India"
+    },
+    "phone": "+91 22 1234 5678",
+    "email": "sales@kbsolutions.com",
+    "website": "www.kbsolutions.com",
+    "gst_number": "27AABCK1234L1ZD",
+    "pan_number": "AABCK1234L"
+  },
+  "bankDetails": {
+    "primary": {
+      "bank_name": "HDFC Bank",
+      "account_name": "KB Solutions Pvt Ltd",
+      "account_number": "50100123456789",
+      "ifsc_code": "HDFC0001234",
+      "swift_code": "HDFCINBBXXX",
+      "branch": "Mumbai Main Branch",
+      "account_type": "Current Account"
+    },
+    "secondary": {
+      "bank_name": "ICICI Bank",
+      "account_name": "KB Solutions Pvt Ltd",
+      "account_number": "012345678901",
+      "ifsc_code": "ICIC0001234",
+      "swift_code": "ABORINBBXXX",
+      "branch": "Andheri East Branch",
+      "account_type": "Current Account"
+    },
+    "international": {
+      "bank_name": "State Bank of India",
+      "account_name": "KB Solutions Pvt Ltd",
+      "account_number": "30987654321",
+      "ifsc_code": "SBIN0001234",
+      "swift_code": "SBININBBXXX",
+      "branch": "Foreign Exchange Branch, Mumbai",
+      "account_type": "EEFC Account",
+      "correspondent_bank": "Citibank N.A., New York",
+      "correspondent_swift": "CITIUS33"
+    }
+  },
+  "paymentTerms": {
+    "default_validity_days": 30,
+    "payment_methods": [
+      { "code": "BANK_TRANSFER", "label": "Bank Transfer", "is_default": true },
+      { "code": "WIRE_TRANSFER", "label": "International Wire Transfer", "is_default": false },
+      { "code": "CHECK", "label": "Check/Cheque", "is_default": false },
+      { "code": "CREDIT_CARD", "label": "Credit Card", "is_default": false },
+      { "code": "LC", "label": "Letter of Credit", "is_default": false }
+    ],
+    "late_payment_policy": "Interest @ 2% per month will be charged on overdue payments.",
+    "advance_payment_discount": "2% discount for full advance payment."
+  },
+  "invoiceSettings": {
+    "prefix": "INV",
+    "year_format": "YY",
+    "padding": 4,
+    "tax_rates": {
+      "gst": 18,
+      "igst": 18,
+      "sgst": 9,
+      "cgst": 9
+    }
+  },
+  "piSettings": {
+    "prefix": "PI",
+    "year_format": "YY",
+    "padding": 5,
+    "default_validity_days": 30,
+    "show_bank_details": true
+  }
+}

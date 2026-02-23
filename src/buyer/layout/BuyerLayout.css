@@ -1,0 +1,40 @@
+.buyer-layout {
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.buyer-container {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+.buyer-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background: #f9fafb;
+}
+
+/* Scrollbar styling for content area */
+.buyer-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.buyer-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.buyer-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.buyer-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .buyer-content {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,258 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useInvoices, useInvoice, useCreateInvoice, useUpdateInvoice, invoiceKeys } from '../../hooks/useInvoices';
+import invoicesService from '../../services/invoices.service';
+
+// Mock the invoices service
+vi.mock('../../services/invoices.service');
+
+// Mock toast
+vi.mock('../../utils/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+}));
+
+// Create a wrapper with QueryClientProvider
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        gcTime: 0,
+      },
+      mutations: {
+        retry: false,
+      },
+    },
+  });
+
+  return ({ children }) => (
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  );
+};
+
+describe('useInvoices hook', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('invoiceKeys', () => {
+    it('should generate correct query keys', () => {
+      expect(invoiceKeys.all).toEqual(['invoices']);
+      expect(invoiceKeys.lists()).toEqual(['invoices', 'list']);
+      expect(invoiceKeys.list({ status: 'PAID' })).toEqual(['invoices', 'list', { status: 'PAID' }]);
+      expect(invoiceKeys.details()).toEqual(['invoices', 'detail']);
+      expect(invoiceKeys.detail('123')).toEqual(['invoices', 'detail', '123']);
+    });
+  });
+
+  describe('useInvoices', () => {
+    it('should fetch invoices successfully', async () => {
+      const mockInvoices = [
+        { _id: '1', invoice_number: 'INV-00001', status: 'PAID' },
+        { _id: '2', invoice_number: 'INV-00002', status: 'UNPAID' },
+      ];
+
+      invoicesService.getAll.mockResolvedValue({
+        success: true,
+        data: { invoices: mockInvoices },
+      });
+
+      const { result } = renderHook(() => useInvoices(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockInvoices);
+      expect(invoicesService.getAll).toHaveBeenCalledWith({});
+    });
+
+    it('should pass params to service', async () => {
+      invoicesService.getAll.mockResolvedValue({
+        success: true,
+        data: { invoices: [] },
+      });
+
+      const params = { status: 'UNPAID', page: 1, limit: 20 };
+      renderHook(() => useInvoices(params), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(invoicesService.getAll).toHaveBeenCalledWith(params);
+      });
+    });
+
+    it('should handle error', async () => {
+      invoicesService.getAll.mockResolvedValue({
+        success: false,
+        error: 'Failed to fetch invoices',
+      });
+
+      const { result } = renderHook(() => useInvoices(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Failed to fetch invoices');
+    });
+
+    it('should return empty array when no invoices', async () => {
+      invoicesService.getAll.mockResolvedValue({
+        success: true,
+        data: { invoices: null },
+      });
+
+      const { result } = renderHook(() => useInvoices(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual([]);
+    });
+  });
+
+  describe('useInvoice', () => {
+    it('should fetch single invoice by ID', async () => {
+      const mockInvoice = { _id: '123', invoice_number: 'INV-00001', status: 'PAID' };
+
+      invoicesService.getById.mockResolvedValue({
+        success: true,
+        data: { invoice: mockInvoice },
+      });
+
+      const { result } = renderHook(() => useInvoice('123'), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockInvoice);
+      expect(invoicesService.getById).toHaveBeenCalledWith('123');
+    });
+
+    it('should not fetch when ID is falsy', async () => {
+      const { result } = renderHook(() => useInvoice(null), {
+        wrapper: createWrapper(),
+      });
+
+      expect(result.current.fetchStatus).toBe('idle');
+      expect(invoicesService.getById).not.toHaveBeenCalled();
+    });
+
+    it('should handle error', async () => {
+      invoicesService.getById.mockResolvedValue({
+        success: false,
+        error: 'Invoice not found',
+      });
+
+      const { result } = renderHook(() => useInvoice('invalid'), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Invoice not found');
+    });
+  });
+
+  describe('useCreateInvoice', () => {
+    it('should create invoice successfully', async () => {
+      const newInvoice = { buyer: 'buyer123', dispatch: 'dispatch123' };
+      const createdInvoice = { _id: '123', invoice_number: 'INV-00001', ...newInvoice };
+
+      invoicesService.create.mockResolvedValue({
+        success: true,
+        data: { invoice: createdInvoice },
+      });
+
+      const { result } = renderHook(() => useCreateInvoice(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate(newInvoice);
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(createdInvoice);
+      expect(invoicesService.create).toHaveBeenCalledWith(newInvoice);
+    });
+
+    it('should handle create error', async () => {
+      invoicesService.create.mockResolvedValue({
+        success: false,
+        error: 'Failed to create invoice',
+      });
+
+      const { result } = renderHook(() => useCreateInvoice(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ buyer: 'test' });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Failed to create invoice');
+    });
+  });
+
+  describe('useUpdateInvoice', () => {
+    it('should update invoice successfully', async () => {
+      const updatedInvoice = { _id: '123', invoice_number: 'INV-00001', status: 'PAID' };
+
+      invoicesService.update.mockResolvedValue({
+        success: true,
+        data: { invoice: updatedInvoice },
+      });
+
+      const { result } = renderHook(() => useUpdateInvoice(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ id: '123', data: { status: 'PAID' } });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(invoicesService.update).toHaveBeenCalledWith('123', { status: 'PAID' });
+    });
+
+    it('should handle update error', async () => {
+      invoicesService.update.mockResolvedValue({
+        success: false,
+        error: 'Failed to update invoice',
+      });
+
+      const { result } = renderHook(() => useUpdateInvoice(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ id: '123', data: { status: 'INVALID' } });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+    });
+  });
+});

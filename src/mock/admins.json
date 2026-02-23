@@ -1,0 +1,30 @@
+{
+  "admins": [
+    {
+      "admin_id": "ADMIN001",
+      "role": "ADMIN",
+      "name": "Admin User",
+      "email": "admin@kbcrm.com",
+      "password": "hashed_admin_password_001",
+      "phone": "+1-555-9999",
+      "address": {
+        "street": "789 Portal HQ",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "60601",
+        "country": "USA"
+      },
+      "permissions": [
+        "manage_users",
+        "manage_orders",
+        "manage_products",
+        "view_analytics",
+        "manage_quotes",
+        "manage_payments"
+      ],
+      "created_at": "2024-01-15T10:30:00Z",
+      "last_login": "2024-12-18T09:15:00Z",
+      "is_active": true
+    }
+  ]
+}

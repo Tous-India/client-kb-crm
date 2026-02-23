@@ -1,0 +1,223 @@
+{
+  "quotations": [
+    {
+      "_id": "QUO001",
+      "quote_id": "QUO-2024-001",
+      "quote_number": "Q240006",
+      "buyer": "BUYER007",
+      "customer_id": "BUYER007",
+      "customer_name": "SkyTech Industries",
+      "customer_email": "buyer@skytech.com",
+      "quote_date": "2026-02-08T00:00:00.000Z",
+      "expiry_date": "2026-03-13T00:00:00.000Z",
+      "status": "SENT",
+      "revision_number": 3,
+      "sent_date": "2026-02-10T00:00:00.000Z",
+      "last_sent_date": "2026-02-12T00:00:00.000Z",
+      "exchange_rate": 83.65,
+      "converted_to_order_id": null,
+      "items": [
+        {
+          "product_id": "PROD001",
+          "product_name": "Industrial Control Unit",
+          "part_number": "ICU-5500",
+          "quantity": 5,
+          "unit_price": 2450.50,
+          "total_price": 12252.50
+        },
+        {
+          "product_id": "PROD002",
+          "product_name": "Pressure Sensor Module",
+          "part_number": "PSM-200",
+          "quantity": 10,
+          "unit_price": 1588.23,
+          "total_price": 15882.30
+        }
+      ],
+      "subtotal": 28134.80,
+      "logistic_charges": 500,
+      "custom_duty": 200,
+      "bank_charges": 50,
+      "total_amount": 28884.80,
+      "customer_notes": "Urgent requirement for production line",
+      "internal_notes": "Priority customer - expedite delivery",
+      "created_by": "ADMIN001",
+      "accepted_date": null,
+      "createdAt": "2026-02-08T00:00:00.000Z",
+      "updatedAt": "2026-02-12T00:00:00.000Z"
+    },
+    {
+      "_id": "QUO002",
+      "quote_id": "QUO-2024-002",
+      "quote_number": "Q240007",
+      "buyer": "BUYER008",
+      "customer_id": "BUYER008",
+      "customer_name": "Apex Manufacturing",
+      "customer_email": "orders@apex.com",
+      "quote_date": "2026-02-10T00:00:00.000Z",
+      "expiry_date": "2026-03-15T00:00:00.000Z",
+      "status": "SENT",
+      "revision_number": 1,
+      "sent_date": "2026-02-10T00:00:00.000Z",
+      "exchange_rate": 83.4,
+      "converted_to_order_id": null,
+      "items": [
+        {
+          "product_id": "PROD003",
+          "product_name": "Hydraulic Pump Assembly",
+          "part_number": "HPA-750",
+          "quantity": 3,
+          "unit_price": 3006.20,
+          "total_price": 9018.60
+        }
+      ],
+      "subtotal": 9018.60,
+      "logistic_charges": 300,
+      "total_amount": 9318.60,
+      "customer_notes": "",
+      "internal_notes": "",
+      "created_by": "ADMIN001",
+      "accepted_date": null,
+      "createdAt": "2026-02-10T00:00:00.000Z"
+    },
+    {
+      "_id": "QUO003",
+      "quote_id": "QUO-2024-003",
+      "quote_number": "Q240008",
+      "buyer": "BUYER009",
+      "customer_id": "BUYER009",
+      "customer_name": "TechCorp Solutions",
+      "customer_email": "procurement@techcorp.com",
+      "quote_date": "2026-02-09T00:00:00.000Z",
+      "expiry_date": "2026-03-16T00:00:00.000Z",
+      "status": "ACCEPTED",
+      "revision_number": 1,
+      "sent_date": "2026-02-09T00:00:00.000Z",
+      "accepted_at": "2026-02-11T00:00:00.000Z",
+      "exchange_rate": 83.75,
+      "converted_to_order_id": null,
+      "items": [
+        {
+          "product_id": "PROD004",
+          "product_name": "Motor Drive Controller",
+          "part_number": "MDC-1200",
+          "quantity": 2,
+          "unit_price": 1245.89,
+          "total_price": 2491.78
+        },
+        {
+          "product_id": "PROD005",
+          "product_name": "Electrical Relay Panel",
+          "part_number": "ERP-400",
+          "quantity": 4,
+          "unit_price": 250.00,
+          "total_price": 1000.00
+        }
+      ],
+      "subtotal": 3491.78,
+      "total_amount": 3491.78,
+      "customer_notes": "Need installation support",
+      "internal_notes": "",
+      "created_by": "ADMIN001",
+      "createdAt": "2026-02-09T00:00:00.000Z"
+    },
+    {
+      "_id": "QUO004",
+      "quote_id": "QUO-2024-004",
+      "quote_number": "Q240009",
+      "buyer": "BUYER010",
+      "customer_id": "BUYER010",
+      "customer_name": "Global Automation Inc",
+      "customer_email": "purchasing@globalautomation.com",
+      "quote_date": "2026-02-06T00:00:00.000Z",
+      "expiry_date": "2026-03-17T00:00:00.000Z",
+      "status": "REJECTED",
+      "revision_number": 1,
+      "sent_date": "2026-02-06T00:00:00.000Z",
+      "rejected_at": "2026-02-08T00:00:00.000Z",
+      "rejection_reason": "Price too high compared to competitors",
+      "exchange_rate": 84.0,
+      "converted_to_order_id": null,
+      "items": [
+        {
+          "product_id": "PROD006",
+          "product_name": "PLC Module Set",
+          "part_number": "PLC-850",
+          "quantity": 8,
+          "unit_price": 1027.43,
+          "total_price": 8219.47
+        }
+      ],
+      "subtotal": 8219.47,
+      "total_amount": 8219.47,
+      "customer_notes": "",
+      "internal_notes": "Repeat customer",
+      "created_by": "ADMIN001",
+      "createdAt": "2026-02-06T00:00:00.000Z"
+    },
+    {
+      "_id": "QUO005",
+      "quote_id": "QUO-2024-005",
+      "quote_number": "Q240010",
+      "buyer": "BUYER004",
+      "customer_id": "BUYER004",
+      "customer_name": "Industrial Systems Ltd",
+      "customer_email": "orders@industrialsystems.com",
+      "quote_date": "2026-02-07T00:00:00.000Z",
+      "expiry_date": "2026-01-15T00:00:00.000Z",
+      "status": "SENT",
+      "revision_number": 1,
+      "sent_date": "2026-02-07T00:00:00.000Z",
+      "exchange_rate": 83.5,
+      "converted_to_order_id": null,
+      "items": [
+        {
+          "product_id": "PROD007",
+          "product_name": "Servo Motor Unit",
+          "part_number": "SMU-2000",
+          "quantity": 6,
+          "unit_price": 1895.16,
+          "total_price": 11370.94
+        }
+      ],
+      "subtotal": 11370.94,
+      "total_amount": 11370.94,
+      "customer_notes": "Replacement for existing units",
+      "internal_notes": "",
+      "created_by": "ADMIN001",
+      "createdAt": "2026-02-07T00:00:00.000Z"
+    },
+    {
+      "_id": "QUO006",
+      "quote_id": "QUO-2024-006",
+      "quote_number": "Q240011",
+      "buyer": "BUYER007",
+      "customer_id": "BUYER007",
+      "customer_name": "SkyTech Industries",
+      "customer_email": "buyer@skytech.com",
+      "quote_date": "2026-02-12T00:00:00.000Z",
+      "expiry_date": "2026-03-20T00:00:00.000Z",
+      "status": "ACCEPTED",
+      "revision_number": 1,
+      "sent_date": "2026-02-12T00:00:00.000Z",
+      "accepted_at": "2026-02-14T00:00:00.000Z",
+      "exchange_rate": 83.50,
+      "converted_to_pi": true,
+      "pi_number": "PI-20260001",
+      "items": [
+        {
+          "product_id": "PROD008",
+          "product_name": "Temperature Controller",
+          "part_number": "TC-3000",
+          "quantity": 10,
+          "unit_price": 450.00,
+          "total_price": 4500.00
+        }
+      ],
+      "subtotal": 4500.00,
+      "total_amount": 4500.00,
+      "created_by": "ADMIN001",
+      "createdAt": "2026-02-12T00:00:00.000Z"
+    }
+  ]
+}

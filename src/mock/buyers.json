@@ -1,0 +1,294 @@
+{
+  "buyers": [
+    {
+      "customer_id": "BUYER001",
+      "role": "BUYER",
+      "name": "John Smith",
+      "email": "john.smith@techcorp.com",
+      "password": "hashed_password_123",
+      "phone": "+1-555-0100",
+      "address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "UNPAID",
+      "current_orders": ["ORD001", "ORD002"],
+      "open_orders": ["ORD001"],
+      "dispatched_orders": ["ORD002"],
+      "company_details": {
+        "company_name": "TechCorp Industries",
+        "tax_id": "12-3456789",
+        "phone": "+1-555-0100",
+        "billing_email": "billing@techcorp.com"
+      },
+      "created_at": "2024-02-10T08:30:00Z",
+      "last_login": "2024-12-17T14:20:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER002",
+      "role": "BUYER",
+      "name": "Sarah Johnson",
+      "email": "sarah.j@aerospace.com",
+      "password": "hashed_password_456",
+      "phone": "+1-555-0200",
+      "address": {
+        "street": "456 Aviation Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90001",
+        "country": "USA"
+      },
+      "status_quote": true,
+      "payment_status": "PAID",
+      "current_orders": ["ORD003"],
+      "open_orders": [],
+      "dispatched_orders": ["ORD003"],
+      "company_details": {
+        "company_name": "Aerospace Solutions Ltd",
+        "tax_id": "98-7654321",
+        "phone": "+1-555-0200",
+        "billing_email": "accounts@aerospace.com"
+      },
+      "created_at": "2024-03-15T10:45:00Z",
+      "last_login": "2024-12-18T08:00:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER003",
+      "role": "BUYER",
+      "name": "Michael Chen",
+      "email": "m.chen@manufacturing.com",
+      "password": "hashed_password_789",
+      "phone": "+1-555-0300",
+      "address": {
+        "street": "789 Industrial Way",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "status_quote": true,
+      "payment_status": "UNPAID",
+      "current_orders": ["ORD004", "ORD005"],
+      "open_orders": ["ORD004", "ORD005"],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Manufacturing Pro Inc",
+        "tax_id": "45-6789012",
+        "phone": "+1-555-0300",
+        "billing_email": "finance@manufacturing.com"
+      },
+      "created_at": "2024-04-20T09:15:00Z",
+      "last_login": "2024-12-16T16:45:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER004",
+      "role": "BUYER",
+      "name": "Emily Rodriguez",
+      "email": "emily.r@aviation-services.com",
+      "password": "hashed_password_321",
+      "phone": "+1-555-0400",
+      "address": {
+        "street": "321 Airport Road",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33101",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "PAID",
+      "current_orders": ["ORD006"],
+      "open_orders": [],
+      "dispatched_orders": ["ORD006"],
+      "company_details": {
+        "company_name": "Aviation Services Group",
+        "tax_id": "78-9012345",
+        "phone": "+1-555-0400",
+        "billing_email": "billing@aviation-services.com"
+      },
+      "created_at": "2024-05-10T11:30:00Z",
+      "last_login": "2024-12-18T07:30:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER005",
+      "role": "BUYER",
+      "name": "Robert Taylor",
+      "email": "robert.t@logistics.com",
+      "password": "hashed_password_654",
+      "phone": "+1-555-0500",
+      "address": {
+        "street": "555 Transport Lane",
+        "city": "Denver",
+        "state": "CO",
+        "zip": "80201",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "UNPAID",
+      "current_orders": ["ORD007"],
+      "open_orders": ["ORD007"],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Logistics Express Inc",
+        "tax_id": "56-7890123",
+        "phone": "+1-555-0500",
+        "billing_email": "accounts@logistics.com"
+      },
+      "created_at": "2024-06-05T13:20:00Z",
+      "last_login": "2024-12-15T10:00:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER006",
+      "role": "BUYER",
+      "name": "Amanda White",
+      "email": "amanda.w@electronics.com",
+      "password": "hashed_password_987",
+      "phone": "+1-555-0600",
+      "address": {
+        "street": "888 Electronics Plaza",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98101",
+        "country": "USA"
+      },
+      "status_quote": true,
+      "payment_status": "PAID",
+      "current_orders": ["ORD008"],
+      "open_orders": [],
+      "dispatched_orders": ["ORD008"],
+      "company_details": {
+        "company_name": "Electronics Solutions Corp",
+        "tax_id": "34-5678901",
+        "phone": "+1-555-0600",
+        "billing_email": "billing@electronics.com"
+      },
+      "created_at": "2024-07-12T15:40:00Z",
+      "last_login": "2024-12-18T06:15:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER007",
+      "role": "BUYER",
+      "name": "David Martinez",
+      "email": "david.m@construction.com",
+      "password": "hashed_password_246",
+      "phone": "+1-555-0700",
+      "address": {
+        "street": "999 Builder's Ave",
+        "city": "Phoenix",
+        "state": "AZ",
+        "zip": "85001",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "UNPAID",
+      "current_orders": ["ORD009"],
+      "open_orders": ["ORD009"],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Construction Materials Ltd",
+        "tax_id": "23-4567890",
+        "phone": "+1-555-0700",
+        "billing_email": "accounting@construction.com"
+      },
+      "created_at": "2024-08-18T12:00:00Z",
+      "last_login": "2024-12-14T13:30:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER008",
+      "role": "BUYER",
+      "name": "Lisa Anderson",
+      "email": "lisa.a@healthcare.com",
+      "password": "hashed_password_135",
+      "phone": "+1-555-0800",
+      "address": {
+        "street": "111 Medical Center Dr",
+        "city": "Boston",
+        "state": "MA",
+        "zip": "02101",
+        "country": "USA"
+      },
+      "status_quote": true,
+      "payment_status": "PAID",
+      "current_orders": ["ORD010"],
+      "open_orders": [],
+      "dispatched_orders": ["ORD010"],
+      "company_details": {
+        "company_name": "Healthcare Supplies Inc",
+        "tax_id": "67-8901234",
+        "phone": "+1-555-0800",
+        "billing_email": "finance@healthcare.com"
+      },
+      "created_at": "2024-09-22T10:10:00Z",
+      "last_login": "2024-12-18T05:45:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER009",
+      "role": "BUYER",
+      "name": "James Wilson",
+      "email": "james.w@automotive.com",
+      "password": "hashed_password_864",
+      "phone": "+1-555-0900",
+      "address": {
+        "street": "222 Auto Parts Blvd",
+        "city": "Detroit",
+        "state": "MI",
+        "zip": "48201",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "UNPAID",
+      "current_orders": [],
+      "open_orders": [],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Automotive Parts Group",
+        "tax_id": "89-0123456",
+        "phone": "+1-555-0900",
+        "billing_email": "billing@automotive.com"
+      },
+      "created_at": "2024-10-05T14:25:00Z",
+      "last_login": "2024-12-12T11:20:00Z",
+      "is_active": true
+    },
+    {
+      "customer_id": "BUYER010",
+      "role": "BUYER",
+      "name": "Patricia Brown",
+      "email": "patricia.b@retail.com",
+      "password": "hashed_password_753",
+      "phone": "+1-555-1000",
+      "address": {
+        "street": "333 Retail Park Way",
+        "city": "Atlanta",
+        "state": "GA",
+        "zip": "30301",
+        "country": "USA"
+      },
+      "status_quote": true,
+      "payment_status": "PAID",
+      "current_orders": [],
+      "open_orders": [],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Retail Solutions Network",
+        "tax_id": "01-2345678",
+        "phone": "+1-555-1000",
+        "billing_email": "accounts@retail.com"
+      },
+      "created_at": "2024-11-10T09:50:00Z",
+      "last_login": "2024-12-17T15:00:00Z",
+      "is_active": true
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+body {
+  font-family: "Poppins";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-family: "Montserrat";
+}
+
+.product-title {
+  font-family: "Montserrat";
+}
+
+span,
+p,
+li,
+strong,
+a,
+button {
+  font-family: "Poppins";
+}
+
+.card-value {
+  font-family: "Montserrat";
+}
+.MuiTypography-h6 {
+  font-family: "Poppins";
+}
+
+.cart-page {
+  .css-17fpwt7-MuiGrid-root {
+    &:first-child {
+      width: 75%;
+    }
+  }
+}
+
+.Login-Page {
+  .image-div {
+    img {
+      border-radius: 10px;
+      object-fit: cover;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+p,
+li,
+a,
+td,
+tr,
+thead,
+tbody,
+span,
+strong {
+  font-size: 12px !important;
+}
+
+.buyer-sidebar {
+  svg {
+    overflow: unset;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    overflow-x: hidden;
+  }
+  html {
+    overflow-x: clip;
+  }
+  .cart-page {
+    padding: 0 !important;
+    .css-17fpwt7-MuiGrid-root {
+      &:first-child {
+        width: 100%;
+      }
+    }
+  }
+
+  .Login-Page {
+    .css-uia32v-MuiPaper-root {
+      width: 100%;
+      max-width: 100%;
+      flex-direction: column;
+    }
+    .image-div {
+      display: none;
+    }
+    .css-1wpevs8 {
+      padding: 24px;
+    }
+  }
+}

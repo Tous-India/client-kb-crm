@@ -1,0 +1,222 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useDispatchedOrders, useDispatch, useCreateDispatch, dispatchKeys } from '../../hooks/useDispatchedOrders';
+import dispatchesService from '../../services/dispatches.service';
+
+// Mock the dispatches service
+vi.mock('../../services/dispatches.service');
+
+// Mock toast
+vi.mock('../../utils/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+}));
+
+// Create a wrapper with QueryClientProvider
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        gcTime: 0,
+      },
+      mutations: {
+        retry: false,
+      },
+    },
+  });
+
+  return ({ children }) => (
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  );
+};
+
+describe('useDispatchedOrders hook', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('dispatchKeys', () => {
+    it('should generate correct query keys', () => {
+      expect(dispatchKeys.all).toEqual(['dispatches']);
+      expect(dispatchKeys.lists()).toEqual(['dispatches', 'list']);
+      expect(dispatchKeys.list({ buyer: '123' })).toEqual(['dispatches', 'list', { buyer: '123' }]);
+      expect(dispatchKeys.details()).toEqual(['dispatches', 'detail']);
+      expect(dispatchKeys.detail('123')).toEqual(['dispatches', 'detail', '123']);
+    });
+  });
+
+  describe('useDispatchedOrders', () => {
+    it('should fetch dispatched orders successfully', async () => {
+      const mockDispatches = [
+        { _id: '1', dispatch_id: 'DSP-00001', source_type: 'ORDER', status: 'DISPATCHED' },
+        { _id: '2', dispatch_id: 'DSP-00002', source_type: 'PROFORMA_INVOICE', status: 'DELIVERED' },
+      ];
+
+      dispatchesService.getAll.mockResolvedValue({
+        success: true,
+        data: { dispatches: mockDispatches },
+      });
+
+      const { result } = renderHook(() => useDispatchedOrders(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockDispatches);
+      expect(dispatchesService.getAll).toHaveBeenCalledWith({});
+    });
+
+    it('should pass params to service', async () => {
+      dispatchesService.getAll.mockResolvedValue({
+        success: true,
+        data: { dispatches: [] },
+      });
+
+      const params = { buyer: '123', source_type: 'ORDER' };
+      renderHook(() => useDispatchedOrders(params), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(dispatchesService.getAll).toHaveBeenCalledWith(params);
+      });
+    });
+
+    it('should handle error', async () => {
+      dispatchesService.getAll.mockResolvedValue({
+        success: false,
+        error: 'Failed to fetch dispatches',
+      });
+
+      const { result } = renderHook(() => useDispatchedOrders(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Failed to fetch dispatches');
+    });
+
+    it('should return empty array when no dispatches', async () => {
+      dispatchesService.getAll.mockResolvedValue({
+        success: true,
+        data: { dispatches: null },
+      });
+
+      const { result } = renderHook(() => useDispatchedOrders(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual([]);
+    });
+  });
+
+  describe('useDispatch', () => {
+    it('should fetch single dispatch by ID', async () => {
+      const mockDispatch = { _id: '123', dispatch_id: 'DSP-00001', source_type: 'ORDER' };
+
+      dispatchesService.getById.mockResolvedValue({
+        success: true,
+        data: { dispatch: mockDispatch },
+      });
+
+      const { result } = renderHook(() => useDispatch('123'), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockDispatch);
+      expect(dispatchesService.getById).toHaveBeenCalledWith('123');
+    });
+
+    it('should not fetch when ID is falsy', async () => {
+      const { result } = renderHook(() => useDispatch(null), {
+        wrapper: createWrapper(),
+      });
+
+      expect(result.current.fetchStatus).toBe('idle');
+      expect(dispatchesService.getById).not.toHaveBeenCalled();
+    });
+
+    it('should handle error', async () => {
+      dispatchesService.getById.mockResolvedValue({
+        success: false,
+        error: 'Dispatch not found',
+      });
+
+      const { result } = renderHook(() => useDispatch('invalid'), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Dispatch not found');
+    });
+  });
+
+  describe('useCreateDispatch', () => {
+    it('should create dispatch successfully', async () => {
+      const newDispatch = {
+        source_type: 'ORDER',
+        source_id: 'order123',
+        items: [{ product_id: 'prod1', quantity: 10 }],
+      };
+      const createdDispatch = { _id: '123', dispatch_id: 'DSP-00001', ...newDispatch };
+
+      dispatchesService.create.mockResolvedValue({
+        success: true,
+        data: { dispatch: createdDispatch },
+      });
+
+      const { result } = renderHook(() => useCreateDispatch(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate(newDispatch);
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(createdDispatch);
+      expect(dispatchesService.create).toHaveBeenCalledWith(newDispatch);
+    });
+
+    it('should handle create error', async () => {
+      dispatchesService.create.mockResolvedValue({
+        success: false,
+        error: 'Failed to create dispatch',
+      });
+
+      const { result } = renderHook(() => useCreateDispatch(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ source_type: 'ORDER' });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Failed to create dispatch');
+    });
+  });
+});

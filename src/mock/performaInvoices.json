@@ -1,0 +1,795 @@
+{
+  "performaInvoices": [
+    {
+      "performa_invoice_id": "PI-2024-010",
+      "performa_invoice_number": "PI240010",
+      "quotation_id": "QUOT-2024-010",
+      "customer_id": "BUYER001",
+      "customer_name": "John Smith",
+      "issue_date": "2026-01-15T10:00:00Z",
+      "valid_until": "2026-02-15T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "PENDING",
+      "currency": "USD",
+      "exchange_rate": 83.50,
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD008",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Aircraft Hydraulic Pump Assembly",
+          "quantity": 3,
+          "unit_price": 2707.50,
+          "total_price": 8122.50
+        },
+        {
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 20,
+          "unit_price": 26.68,
+          "total_price": 533.60
+        }
+      ],
+      "subtotal": 8656.10,
+      "tax": 865.61,
+      "shipping": 125.00,
+      "total_amount": 9646.71,
+      "total_amount_inr": 805600.29,
+      "billing_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "payment_terms": "Net 30 days from invoice date",
+      "notes": "New pending order - awaiting customer confirmation"
+    },
+    {
+      "performa_invoice_id": "PI-2024-011",
+      "performa_invoice_number": "PI240011",
+      "quotation_id": "QUOT-2024-011",
+      "customer_id": "BUYER001",
+      "customer_name": "John Smith",
+      "issue_date": "2026-01-20T14:30:00Z",
+      "valid_until": "2026-02-20T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "APPROVED",
+      "currency": "USD",
+      "exchange_rate": 83.75,
+      "payment_status": "PARTIAL",
+      "payment_received": 7500.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-011",
+          "amount": 7500.00,
+          "currency": "USD",
+          "amount_usd": 7500.00,
+          "exchange_rate_at_payment": 83.75,
+          "payment_method": "WIRE_TRANSFER",
+          "transaction_id": "WIRE-20260125-011",
+          "payment_date": "2026-01-25",
+          "notes": "50% advance payment",
+          "recorded_at": "2026-01-25T10:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 15,
+          "unit_price": 850.45,
+          "total_price": 12756.75
+        }
+      ],
+      "subtotal": 12756.75,
+      "tax": 1275.68,
+      "shipping": 175.00,
+      "total_amount": 14207.43,
+      "total_amount_inr": 1189871.76,
+      "billing_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "payment_terms": "50% advance, 50% on delivery",
+      "notes": "Approved - partial payment received, awaiting balance"
+    },
+    {
+      "performa_invoice_id": "PI-2024-012",
+      "performa_invoice_number": "PI240012",
+      "quotation_id": "QUOT-2024-012",
+      "customer_id": "BUYER001",
+      "customer_name": "John Smith",
+      "issue_date": "2025-11-01T09:00:00Z",
+      "valid_until": "2025-12-01T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "PENDING",
+      "currency": "USD",
+      "exchange_rate": 83.25,
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD010",
+          "part_number": "BEARING-SET-200",
+          "product_name": "Precision Aircraft Bearing Set",
+          "quantity": 8,
+          "unit_price": 403.75,
+          "total_price": 3230.00
+        }
+      ],
+      "subtotal": 3230.00,
+      "tax": 323.00,
+      "shipping": 65.00,
+      "total_amount": 3618.00,
+      "total_amount_inr": 301198.50,
+      "billing_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "payment_terms": "Net 30 days",
+      "notes": "Expired - customer did not respond"
+    },
+    {
+      "performa_invoice_id": "PI-2024-013",
+      "performa_invoice_number": "PI240013",
+      "quotation_id": "QUOT-2024-013",
+      "customer_id": "BUYER001",
+      "customer_name": "John Smith",
+      "issue_date": "2026-02-01T11:00:00Z",
+      "valid_until": "2026-03-03T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "REJECTED",
+      "currency": "USD",
+      "exchange_rate": 84.00,
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD003",
+          "part_number": "ATS-M1-B2",
+          "product_name": "DIE, BALL 1/16\" FOR M1-K",
+          "quantity": 5,
+          "unit_price": 1227.95,
+          "total_price": 6139.75
+        }
+      ],
+      "subtotal": 6139.75,
+      "tax": 613.98,
+      "shipping": 95.00,
+      "total_amount": 6848.73,
+      "total_amount_inr": 575293.32,
+      "billing_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "payment_terms": "Net 30 days",
+      "notes": "Rejected - customer found alternative supplier"
+    },
+    {
+      "performa_invoice_id": "PI-2024-001",
+      "performa_invoice_number": "PI240001",
+      "quotation_id": "QUOT-2024-001",
+      "customer_id": "BUYER001",
+      "customer_name": "John Smith",
+      "issue_date": "2024-12-01T10:00:00Z",
+      "valid_until": "2025-01-01T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "APPROVED",
+      "currency": "USD",
+      "exchange_rate": 83.50,
+      "payment_status": "PAID",
+      "payment_received": 12239.66,
+      "payment_history": [
+        {
+          "payment_id": "PAY-001",
+          "amount": 12239.66,
+          "currency": "USD",
+          "amount_usd": 12239.66,
+          "exchange_rate_at_payment": 83.50,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN-20241205-001",
+          "payment_date": "2024-12-05",
+          "notes": "Full payment received",
+          "recorded_at": "2024-12-05T10:30:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD001",
+          "part_number": "ATS-M1-S5",
+          "product_name": "DIE, STR. SHANK 5/32 (M1-K)",
+          "quantity": 10,
+          "unit_price": 1032.36,
+          "total_price": 10323.60
+        },
+        {
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 25,
+          "unit_price": 26.68,
+          "total_price": 667.00
+        }
+      ],
+      "subtotal": 10990.60,
+      "tax": 1099.06,
+      "shipping": 150.00,
+      "total_amount": 12239.66,
+      "total_amount_inr": 1022011.61,
+      "billing_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "payment_terms": "Net 30 days from invoice date",
+      "terms_conditions": [
+        "Prices are valid for 30 days from the date of this Proforma Invoice.",
+        "Payment must be made in full before shipment unless credit terms are pre-approved.",
+        "Goods remain the property of the seller until full payment is received.",
+        "Delivery dates are estimates and may vary based on stock availability.",
+        "Returns are accepted within 15 days of delivery for manufacturing defects only."
+      ],
+      "notes": "This is a proforma invoice for quotation QUOT-2024-001. Please confirm order to proceed.",
+      "created_by": "Admin User",
+      "approved_date": "2024-12-02T14:30:00Z"
+    },
+    {
+      "performa_invoice_id": "PI-2024-002",
+      "performa_invoice_number": "PI240002",
+      "quotation_id": "QUOT-2024-002",
+      "customer_id": "BUYER002",
+      "customer_name": "Sarah Johnson",
+      "issue_date": "2024-12-03T11:15:00Z",
+      "valid_until": "2025-01-03T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "PENDING",
+      "currency": "USD",
+      "exchange_rate": 83.25,
+      "payment_status": "PARTIAL",
+      "payment_received": 11491.85,
+      "payment_history": [
+        {
+          "payment_id": "PAY-002",
+          "amount": 11491.85,
+          "currency": "USD",
+          "amount_usd": 11491.85,
+          "exchange_rate_at_payment": 83.25,
+          "payment_method": "WIRE_TRANSFER",
+          "transaction_id": "WIRE-20241210-002",
+          "payment_date": "2024-12-10",
+          "notes": "50% advance payment",
+          "recorded_at": "2024-12-10T14:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 20,
+          "unit_price": 850.45,
+          "total_price": 17009.00
+        },
+        {
+          "product_id": "PROD009",
+          "part_number": "SEAL-AV-100",
+          "product_name": "Aviation Grade Sealant (Tube)",
+          "quantity": 100,
+          "unit_price": 36.58,
+          "total_price": 3658.00
+        }
+      ],
+      "subtotal": 20667.00,
+      "tax": 2066.70,
+      "shipping": 250.00,
+      "total_amount": 22983.70,
+      "total_amount_inr": 1913393.28,
+      "billing_address": {
+        "street": "456 Aviation Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "456 Aviation Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90001",
+        "country": "USA"
+      },
+      "payment_terms": "50% advance, 50% on delivery",
+      "terms_conditions": [
+        "Prices are valid for 30 days from the date of this Proforma Invoice.",
+        "50% advance payment required to confirm order.",
+        "Balance 50% to be paid before delivery/dispatch.",
+        "Goods remain the property of the seller until full payment is received.",
+        "Bulk order discounts applied as per agreement."
+      ],
+      "notes": "Bulk order - special pricing applied. Awaiting customer confirmation.",
+      "created_by": "Admin User",
+      "approved_date": null
+    },
+    {
+      "performa_invoice_id": "PI-2024-003",
+      "performa_invoice_number": "PI240003",
+      "quotation_id": "QUOT-2024-003",
+      "customer_id": "BUYER003",
+      "customer_name": "Michael Chen",
+      "issue_date": "2024-12-05T09:30:00Z",
+      "valid_until": "2025-01-05T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "APPROVED",
+      "currency": "USD",
+      "exchange_rate": 84.00,
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD008",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Aircraft Hydraulic Pump Assembly",
+          "quantity": 3,
+          "unit_price": 2707.50,
+          "total_price": 8122.50
+        },
+        {
+          "product_id": "PROD010",
+          "part_number": "BEARING-SET-200",
+          "product_name": "Precision Aircraft Bearing Set",
+          "quantity": 15,
+          "unit_price": 403.75,
+          "total_price": 6056.25
+        }
+      ],
+      "subtotal": 14178.75,
+      "tax": 1417.88,
+      "shipping": 175.00,
+      "total_amount": 15771.63,
+      "total_amount_inr": 1324816.92,
+      "billing_address": {
+        "street": "789 Industrial Way",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "789 Industrial Way",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "payment_terms": "Net 45 days from invoice date",
+      "terms_conditions": [
+        "Prices are valid for 30 days from the date of this Proforma Invoice.",
+        "Extended payment terms of Net 45 days approved for this order.",
+        "Expedited shipping available at additional cost upon request.",
+        "All products are covered under manufacturer warranty.",
+        "Technical support available for installation queries."
+      ],
+      "notes": "High-priority order. Expedited shipping available upon request.",
+      "created_by": "Admin User",
+      "approved_date": "2024-12-06T15:20:00Z"
+    },
+    {
+      "performa_invoice_id": "PI-2024-004",
+      "performa_invoice_number": "PI240004",
+      "quotation_id": "QUOT-2024-005",
+      "customer_id": "BUYER004",
+      "customer_name": "Emily Rodriguez",
+      "issue_date": "2024-12-07T13:45:00Z",
+      "valid_until": "2025-01-07T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "REJECTED",
+      "currency": "USD",
+      "exchange_rate": 83.75,
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD006",
+          "part_number": "ACF50-13OZ",
+          "product_name": "ACF-50 Anti-Corrosion Spray (13 oz)",
+          "quantity": 100,
+          "unit_price": 40.38,
+          "total_price": 4038.00
+        },
+        {
+          "product_id": "PROD007",
+          "part_number": "ACF50-KIT",
+          "product_name": "ACF-50 Starter Kit with Applicator",
+          "quantity": 50,
+          "unit_price": 118.75,
+          "total_price": 5937.50
+        }
+      ],
+      "subtotal": 9975.50,
+      "tax": 997.55,
+      "shipping": 135.00,
+      "total_amount": 11108.05,
+      "total_amount_inr": 930299.19,
+      "billing_address": {
+        "street": "321 Airport Road",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33101",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "321 Airport Road",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33101",
+        "country": "USA"
+      },
+      "payment_terms": "Net 30 days from invoice date",
+      "terms_conditions": [
+        "Prices are valid for 30 days from the date of this Proforma Invoice.",
+        "Payment must be made in full before shipment.",
+        "Goods remain the property of the seller until full payment is received.",
+        "Price revision available upon request for larger quantities."
+      ],
+      "notes": "Customer requested price revision. Rejected pending new quotation.",
+      "created_by": "Admin User",
+      "approved_date": null
+    },
+    {
+      "performa_invoice_id": "PI-2024-005",
+      "performa_invoice_number": "PI240005",
+      "quotation_id": "QUOT-2024-006",
+      "customer_id": "BUYER005",
+      "customer_name": "Robert Taylor",
+      "issue_date": "2024-12-09T08:20:00Z",
+      "valid_until": "2024-12-24T00:00:00Z",
+      "validity_period": "15_DAYS",
+      "status": "PENDING",
+      "currency": "USD",
+      "exchange_rate": 83.90,
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD003",
+          "part_number": "ATS-M1-B2",
+          "product_name": "DIE, BALL 1/16\" FOR M1-K",
+          "quantity": 8,
+          "unit_price": 1227.95,
+          "total_price": 9823.60
+        },
+        {
+          "product_id": "PROD005",
+          "part_number": "ACF50-1G",
+          "product_name": "ACF-50 Anti-Corrosion Formula (1 Gallon)",
+          "quantity": 30,
+          "unit_price": 239.40,
+          "total_price": 7182.00
+        }
+      ],
+      "subtotal": 17005.60,
+      "tax": 1700.56,
+      "shipping": 185.00,
+      "total_amount": 18891.16,
+      "total_amount_inr": 1585064.32,
+      "billing_address": {
+        "street": "555 Transport Lane",
+        "city": "Denver",
+        "state": "CO",
+        "zip": "80201",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "555 Transport Lane",
+        "city": "Denver",
+        "state": "CO",
+        "zip": "80201",
+        "country": "USA"
+      },
+      "payment_terms": "Letter of Credit (LC)",
+      "terms_conditions": [
+        "Prices are valid for 15 days from the date of this Proforma Invoice.",
+        "Letter of Credit (LC) required before order confirmation.",
+        "LC must be irrevocable and confirmed by a recognized bank.",
+        "Shipment will commence within 5 business days of LC confirmation.",
+        "All banking charges outside India are to be borne by the buyer."
+      ],
+      "notes": "International order. LC required before shipment. Awaiting customer response.",
+      "created_by": "Admin User",
+      "approved_date": null
+    },
+    {
+      "performa_invoice_id": "PI-2024-006",
+      "performa_invoice_number": "PI240006",
+      "quotation_id": "QUOT-2024-007",
+      "customer_id": "BUYER006",
+      "customer_name": "David Wilson",
+      "issue_date": "2024-12-11T10:00:00Z",
+      "valid_until": "2025-01-11T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "APPROVED",
+      "currency": "USD",
+      "exchange_rate": 84.10,
+      "payment_status": "PAID",
+      "payment_received": 9684.66,
+      "payment_history": [
+        {
+          "payment_id": "PAY-006",
+          "amount": 9684.66,
+          "currency": "USD",
+          "amount_usd": 9684.66,
+          "exchange_rate_at_payment": 84.10,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN-20241215-006",
+          "payment_date": "2024-12-15",
+          "notes": "Full payment - regular customer",
+          "recorded_at": "2024-12-15T09:00:00Z"
+        }
+      ],
+      "dispatched": true,
+      "dispatch_info": {
+        "dispatch_date": "2024-12-16",
+        "courier_service": "FedEx",
+        "tracking_number": "FX789012345",
+        "dispatch_notes": "Dispatched after full payment"
+      },
+      "items": [
+        {
+          "product_id": "PROD001",
+          "part_number": "ATS-M1-S5",
+          "product_name": "DIE, STR. SHANK 5/32 (M1-K)",
+          "quantity": 5,
+          "unit_price": 1032.36,
+          "total_price": 5161.80
+        },
+        {
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 50,
+          "unit_price": 26.68,
+          "total_price": 1334.00
+        },
+        {
+          "product_id": "PROD009",
+          "part_number": "SEAL-AV-100",
+          "product_name": "Aviation Grade Sealant (Tube)",
+          "quantity": 60,
+          "unit_price": 36.58,
+          "total_price": 2194.80
+        }
+      ],
+      "subtotal": 8690.60,
+      "tax": 869.06,
+      "shipping": 125.00,
+      "total_amount": 9684.66,
+      "total_amount_inr": 814479.91,
+      "billing_address": {
+        "street": "888 Electronics Plaza",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98101",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "888 Electronics Plaza",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98101",
+        "country": "USA"
+      },
+      "payment_terms": "Net 30 days from invoice date",
+      "terms_conditions": [
+        "Prices are valid for 30 days from the date of this Proforma Invoice.",
+        "Standard payment terms of Net 30 days apply.",
+        "Goods remain the property of the seller until full payment is received.",
+        "Regular customer discount applied as per agreement.",
+        "Free shipping for orders above $5,000."
+      ],
+      "notes": "Regular customer order. Standard payment terms apply.",
+      "created_by": "Admin User",
+      "approved_date": "2024-12-12T11:30:00Z"
+    },
+    {
+      "performa_invoice_id": "PI-2024-007",
+      "performa_invoice_number": "PI240007",
+      "quotation_id": "QUOT-2024-008",
+      "customer_id": "BUYER007",
+      "customer_name": "Jennifer Lee",
+      "issue_date": "2024-12-13T14:15:00Z",
+      "valid_until": "2024-12-20T00:00:00Z",
+      "validity_period": "7_DAYS",
+      "status": "APPROVED",
+      "currency": "USD",
+      "exchange_rate": 83.65,
+      "payment_status": "PARTIAL",
+      "payment_received": 9024.75,
+      "payment_history": [
+        {
+          "payment_id": "PAY-007",
+          "amount": 9024.75,
+          "currency": "USD",
+          "amount_usd": 9024.75,
+          "exchange_rate_at_payment": 83.65,
+          "payment_method": "WIRE_TRANSFER",
+          "transaction_id": "WIRE-20241218-007",
+          "payment_date": "2024-12-18",
+          "notes": "30% advance payment received",
+          "recorded_at": "2024-12-18T16:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD008",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Aircraft Hydraulic Pump Assembly",
+          "quantity": 10,
+          "unit_price": 2707.50,
+          "total_price": 27075.00
+        }
+      ],
+      "subtotal": 27075.00,
+      "tax": 2707.50,
+      "shipping": 300.00,
+      "total_amount": 30082.50,
+      "total_amount_inr": 2516401.13,
+      "billing_address": {
+        "street": "999 Builder's Ave",
+        "city": "Phoenix",
+        "state": "AZ",
+        "zip": "85001",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "999 Builder's Ave",
+        "city": "Phoenix",
+        "state": "AZ",
+        "zip": "85001",
+        "country": "USA"
+      },
+      "payment_terms": "30% advance, balance before shipment",
+      "terms_conditions": [
+        "URGENT: Prices are valid for 7 days only from the date of this Proforma Invoice.",
+        "30% advance payment required to confirm order.",
+        "Balance 70% to be paid before shipment.",
+        "Freight shipping charges included in the quoted price.",
+        "Expedited processing available - order will be prioritized upon payment confirmation."
+      ],
+      "notes": "Large order - freight shipping required. 30% advance received, awaiting balance.",
+      "created_by": "Admin User",
+      "approved_date": "2024-12-14T10:00:00Z"
+    },
+    {
+      "performa_invoice_id": "PI-2024-008",
+      "performa_invoice_number": "PI240008",
+      "quotation_id": "QUOT-2024-009",
+      "customer_id": "BUYER008",
+      "customer_name": "Maria Garcia",
+      "issue_date": "2024-12-15T09:00:00Z",
+      "valid_until": "2025-01-15T00:00:00Z",
+      "validity_period": "30_DAYS",
+      "status": "EXPIRED",
+      "currency": "USD",
+      "exchange_rate": 83.40,
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 5,
+          "unit_price": 850.45,
+          "total_price": 4252.25
+        },
+        {
+          "product_id": "PROD006",
+          "part_number": "ACF50-13OZ",
+          "product_name": "ACF-50 Anti-Corrosion Spray (13 oz)",
+          "quantity": 25,
+          "unit_price": 40.38,
+          "total_price": 1009.50
+        }
+      ],
+      "subtotal": 5261.75,
+      "tax": 526.18,
+      "shipping": 85.00,
+      "total_amount": 5872.93,
+      "total_amount_inr": 489802.36,
+      "billing_address": {
+        "street": "111 Medical Center Dr",
+        "city": "Boston",
+        "state": "MA",
+        "zip": "02101",
+        "country": "USA"
+      },
+      "shipping_address": {
+        "street": "111 Medical Center Dr",
+        "city": "Boston",
+        "state": "MA",
+        "zip": "02101",
+        "country": "USA"
+      },
+      "payment_terms": "Net 30 days from invoice date",
+      "terms_conditions": [
+        "Prices are valid for 30 days from the date of this Proforma Invoice.",
+        "Payment must be made in full before shipment.",
+        "Goods remain the property of the seller until full payment is received.",
+        "Contact us for renewal if validity has expired."
+      ],
+      "notes": "Validity expired. Customer did not respond. New quotation required if still interested.",
+      "created_by": "Admin User",
+      "approved_date": null
+    }
+  ],
+  "validityPeriodOptions": [
+    { "value": "7_DAYS", "label": "1 Week (7 Days)", "days": 7 },
+    { "value": "15_DAYS", "label": "15 Days", "days": 15 },
+    { "value": "30_DAYS", "label": "30 Days", "days": 30 }
+  ],
+  "defaultTermsConditions": [
+    "Prices are valid for the specified validity period from the date of this Proforma Invoice.",
+    "Payment must be made in full before shipment unless credit terms are pre-approved.",
+    "Goods remain the property of the seller until full payment is received.",
+    "Delivery dates are estimates and may vary based on stock availability.",
+    "Returns are accepted within 15 days of delivery for manufacturing defects only.",
+    "All disputes are subject to jurisdiction of local courts."
+  ]
+}

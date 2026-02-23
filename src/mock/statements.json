@@ -1,0 +1,450 @@
+{
+  "statements": [
+    {
+      "statement_id": "STMT-2026-001",
+      "customer_id": "BUYER001",
+      "statement_date": "2026-02-01T00:00:00Z",
+      "period_start": "2026-01-01T00:00:00Z",
+      "period_end": "2026-01-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.75,
+      "opening_balance": 0.00,
+      "total_charges": 17495.10,
+      "total_payments": 5290.35,
+      "closing_balance": 12204.75,
+      "closing_balance_inr": 1022147.81,
+      "current_due": 12204.75,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2026-01-10T09:30:00Z",
+          "type": "INVOICE",
+          "reference": "INV-240011",
+          "description": "Invoice for Order ORD011 - Hydraulic Pumps",
+          "charges": 7258.64,
+          "payments": 0.00,
+          "balance": 7258.64
+        },
+        {
+          "date": "2026-01-15T14:00:00Z",
+          "type": "INVOICE",
+          "reference": "INV-240012",
+          "description": "Invoice for Order ORD012 - ACF-50 Kits",
+          "charges": 2667.50,
+          "payments": 0.00,
+          "balance": 9926.14
+        },
+        {
+          "date": "2026-01-20T11:30:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-010",
+          "description": "Payment received - Credit Card",
+          "charges": 0.00,
+          "payments": 2667.50,
+          "balance": 7258.64
+        },
+        {
+          "date": "2026-01-25T10:15:00Z",
+          "type": "INVOICE",
+          "reference": "INV-240013",
+          "description": "Reimbursement Invoice - ACF-50 Formula",
+          "charges": 7568.96,
+          "payments": 0.00,
+          "balance": 14827.60
+        },
+        {
+          "date": "2026-01-28T15:00:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-011",
+          "description": "Partial payment - Wire Transfer",
+          "charges": 0.00,
+          "payments": 2622.85,
+          "balance": 12204.75
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2026-002",
+      "customer_id": "BUYER001",
+      "statement_date": "2026-02-12T00:00:00Z",
+      "period_start": "2026-02-01T00:00:00Z",
+      "period_end": "2026-02-28T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 84.10,
+      "opening_balance": 12204.75,
+      "total_charges": 8027.35,
+      "total_payments": 2622.85,
+      "closing_balance": 17609.25,
+      "closing_balance_inr": 1481137.93,
+      "current_due": 5404.50,
+      "past_due_30": 12204.75,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2026-02-01T16:45:00Z",
+          "type": "INVOICE",
+          "reference": "INV-240014",
+          "description": "Bill of Supply - Safety Wire Twisters & Spray",
+          "charges": 2622.85,
+          "payments": 0.00,
+          "balance": 14827.60
+        },
+        {
+          "date": "2026-02-05T09:00:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-012",
+          "description": "Payment received - Wire Transfer",
+          "charges": 0.00,
+          "payments": 2622.85,
+          "balance": 12204.75
+        },
+        {
+          "date": "2026-02-05T11:20:00Z",
+          "type": "INVOICE",
+          "reference": "INV-240015",
+          "description": "Invoice for Order ORD015 - Bearing Sets",
+          "charges": 5404.50,
+          "payments": 0.00,
+          "balance": 17609.25
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-001",
+      "customer_id": "BUYER001",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-11-01T00:00:00Z",
+      "period_end": "2024-11-30T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.50,
+      "opening_balance": 0.00,
+      "total_charges": 4117.24,
+      "total_payments": 4117.24,
+      "closing_balance": 0.00,
+      "closing_balance_inr": 0.00,
+      "current_due": 0.00,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-05T14:20:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-002",
+          "description": "Invoice for Order ORD002",
+          "charges": 4117.24,
+          "payments": 0.00,
+          "balance": 4117.24
+        },
+        {
+          "date": "2024-12-10T10:15:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-001",
+          "description": "Payment received - Credit Card",
+          "charges": 0.00,
+          "payments": 4117.24,
+          "balance": 0.00
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-002",
+      "customer_id": "BUYER001",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 84.00,
+      "opening_balance": 0.00,
+      "total_charges": 6203.20,
+      "total_payments": 0.00,
+      "closing_balance": 6203.20,
+      "closing_balance_inr": 521068.80,
+      "current_due": 6203.20,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-10T10:30:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-003",
+          "description": "Invoice for Order ORD001",
+          "charges": 6203.20,
+          "payments": 0.00,
+          "balance": 6203.20
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-003",
+      "customer_id": "BUYER002",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.25,
+      "opening_balance": 0.00,
+      "total_charges": 11491.85,
+      "total_payments": 11491.85,
+      "closing_balance": 0.00,
+      "closing_balance_inr": 0.00,
+      "current_due": 0.00,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-08T09:15:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-002",
+          "description": "Invoice for Order ORD003",
+          "charges": 11491.85,
+          "payments": 0.00,
+          "balance": 11491.85
+        },
+        {
+          "date": "2024-12-12T14:30:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-002",
+          "description": "Payment received - Wire Transfer",
+          "charges": 0.00,
+          "payments": 11491.85,
+          "balance": 0.00
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-004",
+      "customer_id": "BUYER003",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.90,
+      "opening_balance": 0.00,
+      "total_charges": 12869.58,
+      "total_payments": 0.00,
+      "closing_balance": 12869.58,
+      "closing_balance_inr": 1079755.58,
+      "current_due": 12869.58,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-12T11:45:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-007",
+          "description": "Invoice for Order ORD004",
+          "charges": 6051.50,
+          "payments": 0.00,
+          "balance": 6051.50
+        },
+        {
+          "date": "2024-12-14T13:30:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-008",
+          "description": "Invoice for Order ORD005",
+          "charges": 6818.08,
+          "payments": 0.00,
+          "balance": 12869.58
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-005",
+      "customer_id": "BUYER004",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.75,
+      "opening_balance": 0.00,
+      "total_charges": 2187.06,
+      "total_payments": 2187.06,
+      "closing_balance": 0.00,
+      "closing_balance_inr": 0.00,
+      "current_due": 0.00,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-07T15:10:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-004",
+          "description": "Invoice for Order ORD006",
+          "charges": 2187.06,
+          "payments": 0.00,
+          "balance": 2187.06
+        },
+        {
+          "date": "2024-12-09T11:20:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-003",
+          "description": "Payment received - Check",
+          "charges": 0.00,
+          "payments": 2187.06,
+          "balance": 0.00
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-006",
+      "customer_id": "BUYER005",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 84.00,
+      "opening_balance": 0.00,
+      "total_charges": 6295.43,
+      "total_payments": 0.00,
+      "closing_balance": 6295.43,
+      "closing_balance_inr": 528816.12,
+      "current_due": 6295.43,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-13T08:50:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-009",
+          "description": "Invoice for Order ORD007",
+          "charges": 6295.43,
+          "payments": 0.00,
+          "balance": 6295.43
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-007",
+      "customer_id": "BUYER006",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 84.10,
+      "opening_balance": 0.00,
+      "total_charges": 7789.17,
+      "total_payments": 7789.17,
+      "closing_balance": 0.00,
+      "closing_balance_inr": 0.00,
+      "current_due": 0.00,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-09T12:20:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-005",
+          "description": "Invoice for Order ORD008",
+          "charges": 7789.17,
+          "payments": 0.00,
+          "balance": 7789.17
+        },
+        {
+          "date": "2024-12-11T09:45:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-004",
+          "description": "Payment received - Credit Card",
+          "charges": 0.00,
+          "payments": 7789.17,
+          "balance": 0.00
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-008",
+      "customer_id": "BUYER007",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.55,
+      "opening_balance": 0.00,
+      "total_charges": 15076.25,
+      "total_payments": 0.00,
+      "closing_balance": 15076.25,
+      "closing_balance_inr": 1260120.19,
+      "current_due": 15076.25,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-15T10:00:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-010",
+          "description": "Invoice for Order ORD009",
+          "charges": 15076.25,
+          "payments": 0.00,
+          "balance": 15076.25
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-009",
+      "customer_id": "BUYER008",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.40,
+      "opening_balance": 0.00,
+      "total_charges": 17245.28,
+      "total_payments": 17245.28,
+      "closing_balance": 0.00,
+      "closing_balance_inr": 0.00,
+      "current_due": 0.00,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": [
+        {
+          "date": "2024-12-11T14:35:00Z",
+          "type": "INVOICE",
+          "reference": "INV-2024-006",
+          "description": "Invoice for Order ORD010",
+          "charges": 17245.28,
+          "payments": 0.00,
+          "balance": 17245.28
+        },
+        {
+          "date": "2024-12-13T16:00:00Z",
+          "type": "PAYMENT",
+          "reference": "PMT-005",
+          "description": "Payment received - Wire Transfer",
+          "charges": 0.00,
+          "payments": 17245.28,
+          "balance": 0.00
+        }
+      ]
+    },
+    {
+      "statement_id": "STMT-2024-010",
+      "customer_id": "BUYER009",
+      "statement_date": "2024-12-18T00:00:00Z",
+      "period_start": "2024-12-01T00:00:00Z",
+      "period_end": "2024-12-31T23:59:59Z",
+      "currency": "USD",
+      "exchange_rate": 83.50,
+      "opening_balance": 0.00,
+      "total_charges": 0.00,
+      "total_payments": 0.00,
+      "closing_balance": 0.00,
+      "closing_balance_inr": 0.00,
+      "current_due": 0.00,
+      "past_due_30": 0.00,
+      "past_due_60": 0.00,
+      "past_due_90": 0.00,
+      "transactions": []
+    }
+  ]
+}

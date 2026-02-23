@@ -1,0 +1,252 @@
+{
+  "userProfiles": [
+    {
+      "profile_id": "PROFILE-BUYER001",
+      "customer_id": "BUYER001",
+      "profile_picture": "/images/profiles/buyer001.jpg",
+      "company_logo": "/images/logos/techcorp.png",
+      "personal_info": {
+        "name": "John Smith",
+        "title": "Procurement Manager",
+        "email": "john.smith@techcorp.com",
+        "phone": "+1-555-0100",
+        "mobile": "+1-555-0101"
+      },
+      "company_details": {
+        "company_name": "TechCorp Industries",
+        "tax_id": "12-3456789",
+        "business_type": "Corporation",
+        "industry": "Technology",
+        "founded_year": 2010,
+        "employees": "50-100",
+        "annual_revenue": "$5M-$10M",
+        "website": "https://techcorp.com"
+      },
+      "billing_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "shipping_addresses": [
+        {
+          "address_id": "ADDR001",
+          "label": "Main Office",
+          "street": "123 Business Park",
+          "city": "New York",
+          "state": "NY",
+          "zip": "10001",
+          "country": "USA",
+          "is_default": true
+        },
+        {
+          "address_id": "ADDR002",
+          "label": "Warehouse",
+          "street": "456 Industrial Blvd",
+          "city": "New York",
+          "state": "NY",
+          "zip": "10002",
+          "country": "USA",
+          "is_default": false
+        }
+      ],
+      "payment_methods": [
+        {
+          "payment_id": "PAY001",
+          "type": "Credit Card",
+          "card_last_four": "4242",
+          "card_brand": "Visa",
+          "is_default": true,
+          "expiry": "12/2026"
+        },
+        {
+          "payment_id": "PAY002",
+          "type": "Bank Account",
+          "account_last_four": "5678",
+          "bank_name": "Chase Bank",
+          "is_default": false
+        }
+      ],
+      "preferences": {
+        "currency": "USD",
+        "language": "en",
+        "timezone": "America/New_York",
+        "notifications": {
+          "email": true,
+          "sms": false,
+          "order_updates": true,
+          "promotional": true
+        }
+      },
+      "credit_info": {
+        "credit_limit": 50000.00,
+        "available_credit": 43796.80,
+        "payment_terms": "Net 30",
+        "credit_rating": "A"
+      },
+      "account_manager": {
+        "name": "Admin User",
+        "email": "admin@kbcrm.com",
+        "phone": "+1-555-9999"
+      }
+    },
+    {
+      "profile_id": "PROFILE-BUYER002",
+      "customer_id": "BUYER002",
+      "profile_picture": "/images/profiles/buyer002.jpg",
+      "company_logo": "/images/logos/aerospace.png",
+      "personal_info": {
+        "name": "Sarah Johnson",
+        "title": "Supply Chain Director",
+        "email": "sarah.j@aerospace.com",
+        "phone": "+1-555-0200",
+        "mobile": "+1-555-0201"
+      },
+      "company_details": {
+        "company_name": "Aerospace Solutions Ltd",
+        "tax_id": "98-7654321",
+        "business_type": "Limited Liability Company",
+        "industry": "Aerospace",
+        "founded_year": 2005,
+        "employees": "100-500",
+        "annual_revenue": "$10M-$50M",
+        "website": "https://aerospace-solutions.com"
+      },
+      "billing_address": {
+        "street": "456 Aviation Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90001",
+        "country": "USA"
+      },
+      "shipping_addresses": [
+        {
+          "address_id": "ADDR003",
+          "label": "Main Facility",
+          "street": "456 Aviation Blvd",
+          "city": "Los Angeles",
+          "state": "CA",
+          "zip": "90001",
+          "country": "USA",
+          "is_default": true
+        }
+      ],
+      "payment_methods": [
+        {
+          "payment_id": "PAY003",
+          "type": "Wire Transfer",
+          "account_last_four": "9012",
+          "bank_name": "Bank of America",
+          "is_default": true
+        }
+      ],
+      "preferences": {
+        "currency": "USD",
+        "language": "en",
+        "timezone": "America/Los_Angeles",
+        "notifications": {
+          "email": true,
+          "sms": true,
+          "order_updates": true,
+          "promotional": false
+        }
+      },
+      "credit_info": {
+        "credit_limit": 100000.00,
+        "available_credit": 100000.00,
+        "payment_terms": "Net 45",
+        "credit_rating": "A+"
+      },
+      "account_manager": {
+        "name": "Admin User",
+        "email": "admin@kbcrm.com",
+        "phone": "+1-555-9999"
+      }
+    },
+    {
+      "profile_id": "PROFILE-BUYER003",
+      "customer_id": "BUYER003",
+      "profile_picture": "/images/profiles/buyer003.jpg",
+      "company_logo": "/images/logos/manufacturing.png",
+      "personal_info": {
+        "name": "Michael Chen",
+        "title": "Operations Manager",
+        "email": "m.chen@manufacturing.com",
+        "phone": "+1-555-0300",
+        "mobile": "+1-555-0301"
+      },
+      "company_details": {
+        "company_name": "Manufacturing Pro Inc",
+        "tax_id": "45-6789012",
+        "business_type": "Corporation",
+        "industry": "Manufacturing",
+        "founded_year": 2008,
+        "employees": "200-500",
+        "annual_revenue": "$20M-$50M",
+        "website": "https://manufacturingpro.com"
+      },
+      "billing_address": {
+        "street": "789 Industrial Way",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "shipping_addresses": [
+        {
+          "address_id": "ADDR004",
+          "label": "Plant 1",
+          "street": "789 Industrial Way",
+          "city": "Houston",
+          "state": "TX",
+          "zip": "77001",
+          "country": "USA",
+          "is_default": true
+        },
+        {
+          "address_id": "ADDR005",
+          "label": "Plant 2",
+          "street": "890 Manufacturing Dr",
+          "city": "Houston",
+          "state": "TX",
+          "zip": "77002",
+          "country": "USA",
+          "is_default": false
+        }
+      ],
+      "payment_methods": [
+        {
+          "payment_id": "PAY004",
+          "type": "Credit Card",
+          "card_last_four": "8888",
+          "card_brand": "American Express",
+          "is_default": true,
+          "expiry": "06/2027"
+        }
+      ],
+      "preferences": {
+        "currency": "USD",
+        "language": "en",
+        "timezone": "America/Chicago",
+        "notifications": {
+          "email": true,
+          "sms": false,
+          "order_updates": true,
+          "promotional": true
+        }
+      },
+      "credit_info": {
+        "credit_limit": 75000.00,
+        "available_credit": 62130.42,
+        "payment_terms": "Net 30",
+        "credit_rating": "A"
+      },
+      "account_manager": {
+        "name": "Admin User",
+        "email": "admin@kbcrm.com",
+        "phone": "+1-555-9999"
+      }
+    }
+  ]
+}

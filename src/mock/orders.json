@@ -1,0 +1,1450 @@
+{
+  "orders": [
+    {
+      "order_id": "ORD001",
+      "customer_id": "BUYER001",
+      "order_date": "2024-12-10T10:30:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 6500.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-001",
+          "amount": 6500.00,
+          "currency": "USD",
+          "amount_usd": 6500.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241210001",
+          "payment_date": "2024-12-10",
+          "notes": "Full advance payment received",
+          "recorded_at": "2024-12-10T11:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD001",
+          "part_number": "ATS-M1-S5",
+          "product_name": "DIE, STR. SHANK 5/32 (M1-K)",
+          "quantity": 5,
+          "unit_price": 1032.36,
+          "total_price": 5161.80,
+          "has_inventory": true,
+          "inventory_quantity": 10
+        },
+        {
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 15,
+          "unit_price": 26.68,
+          "total_price": 400.20,
+          "has_inventory": true,
+          "inventory_quantity": 50
+        }
+      ],
+      "subtotal": 5562.00,
+      "tax": 556.20,
+      "shipping": 85.00,
+      "total_amount": 6203.20,
+      "shipping_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "notes": "Rush order - needed by end of month. Advance paid in full.",
+      "tracking_number": null,
+      "estimated_delivery": "2024-12-25T00:00:00Z"
+    },
+    {
+      "order_id": "ORD002",
+      "customer_id": "BUYER001",
+      "order_date": "2024-12-05T14:20:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 4117.24,
+      "payment_history": [
+        {
+          "payment_id": "PAY-002",
+          "amount": 4117.24,
+          "currency": "USD",
+          "amount_usd": 4117.24,
+          "payment_method": "CREDIT_CARD",
+          "transaction_id": "TXN20241205001",
+          "payment_date": "2024-12-05",
+          "notes": "Advance payment",
+          "recorded_at": "2024-12-05T15:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD003",
+          "part_number": "ATS-M1-B2",
+          "product_name": "DIE, BALL 1/16\" FOR M1-K",
+          "quantity": 3,
+          "unit_price": 1227.95,
+          "total_price": 3683.85
+        }
+      ],
+      "subtotal": 3683.85,
+      "tax": 368.39,
+      "shipping": 65.00,
+      "total_amount": 4117.24,
+      "shipping_address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "notes": "",
+      "tracking_number": "TRK123456789",
+      "courier_service": "FedEx",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-06",
+        "courier_service": "FedEx",
+        "tracking_number": "TRK123456789",
+        "dispatch_notes": "Shipped via priority",
+        "shipment_status": "Delivered"
+      },
+      "estimated_delivery": "2024-12-20T00:00:00Z"
+    },
+    {
+      "order_id": "ORD003",
+      "customer_id": "BUYER002",
+      "order_date": "2024-12-08T09:15:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 11491.85,
+      "payment_history": [
+        {
+          "payment_id": "PAY-003",
+          "amount": 11491.85,
+          "currency": "USD",
+          "amount_usd": 11491.85,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241208001",
+          "payment_date": "2024-12-08",
+          "notes": "Wire transfer received",
+          "recorded_at": "2024-12-08T10:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 10,
+          "unit_price": 850.45,
+          "total_price": 8504.50
+        },
+        {
+          "product_id": "PROD009",
+          "part_number": "SEAL-AV-100",
+          "product_name": "Aviation Grade Sealant (Tube)",
+          "quantity": 50,
+          "unit_price": 36.58,
+          "total_price": 1829.00
+        }
+      ],
+      "subtotal": 10333.50,
+      "tax": 1033.35,
+      "shipping": 125.00,
+      "total_amount": 11491.85,
+      "shipping_address": {
+        "street": "456 Aviation Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90001",
+        "country": "USA"
+      },
+      "notes": "Requires special handling certification",
+      "tracking_number": "TRK987654321",
+      "courier_service": "DHL Express",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-09",
+        "courier_service": "DHL Express",
+        "tracking_number": "TRK987654321",
+        "dispatch_notes": "Special handling - fragile items",
+        "shipment_status": "Delivered"
+      },
+      "estimated_delivery": "2024-12-22T00:00:00Z"
+    },
+    {
+      "order_id": "ORD004",
+      "customer_id": "BUYER003",
+      "order_date": "2024-12-12T11:45:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 6051.50,
+      "payment_history": [
+        {
+          "payment_id": "PAY-004",
+          "amount": 508725.00,
+          "currency": "INR",
+          "amount_usd": 6051.50,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241212001",
+          "payment_date": "2024-12-12",
+          "notes": "INR wire transfer received",
+          "recorded_at": "2024-12-12T12:30:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD008",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Aircraft Hydraulic Pump Assembly",
+          "quantity": 2,
+          "unit_price": 2707.50,
+          "total_price": 5415.00,
+          "has_inventory": true,
+          "inventory_quantity": 5
+        }
+      ],
+      "subtotal": 5415.00,
+      "tax": 541.50,
+      "shipping": 95.00,
+      "total_amount": 6051.50,
+      "shipping_address": {
+        "street": "789 Industrial Way",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "notes": "Quote approved - advance payment received",
+      "tracking_number": null,
+      "estimated_delivery": "2024-12-28T00:00:00Z"
+    },
+    {
+      "order_id": "ORD005",
+      "customer_id": "BUYER003",
+      "order_date": "2024-12-14T13:30:00Z",
+      "status": "OPEN",
+      "payment_status": "PARTIAL",
+      "payment_received": 4000.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-005",
+          "amount": 4000.00,
+          "currency": "USD",
+          "amount_usd": 4000.00,
+          "payment_method": "CREDIT_CARD",
+          "transaction_id": "TXN20241214001",
+          "payment_date": "2024-12-14",
+          "notes": "Partial advance - remaining to be paid later",
+          "recorded_at": "2024-12-14T14:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD010",
+          "part_number": "BEARING-SET-200",
+          "product_name": "Precision Aircraft Bearing Set",
+          "quantity": 8,
+          "unit_price": 403.75,
+          "total_price": 3230.00,
+          "has_inventory": false,
+          "inventory_quantity": 0
+        },
+        {
+          "product_id": "PROD005",
+          "part_number": "ACF50-1G",
+          "product_name": "ACF-50 Anti-Corrosion Formula (1 Gallon)",
+          "quantity": 12,
+          "unit_price": 239.40,
+          "total_price": 2872.80,
+          "has_inventory": true,
+          "inventory_quantity": 25
+        }
+      ],
+      "subtotal": 6102.80,
+      "tax": 610.28,
+      "shipping": 105.00,
+      "total_amount": 6818.08,
+      "shipping_address": {
+        "street": "789 Industrial Way",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "notes": "Partial advance received - can dispatch items worth $4000",
+      "tracking_number": null,
+      "estimated_delivery": "2024-12-30T00:00:00Z"
+    },
+    {
+      "order_id": "ORD006",
+      "customer_id": "BUYER004",
+      "order_date": "2024-12-07T15:10:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 2187.06,
+      "payment_history": [
+        {
+          "payment_id": "PAY-006",
+          "amount": 2187.06,
+          "currency": "USD",
+          "amount_usd": 2187.06,
+          "payment_method": "UPI",
+          "transaction_id": "TXN20241207001",
+          "payment_date": "2024-12-07",
+          "notes": "UPI payment received",
+          "recorded_at": "2024-12-07T16:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD006",
+          "part_number": "ACF50-13OZ",
+          "product_name": "ACF-50 Anti-Corrosion Spray (13 oz)",
+          "quantity": 48,
+          "unit_price": 40.38,
+          "total_price": 1938.24
+        }
+      ],
+      "subtotal": 1938.24,
+      "tax": 193.82,
+      "shipping": 55.00,
+      "total_amount": 2187.06,
+      "shipping_address": {
+        "street": "321 Airport Road",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33101",
+        "country": "USA"
+      },
+      "notes": "Express shipping requested",
+      "tracking_number": "TRK456789123",
+      "courier_service": "UPS",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-08",
+        "courier_service": "UPS",
+        "tracking_number": "TRK456789123",
+        "dispatch_notes": "Express delivery - next day",
+        "shipment_status": "Delivered"
+      },
+      "estimated_delivery": "2024-12-19T00:00:00Z"
+    },
+    {
+      "order_id": "ORD007",
+      "customer_id": "BUYER005",
+      "order_date": "2024-12-13T08:50:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 7000.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-007",
+          "amount": 7000.00,
+          "currency": "USD",
+          "amount_usd": 7000.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241213001",
+          "payment_date": "2024-12-13",
+          "notes": "Advance with buyer credit",
+          "recorded_at": "2024-12-13T09:30:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD007",
+          "part_number": "ACF50-KIT",
+          "product_name": "ACF-50 Starter Kit with Applicator",
+          "quantity": 25,
+          "unit_price": 118.75,
+          "total_price": 2968.75,
+          "has_inventory": true,
+          "inventory_quantity": 30
+        },
+        {
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 100,
+          "unit_price": 26.68,
+          "total_price": 2668.00,
+          "has_inventory": true,
+          "inventory_quantity": 150
+        }
+      ],
+      "subtotal": 5636.75,
+      "tax": 563.68,
+      "shipping": 95.00,
+      "total_amount": 6295.43,
+      "shipping_address": {
+        "street": "555 Transport Lane",
+        "city": "Denver",
+        "state": "CO",
+        "zip": "80201",
+        "country": "USA"
+      },
+      "notes": "Buyer has extra credit of $704.57 for future orders",
+      "tracking_number": null,
+      "estimated_delivery": "2024-12-27T00:00:00Z"
+    },
+    {
+      "order_id": "ORD008",
+      "customer_id": "BUYER006",
+      "order_date": "2024-12-09T12:20:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 7789.17,
+      "payment_history": [
+        {
+          "payment_id": "PAY-008",
+          "amount": 7789.17,
+          "currency": "USD",
+          "amount_usd": 7789.17,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241209001",
+          "payment_date": "2024-12-09",
+          "notes": "Full advance payment",
+          "recorded_at": "2024-12-09T13:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD001",
+          "part_number": "ATS-M1-S5",
+          "product_name": "DIE, STR. SHANK 5/32 (M1-K)",
+          "quantity": 2,
+          "unit_price": 1032.36,
+          "total_price": 2064.72
+        },
+        {
+          "product_id": "PROD003",
+          "part_number": "ATS-M1-B2",
+          "product_name": "DIE, BALL 1/16\" FOR M1-K",
+          "quantity": 4,
+          "unit_price": 1227.95,
+          "total_price": 4911.80
+        }
+      ],
+      "subtotal": 6976.52,
+      "tax": 697.65,
+      "shipping": 115.00,
+      "total_amount": 7789.17,
+      "shipping_address": {
+        "street": "888 Electronics Plaza",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98101",
+        "country": "USA"
+      },
+      "notes": "Regular monthly order",
+      "tracking_number": "TRK789123456",
+      "courier_service": "FedEx Ground",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-10",
+        "courier_service": "FedEx Ground",
+        "tracking_number": "TRK789123456",
+        "dispatch_notes": "Standard shipping",
+        "shipment_status": "In Transit"
+      },
+      "estimated_delivery": "2024-12-21T00:00:00Z"
+    },
+    {
+      "order_id": "ORD009",
+      "customer_id": "BUYER007",
+      "order_date": "2024-12-15T10:00:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 15500.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-009A",
+          "amount": 10000.00,
+          "currency": "USD",
+          "amount_usd": 10000.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241215001",
+          "payment_date": "2024-12-15",
+          "notes": "Initial advance payment",
+          "recorded_at": "2024-12-15T11:00:00Z"
+        },
+        {
+          "payment_id": "PAY-009B",
+          "amount": 5500.00,
+          "currency": "USD",
+          "amount_usd": 5500.00,
+          "payment_method": "CREDIT_CARD",
+          "transaction_id": "TXN20241216001",
+          "payment_date": "2024-12-16",
+          "notes": "Remaining advance payment",
+          "recorded_at": "2024-12-16T10:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD008",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Aircraft Hydraulic Pump Assembly",
+          "quantity": 5,
+          "unit_price": 2707.50,
+          "total_price": 13537.50,
+          "has_inventory": true,
+          "inventory_quantity": 8
+        }
+      ],
+      "subtotal": 13537.50,
+      "tax": 1353.75,
+      "shipping": 185.00,
+      "total_amount": 15076.25,
+      "shipping_address": {
+        "street": "999 Builder's Ave",
+        "city": "Phoenix",
+        "state": "AZ",
+        "zip": "85001",
+        "country": "USA"
+      },
+      "notes": "Large order - requires freight shipping. Buyer has $423.75 credit.",
+      "tracking_number": null,
+      "estimated_delivery": "2025-01-05T00:00:00Z"
+    },
+    {
+      "order_id": "ORD010",
+      "customer_id": "BUYER008",
+      "order_date": "2024-12-11T14:35:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 17245.28,
+      "payment_history": [
+        {
+          "payment_id": "PAY-010",
+          "amount": 17245.28,
+          "currency": "USD",
+          "amount_usd": 17245.28,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241211001",
+          "payment_date": "2024-12-11",
+          "notes": "Full payment via wire",
+          "recorded_at": "2024-12-11T15:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 15,
+          "unit_price": 850.45,
+          "total_price": 12756.75
+        },
+        {
+          "product_id": "PROD009",
+          "part_number": "SEAL-AV-100",
+          "product_name": "Aviation Grade Sealant (Tube)",
+          "quantity": 75,
+          "unit_price": 36.58,
+          "total_price": 2743.50
+        }
+      ],
+      "subtotal": 15500.25,
+      "tax": 1550.03,
+      "shipping": 195.00,
+      "total_amount": 17245.28,
+      "shipping_address": {
+        "street": "111 Medical Center Dr",
+        "city": "Boston",
+        "state": "MA",
+        "zip": "02101",
+        "country": "USA"
+      },
+      "notes": "Priority medical supplies - temperature controlled shipping",
+      "tracking_number": "TRK321654987",
+      "courier_service": "DHL Medical",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-12",
+        "courier_service": "DHL Medical",
+        "tracking_number": "TRK321654987",
+        "dispatch_notes": "Temperature controlled - handle with care",
+        "shipment_status": "Delivered"
+      },
+      "estimated_delivery": "2024-12-20T00:00:00Z"
+    },
+    {
+      "order_id": "ORD011",
+      "customer_id": "BUYER009",
+      "order_date": "2024-12-17T09:00:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 8500.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-011",
+          "amount": 714000.00,
+          "currency": "INR",
+          "amount_usd": 8500.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241217001",
+          "payment_date": "2024-12-17",
+          "notes": "INR payment - converted at 84 INR/USD",
+          "recorded_at": "2024-12-17T10:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD011",
+          "part_number": "RIVET-KIT-PRO",
+          "product_name": "Aviation Rivet Kit Professional",
+          "quantity": 20,
+          "unit_price": 285.50,
+          "total_price": 5710.00,
+          "has_inventory": true,
+          "inventory_quantity": 25
+        },
+        {
+          "product_id": "PROD012",
+          "part_number": "DRILL-SET-AV",
+          "product_name": "Aircraft Drill Bit Set",
+          "quantity": 10,
+          "unit_price": 195.00,
+          "total_price": 1950.00,
+          "has_inventory": true,
+          "inventory_quantity": 15
+        }
+      ],
+      "subtotal": 7660.00,
+      "tax": 766.00,
+      "shipping": 120.00,
+      "total_amount": 8546.00,
+      "shipping_address": {
+        "street": "222 Hangar Road",
+        "city": "Dallas",
+        "state": "TX",
+        "zip": "75201",
+        "country": "USA"
+      },
+      "notes": "New customer - first order with advance payment",
+      "tracking_number": null,
+      "estimated_delivery": "2025-01-02T00:00:00Z"
+    },
+    {
+      "order_id": "ORD012",
+      "customer_id": "BUYER010",
+      "order_date": "2024-12-18T14:00:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 12000.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-012",
+          "amount": 12000.00,
+          "currency": "USD",
+          "amount_usd": 12000.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241218001",
+          "payment_date": "2024-12-18",
+          "notes": "Bulk order advance",
+          "recorded_at": "2024-12-18T15:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD013",
+          "part_number": "FUEL-PUMP-AV",
+          "product_name": "Aircraft Fuel Transfer Pump",
+          "quantity": 3,
+          "unit_price": 3250.00,
+          "total_price": 9750.00,
+          "has_inventory": true,
+          "inventory_quantity": 4
+        },
+        {
+          "product_id": "PROD014",
+          "part_number": "FILTER-SET-100",
+          "product_name": "Aviation Fuel Filter Set",
+          "quantity": 15,
+          "unit_price": 89.00,
+          "total_price": 1335.00,
+          "has_inventory": true,
+          "inventory_quantity": 50
+        }
+      ],
+      "subtotal": 11085.00,
+      "tax": 1108.50,
+      "shipping": 150.00,
+      "total_amount": 12343.50,
+      "shipping_address": {
+        "street": "777 Runway Ave",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "60601",
+        "country": "USA"
+      },
+      "notes": "Bulk order for MRO facility - $343.50 pending",
+      "tracking_number": null,
+      "estimated_delivery": "2025-01-08T00:00:00Z"
+    },
+    {
+      "order_id": "ORD013",
+      "customer_id": "BUYER011",
+      "order_date": "2024-12-16T11:20:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 5432.10,
+      "payment_history": [
+        {
+          "payment_id": "PAY-013",
+          "amount": 5432.10,
+          "currency": "USD",
+          "amount_usd": 5432.10,
+          "payment_method": "CREDIT_CARD",
+          "transaction_id": "TXN20241216002",
+          "payment_date": "2024-12-16",
+          "notes": "Advance payment - card",
+          "recorded_at": "2024-12-16T12:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD007",
+          "part_number": "ACF50-KIT",
+          "product_name": "ACF-50 Starter Kit with Applicator",
+          "quantity": 35,
+          "unit_price": 118.75,
+          "total_price": 4156.25
+        }
+      ],
+      "subtotal": 4156.25,
+      "tax": 415.63,
+      "shipping": 75.00,
+      "total_amount": 4646.88,
+      "shipping_address": {
+        "street": "101 Service Road",
+        "city": "Atlanta",
+        "state": "GA",
+        "zip": "30301",
+        "country": "USA"
+      },
+      "notes": "Dispatched but tracking details pending",
+      "tracking_number": null,
+      "courier_service": "",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-17",
+        "courier_service": "",
+        "tracking_number": "",
+        "dispatch_notes": "Handed to courier - awaiting tracking number",
+        "shipment_status": "Pending"
+      },
+      "estimated_delivery": "2024-12-24T00:00:00Z"
+    },
+    {
+      "order_id": "ORD014",
+      "customer_id": "BUYER012",
+      "order_date": "2024-12-19T10:15:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 9876.50,
+      "payment_history": [
+        {
+          "payment_id": "PAY-014",
+          "amount": 9876.50,
+          "currency": "USD",
+          "amount_usd": 9876.50,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241219001",
+          "payment_date": "2024-12-19",
+          "notes": "Full advance wire transfer",
+          "recorded_at": "2024-12-19T11:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD010",
+          "part_number": "BEARING-SET-200",
+          "product_name": "Precision Aircraft Bearing Set",
+          "quantity": 18,
+          "unit_price": 403.75,
+          "total_price": 7267.50
+        },
+        {
+          "product_id": "PROD006",
+          "part_number": "ACF50-13OZ",
+          "product_name": "ACF-50 Anti-Corrosion Spray (13 oz)",
+          "quantity": 30,
+          "unit_price": 40.38,
+          "total_price": 1211.40
+        }
+      ],
+      "subtotal": 8478.90,
+      "tax": 847.89,
+      "shipping": 95.00,
+      "total_amount": 9421.79,
+      "shipping_address": {
+        "street": "456 Industrial Park",
+        "city": "Portland",
+        "state": "OR",
+        "zip": "97201",
+        "country": "USA"
+      },
+      "notes": "Dispatched via local courier - tracking pending",
+      "tracking_number": null,
+      "courier_service": "Local Courier",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-20",
+        "courier_service": "Local Courier",
+        "tracking_number": "",
+        "dispatch_notes": "Local delivery - tracking not available yet",
+        "shipment_status": "Pending"
+      },
+      "estimated_delivery": "2024-12-26T00:00:00Z"
+    },
+    {
+      "order_id": "ORD015",
+      "customer_id": "BUYER013",
+      "order_date": "2024-12-20T08:30:00Z",
+      "status": "DISPATCHED",
+      "payment_status": "PAID",
+      "payment_received": 6543.21,
+      "payment_history": [
+        {
+          "payment_id": "PAY-015",
+          "amount": 6543.21,
+          "currency": "USD",
+          "amount_usd": 6543.21,
+          "payment_method": "UPI",
+          "transaction_id": "TXN20241220001",
+          "payment_date": "2024-12-20",
+          "notes": "UPI payment processed",
+          "recorded_at": "2024-12-20T09:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD005",
+          "part_number": "ACF50-1G",
+          "product_name": "ACF-50 Anti-Corrosion Formula (1 Gallon)",
+          "quantity": 20,
+          "unit_price": 239.40,
+          "total_price": 4788.00
+        }
+      ],
+      "subtotal": 4788.00,
+      "tax": 478.80,
+      "shipping": 85.00,
+      "total_amount": 5351.80,
+      "shipping_address": {
+        "street": "789 Tech Boulevard",
+        "city": "San Francisco",
+        "state": "CA",
+        "zip": "94102",
+        "country": "USA"
+      },
+      "notes": "Rush order - dispatched same day with tracking",
+      "tracking_number": "TRK555666777",
+      "courier_service": "FedEx Priority",
+      "dispatch_info": {
+        "dispatch_date": "2024-12-20",
+        "courier_service": "FedEx Priority",
+        "tracking_number": "TRK555666777",
+        "dispatch_notes": "Priority overnight - signature required",
+        "shipment_status": "In Transit"
+      },
+      "estimated_delivery": "2024-12-23T00:00:00Z"
+    },
+    {
+      "order_id": "ORD016",
+      "po_number": "PO2024-016",
+      "customer_id": "BUYER014",
+      "customer_name": "Tech Solutions Inc.",
+      "customer_email": "orders@techsolutions.com",
+      "order_date": "2024-12-22T14:30:00Z",
+      "created_at": "2024-12-22T14:30:00Z",
+      "status": "PENDING",
+      "order_type": "QUOTE_REQUEST",
+      "priority": "NORMAL",
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD008",
+          "part_number": "SEAL-KIT-100",
+          "product_name": "Aircraft Seal Kit",
+          "quantity": 50,
+          "requested_unit_price": 85.50,
+          "unit_price": 85.50,
+          "total_price": 4275.00
+        }
+      ],
+      "subtotal": 4275.00,
+      "tax": 0,
+      "shipping": 0,
+      "total_amount": 4275.00,
+      "customer_notes": "Please provide best price for bulk order",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD026",
+      "po_number": "PO2025-001",
+      "customer_id": "BUYER001",
+      "customer_name": "Aero Parts International",
+      "customer_email": "purchasing@aeroparts.com",
+      "order_date": "2025-02-10T10:15:00Z",
+      "created_at": "2025-02-10T10:15:00Z",
+      "status": "PENDING",
+      "order_type": "QUOTE_REQUEST",
+      "priority": "HIGH",
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD001",
+          "part_number": "ATS-M1-S5",
+          "product_name": "DIE, STR. SHANK 5/32 (M1-K)",
+          "quantity": 10,
+          "requested_unit_price": 1032.36,
+          "unit_price": 1032.36,
+          "total_price": 10323.60
+        },
+        {
+          "product_id": "PROD002",
+          "part_number": "ATS-134S",
+          "product_name": "SAFETY WIRE TWISTER (8\")",
+          "quantity": 25,
+          "requested_unit_price": 26.68,
+          "unit_price": 26.68,
+          "total_price": 667.00
+        }
+      ],
+      "subtotal": 10990.60,
+      "tax": 0,
+      "shipping": 0,
+      "total_amount": 10990.60,
+      "customer_notes": "Urgent requirement for maintenance project",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD027",
+      "po_number": "PO2025-002",
+      "customer_id": "BUYER003",
+      "customer_name": "Skyway Maintenance Ltd.",
+      "customer_email": "orders@skywaymaint.com",
+      "order_date": "2025-02-12T09:30:00Z",
+      "created_at": "2025-02-12T09:30:00Z",
+      "status": "PENDING",
+      "order_type": "QUOTE_REQUEST",
+      "priority": "NORMAL",
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD004",
+          "part_number": "ACF50-4LTR",
+          "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+          "quantity": 20,
+          "requested_unit_price": 850.45,
+          "unit_price": 850.45,
+          "total_price": 17009.00
+        }
+      ],
+      "subtotal": 17009.00,
+      "tax": 0,
+      "shipping": 0,
+      "total_amount": 17009.00,
+      "customer_notes": "Annual supply contract - requesting competitive pricing",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD028",
+      "po_number": "PO2025-003",
+      "customer_id": "BUYER005",
+      "customer_name": "Global Aviation Corp",
+      "customer_email": "procurement@globalaviation.com",
+      "order_date": "2025-02-14T14:00:00Z",
+      "created_at": "2025-02-14T14:00:00Z",
+      "status": "PENDING",
+      "order_type": "QUOTE_REQUEST",
+      "priority": "LOW",
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD007",
+          "part_number": "ACF50-KIT",
+          "product_name": "ACF-50 Starter Kit with Applicator",
+          "quantity": 15,
+          "requested_unit_price": 118.75,
+          "unit_price": 118.75,
+          "total_price": 1781.25
+        },
+        {
+          "product_id": "PROD006",
+          "part_number": "ACF50-13OZ",
+          "product_name": "ACF-50 Anti-Corrosion Spray (13 oz)",
+          "quantity": 100,
+          "requested_unit_price": 40.38,
+          "unit_price": 40.38,
+          "total_price": 4038.00
+        },
+        {
+          "product_id": "PROD009",
+          "part_number": "SEAL-AV-100",
+          "product_name": "Aviation Grade Sealant (Tube)",
+          "quantity": 75,
+          "requested_unit_price": 36.58,
+          "unit_price": 36.58,
+          "total_price": 2743.50
+        }
+      ],
+      "subtotal": 8562.75,
+      "tax": 0,
+      "shipping": 0,
+      "total_amount": 8562.75,
+      "customer_notes": "Future inventory buildup - no rush",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD017",
+      "customer_id": "BUYER015",
+      "order_date": "2024-12-21T09:45:00Z",
+      "status": "CANCELLED",
+      "payment_status": "REFUNDED",
+      "payment_received": 0,
+      "payment_history": [
+        {
+          "payment_id": "PAY-017",
+          "amount": 3200.00,
+          "currency": "USD",
+          "amount_usd": 3200.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241221001",
+          "payment_date": "2024-12-21",
+          "notes": "Payment refunded - order cancelled",
+          "recorded_at": "2024-12-21T10:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD009",
+          "part_number": "FILTER-AIR-500",
+          "product_name": "Aircraft Air Filter Set",
+          "quantity": 25,
+          "unit_price": 112.00,
+          "total_price": 2800.00
+        }
+      ],
+      "subtotal": 2800.00,
+      "tax": 280.00,
+      "shipping": 50.00,
+      "total_amount": 3130.00,
+      "shipping_address": {
+        "street": "789 Hangar Lane",
+        "city": "Phoenix",
+        "state": "AZ",
+        "zip": "85001",
+        "country": "USA"
+      },
+      "notes": "Order cancelled by customer - refund processed",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD018",
+      "customer_id": "BUYER016",
+      "order_date": "2024-12-23T11:00:00Z",
+      "status": "ON_HOLD",
+      "payment_status": "PARTIAL",
+      "payment_received": 1500.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-018",
+          "amount": 1500.00,
+          "currency": "USD",
+          "amount_usd": 1500.00,
+          "payment_method": "CREDIT_CARD",
+          "transaction_id": "TXN20241223001",
+          "payment_date": "2024-12-23",
+          "notes": "Partial payment - order on hold",
+          "recorded_at": "2024-12-23T11:30:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD011",
+          "part_number": "HOSE-HYD-300",
+          "product_name": "Hydraulic Hose Assembly",
+          "quantity": 40,
+          "unit_price": 95.75,
+          "total_price": 3830.00
+        }
+      ],
+      "subtotal": 3830.00,
+      "tax": 383.00,
+      "shipping": 70.00,
+      "total_amount": 4283.00,
+      "shipping_address": {
+        "street": "456 Maintenance Blvd",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "notes": "Order on hold - awaiting customer confirmation for shipping address",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD019",
+      "customer_id": "BUYER017",
+      "order_date": "2024-12-24T08:15:00Z",
+      "status": "OPEN",
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD012",
+          "part_number": "RIVET-SET-400",
+          "product_name": "Aircraft Rivet Set - Assorted",
+          "quantity": 0,
+          "unit_price": 65.00,
+          "total_price": 0.00
+        }
+      ],
+      "subtotal": 0.00,
+      "tax": 0.00,
+      "shipping": 0.00,
+      "total_amount": 0.00,
+      "shipping_address": {
+        "street": "123 Workshop Drive",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98101",
+        "country": "USA"
+      },
+      "notes": "Order with zero quantity - cannot dispatch",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD020",
+      "customer_id": "BUYER018",
+      "order_date": "2024-12-25T10:20:00Z",
+      "status": "AWAITING_STOCK",
+      "payment_status": "PAID",
+      "payment_received": 5678.90,
+      "payment_history": [
+        {
+          "payment_id": "PAY-020",
+          "amount": 5678.90,
+          "currency": "USD",
+          "amount_usd": 5678.90,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20241225001",
+          "payment_date": "2024-12-25",
+          "notes": "Full payment received - awaiting stock",
+          "recorded_at": "2024-12-25T11:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD013",
+          "part_number": "GASKET-ENG-600",
+          "product_name": "Engine Gasket Set - Complete",
+          "quantity": 15,
+          "unit_price": 325.50,
+          "total_price": 4882.50
+        }
+      ],
+      "subtotal": 4882.50,
+      "tax": 488.25,
+      "shipping": 85.00,
+      "total_amount": 5455.75,
+      "shipping_address": {
+        "street": "789 Repair Station Rd",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33101",
+        "country": "USA"
+      },
+      "notes": "Payment received but items out of stock - awaiting restock",
+      "tracking_number": null,
+      "estimated_delivery": "2025-01-15T00:00:00Z"
+    },
+    {
+      "order_id": "ORD021",
+      "customer_id": "BUYER019",
+      "order_date": "2025-01-08T10:30:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 8500.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-021",
+          "amount": 8500.00,
+          "currency": "USD",
+          "amount_usd": 8500.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20250108001",
+          "payment_date": "2025-01-08",
+          "notes": "Full payment - awaiting stock",
+          "recorded_at": "2025-01-08T11:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD045",
+          "part_number": "HYD-PUMP-500",
+          "product_name": "Hydraulic Pump Assembly",
+          "quantity": 5,
+          "unit_price": 1200.00,
+          "total_price": 6000.00,
+          "has_inventory": false,
+          "inventory_quantity": 0
+        },
+        {
+          "product_id": "PROD046",
+          "part_number": "GAUGE-KIT-200",
+          "product_name": "Pressure Gauge Kit",
+          "quantity": 10,
+          "unit_price": 250.00,
+          "total_price": 2500.00,
+          "has_inventory": false,
+          "inventory_quantity": 0
+        }
+      ],
+      "subtotal": 8500.00,
+      "tax": 850.00,
+      "shipping": 100.00,
+      "total_amount": 9450.00,
+      "shipping_address": {
+        "street": "456 Industrial Blvd",
+        "city": "Detroit",
+        "state": "MI",
+        "zip": "48201",
+        "country": "USA"
+      },
+      "notes": "All items out of stock - cannot dispatch",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD022",
+      "customer_id": "BUYER020",
+      "order_date": "2025-01-09T14:15:00Z",
+      "status": "OPEN",
+      "payment_status": "PARTIAL",
+      "payment_received": 5000.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-022",
+          "amount": 5000.00,
+          "currency": "USD",
+          "amount_usd": 5000.00,
+          "payment_method": "CREDIT_CARD",
+          "transaction_id": "TXN20250109001",
+          "payment_date": "2025-01-09",
+          "notes": "Partial advance payment",
+          "recorded_at": "2025-01-09T15:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD047",
+          "part_number": "TURBINE-BLD-300",
+          "product_name": "Turbine Blade Set",
+          "quantity": 20,
+          "unit_price": 450.00,
+          "total_price": 9000.00,
+          "has_inventory": true,
+          "inventory_quantity": 8
+        },
+        {
+          "product_id": "PROD048",
+          "part_number": "ENG-GASKET-150",
+          "product_name": "Engine Gasket",
+          "quantity": 50,
+          "unit_price": 35.00,
+          "total_price": 1750.00,
+          "has_inventory": true,
+          "inventory_quantity": 22
+        }
+      ],
+      "subtotal": 10750.00,
+      "tax": 1075.00,
+      "shipping": 120.00,
+      "total_amount": 11945.00,
+      "shipping_address": {
+        "street": "789 Airport Way",
+        "city": "Phoenix",
+        "state": "AZ",
+        "zip": "85001",
+        "country": "USA"
+      },
+      "notes": "Insufficient inventory - ordered 20 but only 8 available, ordered 50 but only 22 available",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD023",
+      "customer_id": "BUYER021",
+      "order_date": "2025-01-10T09:45:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 15200.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-023",
+          "amount": 15200.00,
+          "currency": "USD",
+          "amount_usd": 15200.00,
+          "payment_method": "BANK_TRANSFER",
+          "transaction_id": "TXN20250110001",
+          "payment_date": "2025-01-10",
+          "notes": "Wire transfer - full payment",
+          "recorded_at": "2025-01-10T10:30:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD049",
+          "part_number": "AVION-CTRL-800",
+          "product_name": "Avionics Control Panel",
+          "quantity": 3,
+          "unit_price": 2800.00,
+          "total_price": 8400.00,
+          "has_inventory": true,
+          "inventory_quantity": 5
+        },
+        {
+          "product_id": "PROD050",
+          "part_number": "NAV-ANT-400",
+          "product_name": "Navigation Antenna",
+          "quantity": 12,
+          "unit_price": 320.00,
+          "total_price": 3840.00,
+          "has_inventory": false,
+          "inventory_quantity": 0
+        },
+        {
+          "product_id": "PROD051",
+          "part_number": "CKPT-DISP-600",
+          "product_name": "Cockpit Display Unit",
+          "quantity": 2,
+          "unit_price": 1480.00,
+          "total_price": 2960.00,
+          "has_inventory": true,
+          "inventory_quantity": 1
+        }
+      ],
+      "subtotal": 15200.00,
+      "tax": 1520.00,
+      "shipping": 150.00,
+      "total_amount": 16870.00,
+      "shipping_address": {
+        "street": "321 Aviation Circle",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98101",
+        "country": "USA"
+      },
+      "notes": "Mixed inventory - some items available, some out of stock, some insufficient",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD024",
+      "customer_id": "BUYER022",
+      "order_date": "2025-01-11T11:00:00Z",
+      "status": "OPEN",
+      "payment_status": "UNPAID",
+      "payment_received": 0,
+      "payment_history": [],
+      "items": [
+        {
+          "product_id": "PROD052",
+          "part_number": "WING-FLP-900",
+          "product_name": "Wing Flap Actuator",
+          "quantity": 8,
+          "unit_price": 1850.00,
+          "total_price": 14800.00,
+          "has_inventory": true,
+          "inventory_quantity": 3
+        },
+        {
+          "product_id": "PROD053",
+          "part_number": "FUEL-FLT-250",
+          "product_name": "Fuel Filter Assembly",
+          "quantity": 25,
+          "unit_price": 180.00,
+          "total_price": 4500.00,
+          "has_inventory": false,
+          "inventory_quantity": 0
+        }
+      ],
+      "subtotal": 19300.00,
+      "tax": 1930.00,
+      "shipping": 180.00,
+      "total_amount": 21410.00,
+      "shipping_address": {
+        "street": "555 International Dr",
+        "city": "Boston",
+        "state": "MA",
+        "zip": "02101",
+        "country": "USA"
+      },
+      "notes": "Zero payment, insufficient inventory on both items",
+      "tracking_number": null,
+      "estimated_delivery": null
+    },
+    {
+      "order_id": "ORD025",
+      "customer_id": "BUYER023",
+      "order_date": "2025-01-12T13:30:00Z",
+      "status": "OPEN",
+      "payment_status": "PAID",
+      "payment_received": 6750.00,
+      "payment_history": [
+        {
+          "payment_id": "PAY-025",
+          "amount": 6750.00,
+          "currency": "USD",
+          "amount_usd": 6750.00,
+          "payment_method": "UPI",
+          "transaction_id": "TXN20250112001",
+          "payment_date": "2025-01-12",
+          "notes": "UPI payment received",
+          "recorded_at": "2025-01-12T14:00:00Z"
+        }
+      ],
+      "items": [
+        {
+          "product_id": "PROD054",
+          "part_number": "LND-GR-COMP-700",
+          "product_name": "Landing Gear Component",
+          "quantity": 15,
+          "unit_price": 450.00,
+          "total_price": 6750.00,
+          "has_inventory": true,
+          "inventory_quantity": 2
+        }
+      ],
+      "subtotal": 6750.00,
+      "tax": 675.00,
+      "shipping": 90.00,
+      "total_amount": 7515.00,
+      "shipping_address": {
+        "street": "888 Regional Airport Rd",
+        "city": "Denver",
+        "state": "CO",
+        "zip": "80201",
+        "country": "USA"
+      },
+      "notes": "Single item order - ordered 15 but only 2 in stock",
+      "tracking_number": null,
+      "estimated_delivery": null
+    }
+  ]
+}

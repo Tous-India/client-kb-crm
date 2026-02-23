@@ -1,0 +1,113 @@
+/* Print Styles */
+@media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show only the statement area */
+  .statement-print-area,
+  .statement-print-area *,
+  .print-header,
+  .print-header * {
+    visibility: visible;
+  }
+
+  .statement-print-area {
+    position: absolute;
+    left: 0;
+    top: 80px;
+    width: 100%;
+  }
+
+  .print-header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Hide all no-print elements */
+  .no-print,
+  .MuiButton-root,
+  .MuiTablePagination-root {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Optimize table for printing */
+  table {
+    page-break-inside: auto;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tbody {
+    display: table-row-group;
+  }
+
+  /* Add page margins */
+  @page {
+    margin: 1.5cm;
+    size: landscape;
+  }
+
+  /* Print header styling */
+  .print-header {
+    display: block !important;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #333;
+  }
+
+  .print-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #000;
+    font-weight: bold;
+  }
+
+  .print-header p {
+    margin: 3px 0;
+    font-size: 12px;
+    color: #333;
+  }
+
+  /* Table styling for print */
+  .MuiTableCell-root {
+    font-size: 10px !important;
+    padding: 6px 8px !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .MuiTableHead-root .MuiTableCell-root {
+    font-weight: bold !important;
+    background-color: #d4d8a8 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Remove shadows and backgrounds */
+  .MuiPaper-root {
+    box-shadow: none !important;
+  }
+}
+
+/* Hide print header on screen */
+.print-header {
+  display: none;
+}
+
+/* Statement container */
+.statement-print-area {
+  position: relative;
+}

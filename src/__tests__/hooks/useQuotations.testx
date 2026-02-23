@@ -1,0 +1,258 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useQuotations, useQuotation, useCreateQuotation, useUpdateQuotation, quotationKeys } from '../../hooks/useQuotations';
+import quotationsService from '../../services/quotations.service';
+
+// Mock the quotations service
+vi.mock('../../services/quotations.service');
+
+// Mock toast
+vi.mock('../../utils/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+}));
+
+// Create a wrapper with QueryClientProvider
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        gcTime: 0,
+      },
+      mutations: {
+        retry: false,
+      },
+    },
+  });
+
+  return ({ children }) => (
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  );
+};
+
+describe('useQuotations hook', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('quotationKeys', () => {
+    it('should generate correct query keys', () => {
+      expect(quotationKeys.all).toEqual(['quotations']);
+      expect(quotationKeys.lists()).toEqual(['quotations', 'list']);
+      expect(quotationKeys.list({ status: 'OPEN' })).toEqual(['quotations', 'list', { status: 'OPEN' }]);
+      expect(quotationKeys.details()).toEqual(['quotations', 'detail']);
+      expect(quotationKeys.detail('123')).toEqual(['quotations', 'detail', '123']);
+    });
+  });
+
+  describe('useQuotations', () => {
+    it('should fetch quotations successfully', async () => {
+      const mockQuotations = [
+        { _id: '1', quotation_number: 'QT-00001', status: 'OPEN' },
+        { _id: '2', quotation_number: 'QT-00002', status: 'ACCEPTED' },
+      ];
+
+      quotationsService.getAll.mockResolvedValue({
+        success: true,
+        data: { quotations: mockQuotations },
+      });
+
+      const { result } = renderHook(() => useQuotations(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockQuotations);
+      expect(quotationsService.getAll).toHaveBeenCalledWith({});
+    });
+
+    it('should pass params to service', async () => {
+      quotationsService.getAll.mockResolvedValue({
+        success: true,
+        data: { quotations: [] },
+      });
+
+      const params = { status: 'OPEN', page: 1, limit: 20 };
+      renderHook(() => useQuotations(params), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(quotationsService.getAll).toHaveBeenCalledWith(params);
+      });
+    });
+
+    it('should handle error', async () => {
+      quotationsService.getAll.mockResolvedValue({
+        success: false,
+        error: 'Failed to fetch quotations',
+      });
+
+      const { result } = renderHook(() => useQuotations(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Failed to fetch quotations');
+    });
+
+    it('should return empty array when no quotations', async () => {
+      quotationsService.getAll.mockResolvedValue({
+        success: true,
+        data: { quotations: null },
+      });
+
+      const { result } = renderHook(() => useQuotations(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual([]);
+    });
+  });
+
+  describe('useQuotation', () => {
+    it('should fetch single quotation by ID', async () => {
+      const mockQuotation = { _id: '123', quotation_number: 'QT-00001', status: 'OPEN' };
+
+      quotationsService.getById.mockResolvedValue({
+        success: true,
+        data: { quotation: mockQuotation },
+      });
+
+      const { result } = renderHook(() => useQuotation('123'), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockQuotation);
+      expect(quotationsService.getById).toHaveBeenCalledWith('123');
+    });
+
+    it('should not fetch when ID is falsy', async () => {
+      const { result } = renderHook(() => useQuotation(null), {
+        wrapper: createWrapper(),
+      });
+
+      expect(result.current.fetchStatus).toBe('idle');
+      expect(quotationsService.getById).not.toHaveBeenCalled();
+    });
+
+    it('should handle error', async () => {
+      quotationsService.getById.mockResolvedValue({
+        success: false,
+        error: 'Quotation not found',
+      });
+
+      const { result } = renderHook(() => useQuotation('invalid'), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Quotation not found');
+    });
+  });
+
+  describe('useCreateQuotation', () => {
+    it('should create quotation successfully', async () => {
+      const newQuotation = { buyer: 'buyer123', items: [{ product: 'prod1', quantity: 10, unit_price: 100 }] };
+      const createdQuotation = { _id: '123', quotation_number: 'QT-00001', ...newQuotation };
+
+      quotationsService.create.mockResolvedValue({
+        success: true,
+        data: { quotation: createdQuotation },
+      });
+
+      const { result } = renderHook(() => useCreateQuotation(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate(newQuotation);
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(createdQuotation);
+      expect(quotationsService.create).toHaveBeenCalledWith(newQuotation);
+    });
+
+    it('should handle create error', async () => {
+      quotationsService.create.mockResolvedValue({
+        success: false,
+        error: 'Failed to create quotation',
+      });
+
+      const { result } = renderHook(() => useCreateQuotation(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ buyer: 'test' });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error.message).toBe('Failed to create quotation');
+    });
+  });
+
+  describe('useUpdateQuotation', () => {
+    it('should update quotation successfully', async () => {
+      const updatedQuotation = { _id: '123', quotation_number: 'QT-00001', status: 'ACCEPTED' };
+
+      quotationsService.update.mockResolvedValue({
+        success: true,
+        data: { quotation: updatedQuotation },
+      });
+
+      const { result } = renderHook(() => useUpdateQuotation(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ id: '123', data: { status: 'ACCEPTED' } });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(quotationsService.update).toHaveBeenCalledWith('123', { status: 'ACCEPTED' });
+    });
+
+    it('should handle update error', async () => {
+      quotationsService.update.mockResolvedValue({
+        success: false,
+        error: 'Failed to update quotation',
+      });
+
+      const { result } = renderHook(() => useUpdateQuotation(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ id: '123', data: { status: 'INVALID' } });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+    });
+  });
+});

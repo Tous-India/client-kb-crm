@@ -1,0 +1,274 @@
+{
+  "suppliers": [
+    {
+      "supplier_id": "SUP001",
+      "supplier_code": "ATS-MFG",
+      "supplier_name": "ATS Manufacturing Co.",
+      "supplier_type": "MANUFACTURER",
+      "status": "ACTIVE",
+      "contact": {
+        "primary_name": "John Doe",
+        "email": "john@atsmanufacturing.com",
+        "phone": "+1-555-0100",
+        "secondary_email": "sales@atsmanufacturing.com"
+      },
+      "address": {
+        "street": "123 Industrial Ave",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "zip": "33301",
+        "country": "USA"
+      },
+      "business_info": {
+        "tax_id": "12-3456789",
+        "gstin": "",
+        "pan": "",
+        "registration_no": "REG-2024-001"
+      },
+      "bank_details": {
+        "bank_name": "Bank of America",
+        "account_name": "ATS Manufacturing Co.",
+        "account_number": "4567891234",
+        "ifsc_code": "",
+        "swift_code": "BOFAUS3N",
+        "branch": "Fort Lauderdale"
+      },
+      "terms": {
+        "payment_terms": "Net 30",
+        "currency": "USD",
+        "credit_limit": 50000.00,
+        "credit_used": 12500.00,
+        "delivery_terms": "FOB Origin",
+        "lead_time_days": 14,
+        "minimum_order": 500.00
+      },
+      "products_supplied": ["PROD001", "PROD002", "PROD008"],
+      "performance": {
+        "total_orders": 45,
+        "total_value": 125000.00,
+        "on_time_delivery_rate": 95.5,
+        "quality_rating": 4.8,
+        "last_order_date": "2026-01-08T10:00:00Z"
+      },
+      "notes": "Reliable supplier for aircraft tools and equipment",
+      "created_at": "2024-01-15T08:00:00Z",
+      "updated_at": "2026-01-10T14:30:00Z"
+    },
+    {
+      "supplier_id": "SUP002",
+      "supplier_code": "GPI-DIST",
+      "supplier_name": "Global Parts International",
+      "supplier_type": "DISTRIBUTOR",
+      "status": "ACTIVE",
+      "contact": {
+        "primary_name": "Sarah Chen",
+        "email": "sarah@globalparts.com",
+        "phone": "+1-555-0200",
+        "secondary_email": "orders@globalparts.com"
+      },
+      "address": {
+        "street": "456 Trade Center Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90001",
+        "country": "USA"
+      },
+      "business_info": {
+        "tax_id": "98-7654321",
+        "gstin": "",
+        "pan": "",
+        "registration_no": "REG-2024-002"
+      },
+      "bank_details": {
+        "bank_name": "Chase Bank",
+        "account_name": "Global Parts International",
+        "account_number": "7891234567",
+        "ifsc_code": "",
+        "swift_code": "CHASUS33",
+        "branch": "Los Angeles"
+      },
+      "terms": {
+        "payment_terms": "Net 45",
+        "currency": "USD",
+        "credit_limit": 75000.00,
+        "credit_used": 28750.00,
+        "delivery_terms": "CIF",
+        "lead_time_days": 10,
+        "minimum_order": 1000.00
+      },
+      "products_supplied": ["PROD003", "PROD004", "PROD005"],
+      "performance": {
+        "total_orders": 62,
+        "total_value": 245000.00,
+        "on_time_delivery_rate": 92.0,
+        "quality_rating": 4.5,
+        "last_order_date": "2026-01-12T09:00:00Z"
+      },
+      "notes": "Large distributor with wide product range",
+      "created_at": "2024-02-20T10:00:00Z",
+      "updated_at": "2026-01-12T16:00:00Z"
+    },
+    {
+      "supplier_id": "SUP003",
+      "supplier_code": "PPS-IND",
+      "supplier_name": "Precision Parts Solutions",
+      "supplier_type": "MANUFACTURER",
+      "status": "ACTIVE",
+      "contact": {
+        "primary_name": "Raj Patel",
+        "email": "raj@precisionparts.in",
+        "phone": "+91-9876543210",
+        "secondary_email": "sales@precisionparts.in"
+      },
+      "address": {
+        "street": "Plot 145, Industrial Area",
+        "city": "Ahmedabad",
+        "state": "Gujarat",
+        "zip": "380015",
+        "country": "India"
+      },
+      "business_info": {
+        "tax_id": "",
+        "gstin": "24AABCP1234M1ZV",
+        "pan": "AABCP1234M",
+        "registration_no": "IND-2024-003"
+      },
+      "bank_details": {
+        "bank_name": "ICICI Bank Ltd",
+        "account_name": "Precision Parts Solutions Pvt Ltd",
+        "account_number": "036705501190",
+        "ifsc_code": "ICIC0000367",
+        "swift_code": "ABORINBB",
+        "branch": "Ahmedabad Main"
+      },
+      "terms": {
+        "payment_terms": "50% Advance",
+        "currency": "USD",
+        "credit_limit": 25000.00,
+        "credit_used": 8500.00,
+        "delivery_terms": "FOB",
+        "lead_time_days": 21,
+        "minimum_order": 250.00
+      },
+      "products_supplied": ["PROD006", "PROD007"],
+      "performance": {
+        "total_orders": 28,
+        "total_value": 68500.00,
+        "on_time_delivery_rate": 88.0,
+        "quality_rating": 4.2,
+        "last_order_date": "2026-01-05T11:00:00Z"
+      },
+      "notes": "Good for bulk orders, competitive pricing",
+      "created_at": "2024-05-10T12:00:00Z",
+      "updated_at": "2026-01-05T14:00:00Z"
+    },
+    {
+      "supplier_id": "SUP004",
+      "supplier_code": "ACE-SUP",
+      "supplier_name": "Ace Supplies Ltd",
+      "supplier_type": "WHOLESALER",
+      "status": "ACTIVE",
+      "contact": {
+        "primary_name": "Mike Johnson",
+        "email": "mike@acesupplies.com",
+        "phone": "+1-555-0400",
+        "secondary_email": "support@acesupplies.com"
+      },
+      "address": {
+        "street": "789 Warehouse Drive",
+        "city": "Dallas",
+        "state": "TX",
+        "zip": "75201",
+        "country": "USA"
+      },
+      "business_info": {
+        "tax_id": "45-6789012",
+        "gstin": "",
+        "pan": "",
+        "registration_no": "REG-2024-004"
+      },
+      "bank_details": {
+        "bank_name": "Wells Fargo",
+        "account_name": "Ace Supplies Ltd",
+        "account_number": "9876543210",
+        "ifsc_code": "",
+        "swift_code": "WFBIUS6S",
+        "branch": "Dallas Downtown"
+      },
+      "terms": {
+        "payment_terms": "Net 15",
+        "currency": "USD",
+        "credit_limit": 30000.00,
+        "credit_used": 5200.00,
+        "delivery_terms": "Ex Works",
+        "lead_time_days": 7,
+        "minimum_order": 200.00
+      },
+      "products_supplied": ["PROD001", "PROD004", "PROD008"],
+      "performance": {
+        "total_orders": 35,
+        "total_value": 52000.00,
+        "on_time_delivery_rate": 98.0,
+        "quality_rating": 4.6,
+        "last_order_date": "2026-01-10T08:00:00Z"
+      },
+      "notes": "Fast delivery, good for urgent orders",
+      "created_at": "2024-03-15T09:00:00Z",
+      "updated_at": "2026-01-10T12:00:00Z"
+    },
+    {
+      "supplier_id": "SUP005",
+      "supplier_code": "OLD-VND",
+      "supplier_name": "Old Vendor Co",
+      "supplier_type": "DISTRIBUTOR",
+      "status": "INACTIVE",
+      "contact": {
+        "primary_name": "Tom Brown",
+        "email": "tom@oldvendor.com",
+        "phone": "+1-555-0500",
+        "secondary_email": ""
+      },
+      "address": {
+        "street": "321 Legacy Lane",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "60601",
+        "country": "USA"
+      },
+      "business_info": {
+        "tax_id": "67-8901234",
+        "gstin": "",
+        "pan": "",
+        "registration_no": "REG-2023-005"
+      },
+      "bank_details": {
+        "bank_name": "US Bank",
+        "account_name": "Old Vendor Co",
+        "account_number": "1234567890",
+        "ifsc_code": "",
+        "swift_code": "USBKUS44",
+        "branch": "Chicago"
+      },
+      "terms": {
+        "payment_terms": "Net 30",
+        "currency": "USD",
+        "credit_limit": 20000.00,
+        "credit_used": 0.00,
+        "delivery_terms": "FOB",
+        "lead_time_days": 14,
+        "minimum_order": 300.00
+      },
+      "products_supplied": ["PROD002"],
+      "performance": {
+        "total_orders": 12,
+        "total_value": 18500.00,
+        "on_time_delivery_rate": 75.0,
+        "quality_rating": 3.5,
+        "last_order_date": "2025-06-15T10:00:00Z"
+      },
+      "notes": "Discontinued - poor delivery performance",
+      "created_at": "2023-08-20T10:00:00Z",
+      "updated_at": "2025-07-01T09:00:00Z"
+    }
+  ]
+}

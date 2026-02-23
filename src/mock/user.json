@@ -1,0 +1,179 @@
+{
+  "users": [
+    {
+      "customer_id": "BUYER001",
+      "role": "ADMIN",
+      "name": "John Smith",
+      "email": "admin",
+      "password": "admin",
+      "address": {
+        "street": "123 Business Park",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "UNPAID",
+      "current_orders": ["ORD001", "ORD002"],
+      "open_orders": ["ORD001"],
+      "dispatched_orders": ["ORD002"],
+      "company_details": {
+        "company_name": "TechCorp Industries",
+        "tax_id": "12-3456789",
+        "phone": "+1-555-0100",
+        "billing_email": "billing@techcorp.com"
+      }
+    },
+    {
+      "customer_id": "BUYER002",
+      "role": "BUYER",
+      "name": "Sarah Johnson",
+      "email": "user",
+      "password": "user",
+      "address": {
+        "street": "456 Aviation Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": "90001",
+        "country": "USA"
+      },
+      "status_quote": true,
+      "payment_status": "PAID",
+      "current_orders": ["ORD003"],
+      "open_orders": [],
+      "dispatched_orders": ["ORD003"],
+      "company_details": {
+        "company_name": "Aerospace Solutions Ltd",
+        "tax_id": "98-7654321",
+        "phone": "+1-555-0200",
+        "billing_email": "accounts@aerospace.com"
+      }
+    },
+    {
+      "customer_id": "BUYER003",
+      "role": "BUYER",
+      "name": "Michael Chen",
+      "email": "m.chen@manufacturing.com",
+      "password": "hashed_password_789",
+      "address": {
+        "street": "789 Industrial Way",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "77001",
+        "country": "USA"
+      },
+      "status_quote": true,
+      "payment_status": "UNPAID",
+      "current_orders": ["ORD004", "ORD005"],
+      "open_orders": ["ORD004", "ORD005"],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Manufacturing Pro Inc",
+        "tax_id": "45-6789012",
+        "phone": "+1-555-0300",
+        "billing_email": "finance@manufacturing.com"
+      }
+    },
+    {
+      "customer_id": "BUYER004",
+      "role": "BUYER",
+      "name": "Emily Rodriguez",
+      "email": "emily.r@aviation-services.com",
+      "password": "hashed_password_321",
+      "address": {
+        "street": "321 Airport Road",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33101",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "PAID",
+      "current_orders": [],
+      "open_orders": [],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Aviation Services Group",
+        "tax_id": "78-9012345",
+        "phone": "+1-555-0400",
+        "billing_email": "billing@aviation-services.com"
+      }
+    },
+    {
+      "customer_id": "BUYER005",
+      "role": "BUYER",
+      "name": "Robert Taylor",
+      "email": "robert.t@logistics.com",
+      "password": "hashed_password_654",
+      "address": {
+        "street": "555 Transport Lane",
+        "city": "Denver",
+        "state": "CO",
+        "zip": "80201",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "UNPAID",
+      "current_orders": [],
+      "open_orders": [],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "Logistics Express Inc",
+        "tax_id": "56-7890123",
+        "phone": "+1-555-0500",
+        "billing_email": "accounts@logistics.com"
+      }
+    },
+    {
+      "customer_id": "ADMIN001",
+      "role": "ADMIN",
+      "name": "Admin User",
+      "email": "admin@portal.com",
+      "password": "hashed_admin_password_001",
+      "address": {
+        "street": "789 Portal HQ",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "60601",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "N/A",
+      "current_orders": [],
+      "open_orders": [],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "B2B Portal Administration",
+        "tax_id": "00-0000000",
+        "phone": "+1-555-9999",
+        "billing_email": "admin@portal.com"
+      }
+    },
+    {
+      "customer_id": "ADMIN002",
+      "role": "ADMIN",
+      "name": "Jessica Thompson",
+      "email": "jessica.t@portal.com",
+      "password": "hashed_admin_password_002",
+      "address": {
+        "street": "789 Portal HQ",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "60601",
+        "country": "USA"
+      },
+      "status_quote": false,
+      "payment_status": "N/A",
+      "current_orders": [],
+      "open_orders": [],
+      "dispatched_orders": [],
+      "company_details": {
+        "company_name": "B2B Portal Administration",
+        "tax_id": "00-0000000",
+        "phone": "+1-555-9998",
+        "billing_email": "jessica@portal.com"
+      }
+    }
+  ]
+}

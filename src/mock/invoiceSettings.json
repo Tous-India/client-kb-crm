@@ -1,0 +1,103 @@
+{
+  "invoiceSeries": {
+    "prefix": "INV",
+    "year_prefix": true,
+    "separator": "-",
+    "format": "INV-YYYY-NNN",
+    "current_year": "2024",
+    "last_invoice_number": 10,
+    "next_invoice_number": 11,
+    "padding": 3
+  },
+  "skippedNumbers": [
+    {
+      "number": 11,
+      "skipped_date": "2024-12-16T10:00:00Z",
+      "reason": "Reserved for credit note adjustment",
+      "skipped_by": "admin"
+    },
+    {
+      "number": 12,
+      "skipped_date": "2024-12-16T10:05:00Z",
+      "reason": "Voided due to client cancellation",
+      "skipped_by": "admin"
+    }
+  ],
+  "reservedNumbers": [
+    {
+      "number": 15,
+      "reserved_date": "2024-12-14T09:00:00Z",
+      "reserved_for": "BUYER005",
+      "reserved_by": "admin",
+      "notes": "Reserved for upcoming large order",
+      "expires_at": "2025-01-14T00:00:00Z"
+    },
+    {
+      "number": 20,
+      "reserved_date": "2024-12-15T11:30:00Z",
+      "reserved_for": "Project Alpha",
+      "reserved_by": "admin",
+      "notes": "Reserved for project milestone billing",
+      "expires_at": "2025-02-15T00:00:00Z"
+    }
+  ],
+  "usedNumbers": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "invoiceTypes": [
+    {
+      "type": "TAX_INVOICE",
+      "label": "Tax Invoice",
+      "description": "Standard invoice with GST/tax applied",
+      "has_tax": true
+    },
+    {
+      "type": "REIMBURSEMENT",
+      "label": "Reimbursement Invoice",
+      "description": "Expense reimbursement - no tax applicable",
+      "has_tax": false
+    },
+    {
+      "type": "BILL_OF_SUPPLY",
+      "label": "Bill of Supply",
+      "description": "For exempt supplies - no tax charged",
+      "has_tax": false
+    }
+  ],
+  "seriesHistory": [
+    {
+      "action": "CREATED",
+      "number": 1,
+      "date": "2024-12-05T14:20:00Z",
+      "invoice_id": "INV-2024-001"
+    },
+    {
+      "action": "CREATED",
+      "number": 2,
+      "date": "2024-12-08T09:15:00Z",
+      "invoice_id": "INV-2024-002"
+    },
+    {
+      "action": "SKIPPED",
+      "number": 11,
+      "date": "2024-12-16T10:00:00Z",
+      "reason": "Reserved for credit note adjustment"
+    },
+    {
+      "action": "SKIPPED",
+      "number": 12,
+      "date": "2024-12-16T10:05:00Z",
+      "reason": "Voided due to client cancellation"
+    },
+    {
+      "action": "RESERVED",
+      "number": 15,
+      "date": "2024-12-14T09:00:00Z",
+      "reserved_for": "BUYER005"
+    },
+    {
+      "action": "RESERVED",
+      "number": 20,
+      "date": "2024-12-15T11:30:00Z",
+      "reserved_for": "Project Alpha"
+    }
+  ]
+}

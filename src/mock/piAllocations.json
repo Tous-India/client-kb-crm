@@ -1,0 +1,332 @@
+{
+  "piAllocations": [
+    {
+      "allocation_id": "ALLOC-001",
+      "pi_id": "PI-2024-010",
+      "pi_number": "PI240010",
+      "customer_name": "John Smith",
+      "pi_item_id": "PI-ITEM-001",
+      "product_id": "PROD008",
+      "part_number": "HYD-PUMP-500",
+      "product_name": "Aircraft Hydraulic Pump Assembly",
+      "total_pi_qty": 3,
+      "sell_price": 2707.50,
+      "allocations": [
+        {
+          "supplier_id": "SUP001",
+          "supplier_name": "ATS Manufacturing Co.",
+          "spo_id": "SPO-2026-001",
+          "spo_number": "SP260001",
+          "allocated_qty": 3,
+          "unit_cost": 2200.00,
+          "total_cost": 6600.00,
+          "status": "ORDERED",
+          "expected_date": "2026-01-24",
+          "received_qty": 0
+        }
+      ],
+      "summary": {
+        "total_qty": 3,
+        "allocated_qty": 3,
+        "unallocated_qty": 0,
+        "ordered_qty": 3,
+        "received_qty": 0,
+        "allocation_complete": true
+      },
+      "avg_cost_price": 2200.00,
+      "profit_margin": 18.74,
+      "created_at": "2026-01-10T10:00:00Z",
+      "updated_at": "2026-01-10T14:00:00Z"
+    },
+    {
+      "allocation_id": "ALLOC-002",
+      "pi_id": "PI-2024-010",
+      "pi_number": "PI240010",
+      "customer_name": "John Smith",
+      "pi_item_id": "PI-ITEM-002",
+      "product_id": "PROD002",
+      "part_number": "ATS-134S",
+      "product_name": "SAFETY WIRE TWISTER (8\")",
+      "total_pi_qty": 20,
+      "sell_price": 26.68,
+      "allocations": [
+        {
+          "supplier_id": "SUP003",
+          "supplier_name": "Precision Parts Solutions",
+          "spo_id": "SPO-2026-003",
+          "spo_number": "SP260003",
+          "allocated_qty": 20,
+          "unit_cost": 18.50,
+          "total_cost": 370.00,
+          "status": "RECEIVED",
+          "expected_date": "2026-01-26",
+          "received_qty": 20
+        }
+      ],
+      "summary": {
+        "total_qty": 20,
+        "allocated_qty": 20,
+        "unallocated_qty": 0,
+        "ordered_qty": 20,
+        "received_qty": 20,
+        "allocation_complete": true
+      },
+      "avg_cost_price": 18.50,
+      "profit_margin": 30.66,
+      "created_at": "2026-01-05T11:00:00Z",
+      "updated_at": "2026-01-08T16:00:00Z"
+    },
+    {
+      "allocation_id": "ALLOC-003",
+      "pi_id": "PI-2024-011",
+      "pi_number": "PI240011",
+      "customer_name": "John Smith",
+      "pi_item_id": "PI-ITEM-002",
+      "product_id": "PROD004",
+      "part_number": "ACF50-4LTR",
+      "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+      "total_pi_qty": 15,
+      "sell_price": 850.45,
+      "allocations": [
+        {
+          "supplier_id": "SUP002",
+          "supplier_name": "Global Parts International",
+          "spo_id": "SPO-2026-002",
+          "spo_number": "SP260002",
+          "allocated_qty": 15,
+          "unit_cost": 680.00,
+          "total_cost": 10200.00,
+          "status": "PARTIAL_RECEIVED",
+          "expected_date": "2026-01-22",
+          "received_qty": 10
+        }
+      ],
+      "summary": {
+        "total_qty": 15,
+        "allocated_qty": 15,
+        "unallocated_qty": 0,
+        "ordered_qty": 15,
+        "received_qty": 10,
+        "allocation_complete": true
+      },
+      "avg_cost_price": 680.00,
+      "profit_margin": 20.04,
+      "created_at": "2026-01-12T09:00:00Z",
+      "updated_at": "2026-01-20T14:00:00Z"
+    },
+    {
+      "allocation_id": "ALLOC-004",
+      "pi_id": "PI-2024-012",
+      "pi_number": "PI240012",
+      "customer_name": "Tech Solutions Inc",
+      "pi_item_id": "PI-ITEM-003",
+      "product_id": "PROD008",
+      "part_number": "HYD-PUMP-500",
+      "product_name": "Aircraft Hydraulic Pump Assembly",
+      "total_pi_qty": 8,
+      "sell_price": 2650.00,
+      "allocations": [
+        {
+          "supplier_id": "SUP001",
+          "supplier_name": "ATS Manufacturing Co.",
+          "spo_id": "SPO-2026-005",
+          "spo_number": "SP260005",
+          "allocated_qty": 5,
+          "unit_cost": 2150.00,
+          "total_cost": 10750.00,
+          "status": "ORDERED",
+          "expected_date": "2026-02-19",
+          "received_qty": 0
+        },
+        {
+          "supplier_id": null,
+          "supplier_name": null,
+          "spo_id": null,
+          "spo_number": null,
+          "allocated_qty": 3,
+          "unit_cost": null,
+          "total_cost": null,
+          "status": "UNALLOCATED",
+          "expected_date": null,
+          "received_qty": 0
+        }
+      ],
+      "summary": {
+        "total_qty": 8,
+        "allocated_qty": 5,
+        "unallocated_qty": 3,
+        "ordered_qty": 5,
+        "received_qty": 0,
+        "allocation_complete": false
+      },
+      "avg_cost_price": 2150.00,
+      "profit_margin": 18.87,
+      "created_at": "2026-02-05T14:00:00Z",
+      "updated_at": "2026-02-05T16:00:00Z"
+    },
+    {
+      "allocation_id": "ALLOC-005",
+      "pi_id": "PI-2024-012",
+      "pi_number": "PI240012",
+      "customer_name": "Tech Solutions Inc",
+      "pi_item_id": "PI-ITEM-004",
+      "product_id": "PROD002",
+      "part_number": "ATS-134S",
+      "product_name": "SAFETY WIRE TWISTER (8\")",
+      "total_pi_qty": 30,
+      "sell_price": 28.00,
+      "allocations": [
+        {
+          "supplier_id": "SUP001",
+          "supplier_name": "ATS Manufacturing Co.",
+          "spo_id": "SPO-2026-005",
+          "spo_number": "SP260005",
+          "allocated_qty": 30,
+          "unit_cost": 17.00,
+          "total_cost": 510.00,
+          "status": "ORDERED",
+          "expected_date": "2026-02-19",
+          "received_qty": 0
+        }
+      ],
+      "summary": {
+        "total_qty": 30,
+        "allocated_qty": 30,
+        "unallocated_qty": 0,
+        "ordered_qty": 30,
+        "received_qty": 0,
+        "allocation_complete": true
+      },
+      "avg_cost_price": 17.00,
+      "profit_margin": 39.29,
+      "created_at": "2026-02-05T14:00:00Z",
+      "updated_at": "2026-02-05T16:00:00Z"
+    },
+    {
+      "allocation_id": "ALLOC-006",
+      "pi_id": "PI-2024-013",
+      "pi_number": "PI240013",
+      "customer_name": "Aviation Supplies Ltd",
+      "pi_item_id": "PI-ITEM-005",
+      "product_id": "PROD002",
+      "part_number": "ATS-134S",
+      "product_name": "SAFETY WIRE TWISTER (8\")",
+      "total_pi_qty": 50,
+      "sell_price": 25.50,
+      "allocations": [
+        {
+          "supplier_id": "SUP001",
+          "supplier_name": "ATS Manufacturing Co.",
+          "spo_id": "SPO-2026-005",
+          "spo_number": "SP260005",
+          "allocated_qty": 20,
+          "unit_cost": 17.00,
+          "total_cost": 340.00,
+          "status": "ORDERED",
+          "expected_date": "2026-02-19",
+          "received_qty": 0
+        },
+        {
+          "supplier_id": null,
+          "supplier_name": null,
+          "spo_id": null,
+          "spo_number": null,
+          "allocated_qty": 30,
+          "unit_cost": null,
+          "total_cost": null,
+          "status": "UNALLOCATED",
+          "expected_date": null,
+          "received_qty": 0
+        }
+      ],
+      "summary": {
+        "total_qty": 50,
+        "allocated_qty": 20,
+        "unallocated_qty": 30,
+        "ordered_qty": 20,
+        "received_qty": 0,
+        "allocation_complete": false
+      },
+      "avg_cost_price": 17.00,
+      "profit_margin": 33.33,
+      "created_at": "2026-02-05T14:00:00Z",
+      "updated_at": "2026-02-05T16:00:00Z"
+    },
+    {
+      "allocation_id": "ALLOC-007",
+      "pi_id": "PI-2024-014",
+      "pi_number": "PI240014",
+      "customer_name": "Global Aviation Corp",
+      "pi_item_id": "PI-ITEM-006",
+      "product_id": "PROD004",
+      "part_number": "ACF50-4LTR",
+      "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+      "total_pi_qty": 25,
+      "sell_price": 875.00,
+      "allocations": [
+        {
+          "supplier_id": null,
+          "supplier_name": null,
+          "spo_id": null,
+          "spo_number": null,
+          "allocated_qty": 25,
+          "unit_cost": null,
+          "total_cost": null,
+          "status": "UNALLOCATED",
+          "expected_date": null,
+          "received_qty": 0
+        }
+      ],
+      "summary": {
+        "total_qty": 25,
+        "allocated_qty": 0,
+        "unallocated_qty": 25,
+        "ordered_qty": 0,
+        "received_qty": 0,
+        "allocation_complete": false
+      },
+      "avg_cost_price": null,
+      "profit_margin": null,
+      "created_at": "2026-02-10T10:00:00Z",
+      "updated_at": "2026-02-10T10:00:00Z"
+    },
+    {
+      "allocation_id": "ALLOC-008",
+      "pi_id": "PI-2024-014",
+      "pi_number": "PI240014",
+      "customer_name": "Global Aviation Corp",
+      "pi_item_id": "PI-ITEM-007",
+      "product_id": "PROD008",
+      "part_number": "HYD-PUMP-500",
+      "product_name": "Aircraft Hydraulic Pump Assembly",
+      "total_pi_qty": 10,
+      "sell_price": 2800.00,
+      "allocations": [
+        {
+          "supplier_id": null,
+          "supplier_name": null,
+          "spo_id": null,
+          "spo_number": null,
+          "allocated_qty": 10,
+          "unit_cost": null,
+          "total_cost": null,
+          "status": "UNALLOCATED",
+          "expected_date": null,
+          "received_qty": 0
+        }
+      ],
+      "summary": {
+        "total_qty": 10,
+        "allocated_qty": 0,
+        "unallocated_qty": 10,
+        "ordered_qty": 0,
+        "received_qty": 0,
+        "allocation_complete": false
+      },
+      "avg_cost_price": null,
+      "profit_margin": null,
+      "created_at": "2026-02-10T10:00:00Z",
+      "updated_at": "2026-02-10T10:00:00Z"
+    }
+  ]
+}

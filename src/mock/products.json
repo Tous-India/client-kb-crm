@@ -1,0 +1,322 @@
+{
+  "products": [
+    {
+      "product_id": "PROD001",
+      "part_number": "ATS-M1-S5",
+      "oem_part": "M1-S5",
+      "product_name": "DIE, STR. SHANK 5/32 (M1-K)",
+      "category": "Pilot Supplies",
+      "sub_category": "Safety / Survival",
+      "brand": "ACF-50",
+      "description": "High-quality die with straight shank, precision engineered for M1-K applications",
+      "list_price": 1086.70,
+      "your_price": 1032.36,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 85
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 42
+        }
+      ],
+      "total_quantity": 127,
+      "image_url": "/images/products/ats-m1-s5.jpg",
+      "specifications": {
+        "weight": "0.5 lbs",
+        "dimensions": "5x3x2 inches",
+        "material": "Steel Alloy"
+      },
+      "manufacturer": "ATS Manufacturing"
+    },
+    {
+      "product_id": "PROD002",
+      "part_number": "ATS-134S",
+      "oem_part": "134S",
+      "product_name": "SAFETY WIRE TWISTER (8\")",
+      "category": "Pilot Supplies",
+      "sub_category": "Tools",
+      "brand": "ACF-50",
+      "description": "Professional grade 8-inch safety wire twister for aviation maintenance",
+      "list_price": 28.08,
+      "your_price": 26.68,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 450
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 280
+        }
+      ],
+      "total_quantity": 730,
+      "image_url": "/images/products/ats-134s.jpg",
+      "specifications": {
+        "weight": "0.3 lbs",
+        "dimensions": "8x2x1 inches",
+        "material": "Chrome Steel"
+      },
+      "manufacturer": "ATS Tools"
+    },
+    {
+      "product_id": "PROD003",
+      "part_number": "ATS-M1-B2",
+      "oem_part": "M1-B2",
+      "product_name": "DIE, BALL 1/16\" FOR M1-K",
+      "category": "Hardware",
+      "sub_category": "Dies",
+      "brand": "Bose Aviation",
+      "description": "Precision ball die designed for M1-K systems with 1/16 inch specifications",
+      "list_price": 1292.58,
+      "your_price": 1227.95,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 35
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 18
+        }
+      ],
+      "total_quantity": 53,
+      "image_url": "/images/products/ats-m1-b2.jpg",
+      "specifications": {
+        "weight": "0.6 lbs",
+        "dimensions": "4x3x2 inches",
+        "material": "Hardened Steel"
+      },
+      "manufacturer": "ATS Precision"
+    },
+    {
+      "product_id": "PROD004",
+      "part_number": "ACF50-4LTR",
+      "oem_part": "ACF50-4L",
+      "product_name": "ACF-50 Anti-Corrosion Formula (4 Liter)",
+      "category": "Miscellaneous Chemicals",
+      "sub_category": "Corrosion Prevention",
+      "brand": "ACF-50",
+      "description": "Advanced anti-corrosion compound specifically designed for aircraft. Provides superior protection against corrosion in all weather conditions.",
+      "list_price": 895.21,
+      "your_price": 850.45,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 120
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 95
+        }
+      ],
+      "total_quantity": 215,
+      "image_url": "/images/products/acf50-4ltr.jpg",
+      "specifications": {
+        "weight": "9 lbs",
+        "dimensions": "10x6x6 inches",
+        "volume": "4 liters"
+      },
+      "manufacturer": "ACF-50"
+    },
+    {
+      "product_id": "PROD005",
+      "part_number": "ACF50-1G",
+      "oem_part": "ACF50-1GAL",
+      "product_name": "ACF-50 Anti-Corrosion Formula (1 Gallon)",
+      "category": "Miscellaneous Chemicals",
+      "sub_category": "Corrosion Prevention",
+      "brand": "ACF-50",
+      "description": "Professional grade anti-corrosion treatment in convenient 1-gallon container",
+      "list_price": 252.00,
+      "your_price": 239.40,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 180
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 150
+        }
+      ],
+      "total_quantity": 330,
+      "image_url": "/images/products/acf50-1g.jpg",
+      "specifications": {
+        "weight": "8.5 lbs",
+        "dimensions": "8x5x5 inches",
+        "volume": "1 gallon"
+      },
+      "manufacturer": "ACF-50"
+    },
+    {
+      "product_id": "PROD006",
+      "part_number": "ACF50-13OZ",
+      "oem_part": "ACF50-13",
+      "product_name": "ACF-50 Anti-Corrosion Spray (13 oz)",
+      "category": "Miscellaneous Chemicals",
+      "sub_category": "Corrosion Prevention",
+      "brand": "ACF-50",
+      "description": "Convenient spray bottle for quick application and touch-ups",
+      "list_price": 42.50,
+      "your_price": 40.38,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 500
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 380
+        }
+      ],
+      "total_quantity": 880,
+      "image_url": "/images/products/acf50-13oz.jpg",
+      "specifications": {
+        "weight": "1.2 lbs",
+        "dimensions": "9x3x3 inches",
+        "volume": "13 oz"
+      },
+      "manufacturer": "ACF-50"
+    },
+    {
+      "product_id": "PROD007",
+      "part_number": "ACF50-KIT",
+      "oem_part": "ACF50-STARTER",
+      "product_name": "ACF-50 Starter Kit with Applicator",
+      "category": "Miscellaneous Chemicals",
+      "sub_category": "Corrosion Prevention",
+      "brand": "ACF-50",
+      "description": "Complete starter kit including ACF-50 formula, spray applicator, and application instructions",
+      "list_price": 125.00,
+      "your_price": 118.75,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 75
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 45
+        }
+      ],
+      "total_quantity": 120,
+      "image_url": "/images/products/acf50-kit.jpg",
+      "specifications": {
+        "weight": "3 lbs",
+        "dimensions": "12x8x6 inches"
+      },
+      "manufacturer": "ACF-50"
+    },
+    {
+      "product_id": "PROD008",
+      "part_number": "HYD-PUMP-500",
+      "oem_part": "HP-500-A",
+      "product_name": "Aircraft Hydraulic Pump Assembly",
+      "category": "Hardware",
+      "sub_category": "Hydraulic Systems",
+      "brand": "Aeroshell",
+      "description": "High-performance hydraulic pump for commercial and general aviation aircraft",
+      "list_price": 2850.00,
+      "your_price": 2707.50,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 15
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 8
+        }
+      ],
+      "total_quantity": 23,
+      "image_url": "/images/products/hyd-pump-500.jpg",
+      "specifications": {
+        "weight": "12 lbs",
+        "dimensions": "14x10x8 inches",
+        "pressure_rating": "3000 PSI"
+      },
+      "manufacturer": "Precision Hydraulics"
+    },
+    {
+      "product_id": "PROD009",
+      "part_number": "SEAL-AV-100",
+      "oem_part": "SEAL-100",
+      "product_name": "Aviation Grade Sealant (Tube)",
+      "category": "Miscellaneous Chemicals",
+      "sub_category": "Sealants",
+      "brand": "3M Aviation",
+      "description": "Professional aviation-grade sealant for fuel tanks and structural applications",
+      "list_price": 38.50,
+      "your_price": 36.58,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 650
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 420
+        }
+      ],
+      "total_quantity": 1070,
+      "image_url": "/images/products/seal-av-100.jpg",
+      "specifications": {
+        "weight": "0.8 lbs",
+        "dimensions": "10x2x2 inches",
+        "volume": "300ml"
+      },
+      "manufacturer": "3M"
+    },
+    {
+      "product_id": "PROD010",
+      "part_number": "BEARING-SET-200",
+      "oem_part": "BS-200-HG",
+      "product_name": "Precision Aircraft Bearing Set",
+      "category": "Hardware",
+      "sub_category": "Bearings",
+      "brand": "SKF Aviation",
+      "description": "High-grade precision bearing set for aircraft control systems",
+      "list_price": 425.00,
+      "your_price": 403.75,
+      "discount_percentage": 5,
+      "stock_status": "In Stock",
+      "available_locations": [
+        {
+          "location": "Fort Lauderdale, FL",
+          "quantity": 200
+        },
+        {
+          "location": "Wichita, KS",
+          "quantity": 150
+        }
+      ],
+      "total_quantity": 350,
+      "image_url": "/images/products/bearing-set-200.jpg",
+      "specifications": {
+        "weight": "2.5 lbs",
+        "dimensions": "6x6x4 inches"
+      },
+      "manufacturer": "SKF"
+    }
+  ]
+}
