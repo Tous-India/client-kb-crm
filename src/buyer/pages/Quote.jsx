@@ -55,6 +55,7 @@ import QuotationPrintPreview from "../../admin/components/QuotationPrintPreview"
 import SendInquiryModal from "../components/SendInquiryModal";
 import { quotationsService } from "../../services";
 import { useCurrency } from "../../context/CurrencyContext";
+import { useAuth } from "../../context/AuthContext";
 
 // Tab Panel Component
 function TabPanel({ children, value, index, ...other }) {
@@ -73,6 +74,7 @@ function TabPanel({ children, value, index, ...other }) {
 
 function Quote() {
   const { usdToInr } = useCurrency();
+  const { user } = useAuth();
   const [quotations, setQuotations] = useState([]);
   const [selectedQuote, setSelectedQuote] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -244,13 +246,14 @@ function Quote() {
   // Accept quotation
   const handleAcceptQuote = (quote) => {
     setSelectedQuote(quote);
-    // Reset shipping address form
+    // Pre-fill shipping address from user profile
+    const userAddress = user?.address || {};
     setShippingAddress({
-      street: "",
-      city: "",
-      state: "",
-      zip: "",
-      country: "",
+      street: userAddress.street || "",
+      city: userAddress.city || "",
+      state: userAddress.state || "",
+      zip: userAddress.zip || "",
+      country: userAddress.country || "",
     });
     setShowAcceptModal(true);
   };
@@ -1368,19 +1371,34 @@ function Quote() {
                   mt: 2,
                   borderRadius: 2,
                   border: "1px solid",
-                  borderColor: "primary.light",
-                  bgcolor: "primary.lighter"
+                  borderColor: shippingAddress.street && shippingAddress.city ? "success.light" : "primary.light",
+                  bgcolor: shippingAddress.street && shippingAddress.city ? "success.lighter" : "primary.lighter"
                 }}
               >
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-                  <LocalShipping color="primary" />
-                  <Typography variant="subtitle1" fontWeight="bold" color="primary.main">
+                  <LocalShipping color={shippingAddress.street && shippingAddress.city ? "success" : "primary"} />
+                  <Typography variant="subtitle1" fontWeight="bold" color={shippingAddress.street && shippingAddress.city ? "success.main" : "primary.main"}>
                     Shipping Address
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    (Required)
-                  </Typography>
+                  {shippingAddress.street && shippingAddress.city ? (
+                    <Chip
+                      icon={<CheckCircle sx={{ fontSize: '14px !important' }} />}
+                      label="From Profile"
+                      size="small"
+                      color="success"
+                      sx={{ fontSize: '11px', height: '22px' }}
+                    />
+                  ) : (
+                    <Typography variant="caption" color="text.secondary">
+                      (Required)
+                    </Typography>
+                  )}
                 </Stack>
+                {shippingAddress.street && shippingAddress.city && (
+                  <Alert severity="success" sx={{ mb: 2, borderRadius: 1, py: 0.5 }}>
+                    Address synced from your profile. You can edit if needed.
+                  </Alert>
+                )}
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <TextField
