@@ -56,6 +56,8 @@ import SendInquiryModal from "../components/SendInquiryModal";
 import { quotationsService } from "../../services";
 import { useCurrency } from "../../context/CurrencyContext";
 import { useAuth } from "../../context/AuthContext";
+import apiClient from "../../services/api/client";
+import { ENDPOINTS } from "../../services/api/endpoints";
 
 // Tab Panel Component
 function TabPanel({ children, value, index, ...other }) {
@@ -74,7 +76,7 @@ function TabPanel({ children, value, index, ...other }) {
 
 function Quote() {
   const { usdToInr } = useCurrency();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [quotations, setQuotations] = useState([]);
   const [selectedQuote, setSelectedQuote] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -286,6 +288,25 @@ function Quote() {
               : q
           )
         );
+
+        // Sync shipping address back to user profile
+        try {
+          await apiClient.put(ENDPOINTS.USERS.UPDATE_PROFILE, {
+            address: {
+              street: shippingAddress.street,
+              city: shippingAddress.city,
+              state: shippingAddress.state,
+              zip: shippingAddress.zip,
+              country: shippingAddress.country,
+            },
+          });
+          // Refresh user data in context
+          await refreshUser();
+        } catch (profileErr) {
+          console.error("[Quote] Error syncing address to profile:", profileErr);
+          // Don't show error - quotation was accepted successfully
+        }
+
         setShowAcceptModal(false);
         setSelectedQuote(null);
         setShippingAddress({ street: "", city: "", state: "", zip: "", country: "" });
