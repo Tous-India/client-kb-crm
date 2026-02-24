@@ -1560,7 +1560,7 @@ function Quotations() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {piForm.items.map((item, idx) => (
+                      {(piForm.items || []).map((item, idx) => (
                         <TableRow key={idx}>
                           <TableCell sx={{ fontSize: "12px" }}>
                             <Typography variant="body2" sx={{ fontSize: "12px" }}>{item.product_name}</Typography>

@@ -238,8 +238,8 @@ function AddEditProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
-    if (!productForm.part_number || !productForm.product_name || !productForm.category || !productForm.brand) {
+    // Validate required fields (category and brand are optional - will default on backend)
+    if (!productForm.part_number || !productForm.product_name) {
       showError("Please fill in all required fields");
       return;
     }
@@ -432,7 +432,7 @@ function AddEditProduct() {
 
             {/* Category */}
             <Grid size={{ xs: 12, md: 6 }}>
-              <FormControl fullWidth required>
+              <FormControl fullWidth>
                 <InputLabel>Category</InputLabel>
                 <Select
                   value={productForm.category}
@@ -463,7 +463,7 @@ function AddEditProduct() {
 
             {/* Brand */}
             <Grid size={{ xs: 12, md: 6 }}>
-              <FormControl fullWidth required>
+              <FormControl fullWidth>
                 <InputLabel>Brand</InputLabel>
                 <Select
                   value={productForm.brand}

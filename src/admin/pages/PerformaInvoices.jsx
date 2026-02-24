@@ -2336,7 +2336,7 @@ function PerformaInvoices() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {selectedPI.items.map((item, idx) => (
+                      {(selectedPI.items || []).map((item, idx) => (
                         <TableRow key={idx}>
                           <TableCell>{item.product_name}</TableCell>
                           <TableCell>{item.part_number}</TableCell>
@@ -2596,7 +2596,7 @@ function PerformaInvoices() {
                     Terms & Conditions:
                   </Typography>
                   <Box component="ol" sx={{ pl: 2, m: 0 }}>
-                    {selectedPI.terms_conditions.map((term, idx) => (
+                    {(selectedPI.terms_conditions || []).map((term, idx) => (
                       <Box component="li" key={idx} sx={{ mb: 0.5 }}>
                         <Typography variant="body2" sx={{ fontSize: '12px' }}>
                           {term}
@@ -2956,7 +2956,7 @@ function PerformaInvoices() {
                     )}
                   </Stack>
 
-                  {pendingPaymentRecords.map((record) => (
+                  {(pendingPaymentRecords || []).map((record) => (
                     <Paper
                       key={record._id}
                       variant="outlined"
@@ -3458,7 +3458,7 @@ function PerformaInvoices() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {selectedPI.payment_history.map((payment, idx) => (
+                        {(selectedPI.payment_history || []).map((payment, idx) => (
                           <TableRow key={idx}>
                             <TableCell>
                               <Typography variant="caption">
@@ -3985,7 +3985,7 @@ function PerformaInvoices() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {invoiceItems.map((item, index) => (
+                      {(invoiceItems || []).map((item, index) => (
                         <TableRow
                           key={index}
                           sx={{

@@ -166,6 +166,10 @@ export const ENDPOINTS = {
     LIST: '/statements',
     GET: (id) => `/statements/${id}`,
     DOWNLOAD: (id) => `/statements/${id}/download`,
+    TRANSACTIONS: '/statements/transactions',
+    TRANSACTIONS_BY_MONTH: '/statements/transactions/by-month',
+    TRANSACTIONS_BY_BUYER: (buyerId) => `/statements/transactions/by-buyer/${buyerId}`,
+    MY: '/statements/my',
   },
 
   // Suppliers

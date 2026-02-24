@@ -70,7 +70,7 @@ const PendingApprovals = () => {
     },
   });
 
-  const pendingUsers = pendingData?.data || [];
+  const pendingUsers = pendingData?.data?.users || [];
 
   // Approve mutation
   const approveMutation = useMutation({

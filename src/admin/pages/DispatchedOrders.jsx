@@ -1197,7 +1197,7 @@ Customer Service Team`
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {selectedOrder.items.map((item, idx) => (
+                      {(selectedOrder.items || []).map((item, idx) => (
                         <TableRow key={idx}>
                           <TableCell>{item.product_name}</TableCell>
                           <TableCell>{item.part_number}</TableCell>

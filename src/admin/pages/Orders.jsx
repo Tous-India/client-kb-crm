@@ -1123,14 +1123,14 @@ function Orders() {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {selectedOrder.dispatch_history.map((dispatch, idx) => (
+                          {(selectedOrder.dispatch_history || []).map((dispatch, idx) => (
                             <TableRow key={idx}>
                               <TableCell sx={{ fontSize: '12px' }}>{dispatch.dispatch_id}</TableCell>
                               <TableCell sx={{ fontSize: '12px' }}>
                                 {new Date(dispatch.dispatch_date).toLocaleDateString()}
                               </TableCell>
                               <TableCell sx={{ fontSize: '12px' }}>
-                                {dispatch.items.map(i => i.product_name).join(', ')}
+                                {(dispatch.items || []).map(i => i.product_name).join(', ')}
                               </TableCell>
                               <TableCell align="center" sx={{ fontSize: '12px' }}>
                                 <Chip label={dispatch.total_quantity} size="small" color="success" sx={{ fontSize: '11px' }} />
@@ -1354,14 +1354,14 @@ function Orders() {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {selectedOrder.dispatch_history.map((dispatch, idx) => (
+                            {(selectedOrder.dispatch_history || []).map((dispatch, idx) => (
                               <TableRow key={idx} sx={{ '&:last-child td': { borderBottom: 0 } }}>
                                 <TableCell sx={{ fontSize: '11px', py: 0.75 }}>{dispatch.dispatch_id}</TableCell>
                                 <TableCell sx={{ fontSize: '11px', py: 0.75 }}>
                                   {new Date(dispatch.dispatch_date).toLocaleDateString()}
                                 </TableCell>
                                 <TableCell sx={{ fontSize: '11px', py: 0.75, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                  {dispatch.items.map(i => i.product_name).join(', ')}
+                                  {(dispatch.items || []).map(i => i.product_name).join(', ')}
                                 </TableCell>
                                 <TableCell align="center" sx={{ fontSize: '11px', py: 0.75 }}>
                                   <Chip label={dispatch.total_quantity} size="small" color="success" sx={{ fontSize: '10px', height: 18 }} />

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import {
   Container,
   Box,
@@ -30,11 +30,12 @@ import {
   Select,
   MenuItem,
   Card,
-  CardContent
+  CardContent,
+  CircularProgress,
+  Skeleton
 } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import {
-  Receipt,
   Visibility,
   Search,
   Print,
@@ -45,7 +46,9 @@ import {
   CalendarMonth,
   Person
 } from '@mui/icons-material'
-import statementsData from '../../mock/statements.json'
+import { useQuery } from '@tanstack/react-query'
+import apiClient from '../../services/api/client'
+import { ENDPOINTS } from '../../services/api/endpoints'
 import { useCurrency } from '../../context/CurrencyContext'
 import StatementPrintPreview from '../components/StatementPrintPreview'
 
@@ -63,8 +66,6 @@ const printStyles = `
 
 function Statements() {
   const { usdToInr } = useCurrency()
-  const [statements, setStatements] = useState([])
-  const [allTransactions, setAllTransactions] = useState([])
   const [selectedStatement, setSelectedStatement] = useState(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [showStatementPreviewModal, setShowStatementPreviewModal] = useState(false)
@@ -81,23 +82,27 @@ function Statements() {
   const [sortBy, setSortBy] = useState('date')
   const [sortOrder, setSortOrder] = useState('desc')
 
-  useEffect(() => {
-    const stmts = statementsData.statements || []
-    setStatements(stmts)
+  // Fetch transactions from API
+  const {
+    data: transactionsData,
+    isLoading,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['statements', 'transactions'],
+    queryFn: async () => {
+      const response = await apiClient.get(ENDPOINTS.STATEMENTS.TRANSACTIONS)
+      return response.data
+    }
+  })
 
-    // Extract all transactions from all statements
-    const transactions = stmts.flatMap(stmt =>
-      stmt.transactions.map(txn => ({
-        ...txn,
-        customer_id: stmt.customer_id,
-        statement_id: stmt.statement_id
-      }))
-    )
-    setAllTransactions(transactions)
-  }, [])
+  // Extract transactions from API response
+  const allTransactions = transactionsData?.data?.transactions || []
 
-  // Get unique buyers
-  const uniqueBuyers = [...new Set(statements.map(stmt => stmt.customer_id))].sort()
+  // Get unique buyers from transactions
+  const uniqueBuyers = [...new Set(allTransactions.map(txn =>
+    txn.buyer?.user_id || txn.buyer?.name || 'Unknown'
+  ))].filter(Boolean).sort()
 
   // Get unique months from transactions
   const getMonthOptions = () => {
@@ -119,16 +124,23 @@ function Statements() {
     return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   }
 
+  // Helper to get buyer identifier
+  const getBuyerId = (txn) => txn.buyer?.user_id || txn.buyer?.name || 'Unknown'
+
   // Filter transactions
   const filteredTransactions = allTransactions.filter(txn => {
+    const buyerId = getBuyerId(txn)
+    const description = txn.description || ''
+    const reference = txn.reference || ''
+
     // Search filter
     const matchesSearch = !searchTerm ||
-      txn.customer_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      txn.reference.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      txn.description.toLowerCase().includes(searchTerm.toLowerCase())
+      buyerId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reference.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      description.toLowerCase().includes(searchTerm.toLowerCase())
 
     // Buyer filter
-    const matchesBuyer = buyerFilter === 'all' || txn.customer_id === buyerFilter
+    const matchesBuyer = buyerFilter === 'all' || buyerId === buyerFilter
 
     // Month filter
     let matchesMonth = true
@@ -152,8 +164,8 @@ function Statements() {
       compareA = a.charges || a.payments || 0
       compareB = b.charges || b.payments || 0
     } else if (sortBy === 'customer_id') {
-      compareA = a.customer_id
-      compareB = b.customer_id
+      compareA = getBuyerId(a)
+      compareB = getBuyerId(b)
     }
 
     if (sortOrder === 'asc') {
@@ -191,11 +203,25 @@ function Statements() {
     }
   }
 
-  // View buyer statement details
-  const handleViewBuyerStatement = (customerId) => {
-    const stmt = statements.find(s => s.customer_id === customerId)
-    if (stmt) {
-      setSelectedStatement(stmt)
+  // View buyer statement details - filter transactions for this buyer
+  const handleViewBuyerStatement = (buyerId) => {
+    const buyerTransactions = allTransactions.filter(txn => getBuyerId(txn) === buyerId)
+    if (buyerTransactions.length > 0) {
+      // Calculate totals for this buyer
+      const totalCharges = buyerTransactions.reduce((sum, txn) => sum + (txn.charges || 0), 0)
+      const totalPayments = buyerTransactions.reduce((sum, txn) => sum + (txn.payments || 0), 0)
+
+      setSelectedStatement({
+        customer_id: buyerId,
+        transactions: buyerTransactions,
+        total_charges: totalCharges,
+        total_payments: totalPayments,
+        opening_balance: 0,
+        closing_balance: totalCharges - totalPayments,
+        statement_date: new Date().toISOString(),
+        period_start: buyerTransactions[buyerTransactions.length - 1]?.date,
+        period_end: buyerTransactions[0]?.date,
+      })
       setShowDetailsModal(true)
     }
   }
@@ -282,6 +308,37 @@ function Statements() {
       `)
       printWindow.document.close()
     }
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <Container className='px-0!' maxWidth="xl" sx={{ mt: 0, mb: 4 }}>
+        <Box sx={{ mb: 3 }}>
+          <Skeleton variant="text" width={200} height={40} />
+          <Skeleton variant="text" width={350} height={24} />
+        </Box>
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          {[1, 2, 3].map(i => (
+            <Grid key={i} size={{ xs: 12, sm: 4 }}>
+              <Skeleton variant="rectangular" height={100} sx={{ borderRadius: 1 }} />
+            </Grid>
+          ))}
+        </Grid>
+        <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 1 }} />
+      </Container>
+    )
+  }
+
+  // Error state
+  if (isError) {
+    return (
+      <Container className='px-0!' maxWidth="xl" sx={{ mt: 0, mb: 4 }}>
+        <Alert severity="error">
+          Failed to load transactions: {error?.message || 'Unknown error'}
+        </Alert>
+      </Container>
+    )
   }
 
   return (
@@ -520,7 +577,7 @@ function Statements() {
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '13px' }}>
-                        {txn.customer_id}
+                        {getBuyerId(txn)}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -570,21 +627,25 @@ function Statements() {
                       )}
                     </TableCell>
                     <TableCell align="right">
-                      <Stack spacing={0} alignItems="flex-end">
-                        <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '13px' }}>
-                          ${txn.balance.toFixed(2)}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '10px' }}>
-                          ₹{(txn.balance * usdToInr).toFixed(2)}
-                        </Typography>
-                      </Stack>
+                      {txn.balance !== undefined ? (
+                        <Stack spacing={0} alignItems="flex-end">
+                          <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '13px' }}>
+                            ${txn.balance.toFixed(2)}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '10px' }}>
+                            ₹{(txn.balance * usdToInr).toFixed(2)}
+                          </Typography>
+                        </Stack>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }}>-</Typography>
+                      )}
                     </TableCell>
                     <TableCell align="center" className="no-print">
                       <Tooltip title="View Buyer Statement">
                         <IconButton
                           size="small"
                           color="info"
-                          onClick={() => handleViewBuyerStatement(txn.customer_id)}
+                          onClick={() => handleViewBuyerStatement(getBuyerId(txn))}
                         >
                           <Visibility fontSize="small" />
                         </IconButton>
@@ -784,7 +845,7 @@ function Statements() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {selectedStatement.transactions.map((txn, index) => (
+                        {(selectedStatement.transactions || []).map((txn, index) => (
                           <TableRow key={index} hover sx={{ bgcolor: txn.type === 'PAYMENT' ? '#f1f8e9' : '#fff' }}>
                             <TableCell>
                               <Typography variant="body2" sx={{ fontSize: '12px' }}>
@@ -828,9 +889,13 @@ function Statements() {
                               )}
                             </TableCell>
                             <TableCell align="right">
-                              <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '12px' }}>
-                                ${txn.balance.toFixed(2)}
-                              </Typography>
+                              {txn.balance !== undefined ? (
+                                <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '12px' }}>
+                                  ${txn.balance.toFixed(2)}
+                                </Typography>
+                              ) : (
+                                <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }}>-</Typography>
+                              )}
                             </TableCell>
                           </TableRow>
                         ))}

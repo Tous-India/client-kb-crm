@@ -46,18 +46,26 @@ export function NotificationCountsProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
 
+  // Helper: Ensure we have an array
+  const ensureArray = (data) => {
+    if (Array.isArray(data)) return data;
+    if (data && typeof data === "object") return [];
+    return [];
+  };
+
   // Helper: Count items updated since last viewed timestamp
   const countUpdatedSince = (items, lastViewedKey) => {
-    if (!items || items.length === 0) return 0;
+    const itemsArray = ensureArray(items);
+    if (itemsArray.length === 0) return 0;
 
     const lastViewed = localStorage.getItem(lastViewedKey);
     if (!lastViewed) {
       // First time viewing - count all items as new
-      return items.length;
+      return itemsArray.length;
     }
 
     const lastViewedDate = new Date(lastViewed);
-    return items.filter(item => {
+    return itemsArray.filter(item => {
       const updatedAt = new Date(item.updatedAt || item.updated_at || item.createdAt || item.created_at);
       return updatedAt > lastViewedDate;
     }).length;
@@ -80,14 +88,15 @@ export function NotificationCountsProvider({ children }) {
         ]);
 
         // Get the actual items to check updatedAt
+        // API returns { data: { orders: [...] } } or { data: { paymentRecords: [...] } } etc.
         const pendingOrdersList = ordersRes.status === "fulfilled"
-          ? (ordersRes.value.data?.data || [])
+          ? (ordersRes.value.data?.data?.orders || ordersRes.value.data?.data || [])
           : [];
         const pendingPaymentsList = paymentsRes.status === "fulfilled"
-          ? (paymentsRes.value.data?.data || [])
+          ? (paymentsRes.value.data?.data?.paymentRecords || paymentsRes.value.data?.data || [])
           : [];
         const pendingApprovalsList = approvalsRes.status === "fulfilled"
-          ? (approvalsRes.value.data?.data || [])
+          ? (approvalsRes.value.data?.data?.users || approvalsRes.value.data?.data || [])
           : [];
 
         // Count items updated since last viewed
@@ -111,11 +120,19 @@ export function NotificationCountsProvider({ children }) {
           apiClient.get("/invoices/my"),
         ]);
 
-        // Get the actual items
-        const quotations = quotesRes.status === "fulfilled" ? (quotesRes.value.data?.data || []) : [];
-        const pis = pisRes.status === "fulfilled" ? (pisRes.value.data?.data || []) : [];
-        const orders = ordersRes.status === "fulfilled" ? (ordersRes.value.data?.data || []) : [];
-        const invoices = invoicesRes.status === "fulfilled" ? (invoicesRes.value.data?.data || []) : [];
+        // Get the actual items - API returns { data: { quotations: [...] } } etc.
+        const quotations = quotesRes.status === "fulfilled"
+          ? (quotesRes.value.data?.data?.quotations || quotesRes.value.data?.data || [])
+          : [];
+        const pis = pisRes.status === "fulfilled"
+          ? (pisRes.value.data?.data?.proformaInvoices || pisRes.value.data?.data || [])
+          : [];
+        const orders = ordersRes.status === "fulfilled"
+          ? (ordersRes.value.data?.data?.orders || ordersRes.value.data?.data || [])
+          : [];
+        const invoices = invoicesRes.status === "fulfilled"
+          ? (invoicesRes.value.data?.data?.invoices || invoicesRes.value.data?.data || [])
+          : [];
 
         // Count items updated since last viewed (status changes)
         const newQuotations = countUpdatedSince(quotations, STORAGE_KEYS.buyerQuotes);
