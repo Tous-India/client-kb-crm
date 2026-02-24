@@ -271,9 +271,22 @@ function Quote() {
 
     setActionLoading(true);
     try {
-      const result = await quotationsService.accept(selectedQuote._id, {
-        shipping_address: shippingAddress,
+      // Step 1: Update user profile with address (single source of truth)
+      await apiClient.put(ENDPOINTS.USERS.UPDATE_PROFILE, {
+        address: {
+          street: shippingAddress.street,
+          city: shippingAddress.city,
+          state: shippingAddress.state,
+          zip: shippingAddress.zip,
+          country: shippingAddress.country,
+        },
       });
+      // Refresh user data in context
+      await refreshUser();
+
+      // Step 2: Accept quotation (backend will use address from user profile)
+      const result = await quotationsService.accept(selectedQuote._id, {});
+
       if (result.success) {
         // Update local state
         setQuotations(
@@ -283,29 +296,10 @@ function Quote() {
                   ...q,
                   status: "ACCEPTED",
                   accepted_at: new Date().toISOString(),
-                  shipping_address: shippingAddress,
                 }
               : q
           )
         );
-
-        // Sync shipping address back to user profile
-        try {
-          await apiClient.put(ENDPOINTS.USERS.UPDATE_PROFILE, {
-            address: {
-              street: shippingAddress.street,
-              city: shippingAddress.city,
-              state: shippingAddress.state,
-              zip: shippingAddress.zip,
-              country: shippingAddress.country,
-            },
-          });
-          // Refresh user data in context
-          await refreshUser();
-        } catch (profileErr) {
-          console.error("[Quote] Error syncing address to profile:", profileErr);
-          // Don't show error - quotation was accepted successfully
-        }
 
         setShowAcceptModal(false);
         setSelectedQuote(null);
