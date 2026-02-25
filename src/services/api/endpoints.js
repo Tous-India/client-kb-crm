@@ -170,6 +170,9 @@ export const ENDPOINTS = {
     TRANSACTIONS_BY_MONTH: '/statements/transactions/by-month',
     TRANSACTIONS_BY_BUYER: (buyerId) => `/statements/transactions/by-buyer/${buyerId}`,
     MY: '/statements/my',
+    // Profit Analysis endpoints
+    PROFIT_ANALYSIS: '/statements/profit-analysis',
+    PROFIT_ANALYSIS_BY_MONTH: '/statements/profit-analysis/by-month',
   },
 
   // Suppliers

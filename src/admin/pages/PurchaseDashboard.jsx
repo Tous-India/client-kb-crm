@@ -37,19 +37,33 @@ import {
   Add,
   History,
   Edit,
+  TrendingUp,
+  LocationOn,
+  Receipt,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress, Alert, Collapse } from "@mui/material";
 import { toast } from "react-toastify";
 import suppliersService from "../../services/suppliers.service";
 import proformaInvoicesService from "../../services/proformaInvoices.service";
+import { useCurrency } from "../../context/CurrencyContext";
 
 function PurchaseDashboard() {
   const navigate = useNavigate();
+  const { inrRate } = useCurrency();
   const [suppliers, setSuppliers] = useState([]);
   const [proformaInvoices, setProformaInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Load PI Allocations from localStorage
+  const [piAllocations, setPiAllocations] = useState(() => {
+    const saved = localStorage.getItem("piAllocations");
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  // Load purchase INR rate from localStorage (set in PI Allocation page)
+  const purchaseRate = parseFloat(localStorage.getItem("purchaseInrRate")) || inrRate || 83;
 
   // PI Payments state
   const [expandedPI, setExpandedPI] = useState(null);
@@ -221,6 +235,82 @@ function PurchaseDashboard() {
 
     return { totalSellValue, totalPurchaseCost, totalPaid, totalUnpaid, totalProfit, unpaidCount };
   }, [piListForTracking]);
+
+  // Calculate allocation-based profits per PI
+  const allocationProfits = useMemo(() => {
+    return proformaInvoices.map((pi) => {
+      const piId = pi._id;
+      const items = pi.items || [];
+      let totalSellingPrice = 0;
+      let totalAllocationCost = 0;
+      let allocatedItems = 0;
+      let totalQty = 0;
+      let allocatedQty = 0;
+      const supplierBreakdown = {};
+
+      items.forEach((item) => {
+        const productId = item._id || item.product_id;
+        const key = `${piId}_${productId}`;
+        const itemAllocs = piAllocations[key] || [];
+        const itemQty = item.quantity || 0;
+        const sellingPrice = item.unit_price || 0;
+
+        totalQty += itemQty;
+        totalSellingPrice += sellingPrice * itemQty;
+
+        itemAllocs.forEach((alloc) => {
+          const qty = parseInt(alloc.quantity) || 0;
+          const unitCost = parseFloat(alloc.unit_cost) || 0;
+          if (qty > 0 && alloc.supplier_id) {
+            allocatedQty += qty;
+            totalAllocationCost += unitCost * qty;
+            if (qty > 0) allocatedItems++;
+
+            // Track by supplier
+            const supplierName = alloc.supplier_name || "Unknown";
+            if (!supplierBreakdown[supplierName]) {
+              supplierBreakdown[supplierName] = { qty: 0, cost: 0 };
+            }
+            supplierBreakdown[supplierName].qty += qty;
+            supplierBreakdown[supplierName].cost += unitCost * qty;
+          }
+        });
+      });
+
+      const profit = totalSellingPrice - totalAllocationCost;
+      const marginPercent = totalSellingPrice > 0 ? ((profit / totalSellingPrice) * 100) : 0;
+      const isFullyAllocated = allocatedQty >= totalQty && totalQty > 0;
+
+      return {
+        _id: piId,
+        pi_number: pi.proforma_number || pi.pi_number || "N/A",
+        invoice_number: pi.invoice_number || pi.commercial_invoice_number || "-",
+        customer_name: pi.buyer?.name || pi.buyer_name || "N/A",
+        location: pi.buyer?.city || pi.shipping_address?.city || pi.buyer?.country || "-",
+        pi_date: pi.issue_date || pi.createdAt,
+        totalSellingPrice,
+        totalAllocationCost,
+        profit,
+        marginPercent,
+        totalQty,
+        allocatedQty,
+        isFullyAllocated,
+        supplierBreakdown,
+        currency: pi.currency || "USD",
+      };
+    })
+    .filter((pi) => pi.allocatedQty > 0) // Only show PIs with allocations
+    .sort((a, b) => new Date(b.pi_date) - new Date(a.pi_date));
+  }, [proformaInvoices, piAllocations]);
+
+  // Allocation stats
+  const allocationStats = useMemo(() => {
+    const totalProfit = allocationProfits.reduce((sum, pi) => sum + pi.profit, 0);
+    const totalSelling = allocationProfits.reduce((sum, pi) => sum + pi.totalSellingPrice, 0);
+    const totalCost = allocationProfits.reduce((sum, pi) => sum + pi.totalAllocationCost, 0);
+    const fullyAllocatedCount = allocationProfits.filter((pi) => pi.isFullyAllocated).length;
+    return { totalProfit, totalSelling, totalCost, fullyAllocatedCount, count: allocationProfits.length };
+  }, [allocationProfits]);
 
   // Save PI costs to localStorage whenever they change
   useEffect(() => {
@@ -482,10 +572,13 @@ function PurchaseDashboard() {
             <Typography variant="caption" color="info.main" fontWeight={600}>
               TOTAL SALES
             </Typography>
-            <Typography variant="h4" fontWeight={600} color="info.main" sx={{ mb: 0.5 }}>
+            <Typography variant="h4" fontWeight={600} color="info.main">
               {formatCurrency(piStats.totalSellValue)}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: "11px" }}>
+              ₹{(piStats.totalSellValue * purchaseRate).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
               {proformaInvoices.length} PIs
             </Typography>
           </Paper>
@@ -496,10 +589,13 @@ function PurchaseDashboard() {
             <Typography variant="caption" color="warning.main" fontWeight={600}>
               TOTAL COST
             </Typography>
-            <Typography variant="h4" fontWeight={600} color="warning.main" sx={{ mb: 0.5 }}>
+            <Typography variant="h4" fontWeight={600} color="warning.main">
               {formatCurrency(piStats.totalPurchaseCost)}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: "11px" }}>
+              ₹{(piStats.totalPurchaseCost * purchaseRate).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
               supplier bills
             </Typography>
           </Paper>
@@ -510,10 +606,13 @@ function PurchaseDashboard() {
             <Typography variant="caption" color="success.main" fontWeight={600}>
               PAID
             </Typography>
-            <Typography variant="h4" fontWeight={600} color="success.main" sx={{ mb: 0.5 }}>
+            <Typography variant="h4" fontWeight={600} color="success.main">
               {formatCurrency(piStats.totalPaid)}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: "11px" }}>
+              ₹{(piStats.totalPaid * purchaseRate).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
               to suppliers
             </Typography>
           </Paper>
@@ -532,431 +631,163 @@ function PurchaseDashboard() {
             <Typography variant="caption" color="error.main" fontWeight={600}>
               UNPAID
             </Typography>
-            <Typography variant="h4" fontWeight={600} color="error.main" sx={{ mb: 0.5 }}>
+            <Typography variant="h4" fontWeight={600} color="error.main">
               {formatCurrency(piStats.totalUnpaid)}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: "11px" }}>
+              ₹{(piStats.totalUnpaid * purchaseRate).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
               {piStats.unpaidCount} pending
             </Typography>
           </Paper>
         </Grid>
       </Grid>
 
-      {/* PI Payments Table */}
-      <Paper elevation={0} sx={{ border: "1px solid #e0e0e0", borderRadius: 2, overflow: "hidden" }}>
-        <Box sx={{ p: 2, borderBottom: "1px solid #e0e0e0", bgcolor: "#f5f5f5" }}>
-          <Typography variant="h6" fontWeight={600}>
-            Supplier Costs by PI
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Click a PI to add supplier bills. <strong>SALE - COST = PROFIT</strong>
-          </Typography>
-        </Box>
-
-        {piListForTracking.length === 0 ? (
-          <Box sx={{ py: 6, textAlign: "center" }}>
-            <Description color="disabled" sx={{ fontSize: 40, mb: 1 }} />
-            <Typography color="text.secondary">No Proforma Invoices yet</Typography>
-          </Box>
-        ) : (
-          <Box>
-            {piListForTracking.map((pi) => {
-              const isExpanded = expandedPI === pi._id;
-              const hasEntries = pi.supplier_entries.length > 0;
-
-              return (
-                <Box
-                  key={pi._id}
-                  sx={{
-                    borderBottom: "1px solid #e0e0e0",
-                    "&:last-child": { borderBottom: "none" },
-                  }}
-                >
-                  {/* PI Header Row */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      p: 2,
-                      cursor: "pointer",
-                      bgcolor: isExpanded ? "#f5f5f5" : "transparent",
-                      "&:hover": { bgcolor: "#fafafa" },
-                    }}
-                    onClick={() => setExpandedPI(isExpanded ? null : pi._id)}
-                  >
-                    <IconButton size="small" sx={{ mr: 1 }}>
-                      {isExpanded ? <ExpandLess /> : <ExpandMore />}
-                    </IconButton>
-
-                    <Box sx={{ flex: 1 }}>
-                      <Stack direction="row" alignItems="center" spacing={2}>
-                        <Typography variant="subtitle1" fontWeight={600} color="primary.main">
-                          {pi.pi_number}
-                        </Typography>
-                        <Chip label={pi.customer_name} size="small" variant="outlined" />
-                        <Typography variant="body2" color="text.secondary">
-                          {formatDate(pi.pi_date)}
-                        </Typography>
-                      </Stack>
-                      <Typography variant="caption" color="text.secondary">
-                        {pi.items?.length || 0} items • {pi.supplier_entries.length} supplier entries
-                      </Typography>
-                    </Box>
-
-                    <Stack direction="row" spacing={1.5} alignItems="center">
-                      <Box sx={{ textAlign: "center", px: 1.5, py: 0.5, bgcolor: "#e3f2fd", borderRadius: 1, minWidth: 80 }}>
-                        <Typography variant="caption" color="primary.main" fontWeight={500}>
-                          SALE
-                        </Typography>
-                        <Typography variant="body2" fontWeight={600} color="primary.main">
-                          {formatCurrency(pi.sell_total)}
-                        </Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary">−</Typography>
-                      <Box sx={{ textAlign: "center", px: 1.5, py: 0.5, bgcolor: "#fff3e0", borderRadius: 1, minWidth: 80 }}>
-                        <Typography variant="caption" color="warning.dark" fontWeight={500}>
-                          COST
-                        </Typography>
-                        <Typography variant="body2" fontWeight={600} color="warning.dark">
-                          {formatCurrency(pi.purchase_cost)}
-                        </Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary">=</Typography>
-                      <Box sx={{ textAlign: "center", px: 1.5, py: 0.5, bgcolor: pi.profit >= 0 ? "#e8f5e9" : "#ffebee", borderRadius: 1, minWidth: 80, border: pi.profit < 0 ? "2px solid #f44336" : "none" }}>
-                        <Typography variant="caption" color={pi.profit >= 0 ? "success.main" : "error.main"} fontWeight={500}>
-                          {pi.profit >= 0 ? "PROFIT" : "⚠️ LOSS"}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          color={pi.profit >= 0 ? "success.main" : "error.main"}
-                        >
-                          {formatCurrency(Math.abs(pi.profit))}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ borderLeft: "1px solid #ddd", pl: 1.5, ml: 1 }}>
-                        <Stack direction="row" spacing={1.5}>
-                          <Box sx={{ textAlign: "center" }}>
-                            <Typography variant="caption" color="success.main" fontWeight={500}>
-                              PAID
-                            </Typography>
-                            <Typography variant="body2" fontWeight={600} color="success.main">
-                              {formatCurrency(pi.amount_paid)}
-                            </Typography>
-                          </Box>
-                          <Box sx={{ textAlign: "center" }}>
-                            <Typography variant="caption" color={pi.balance_due > 0 ? "error.main" : "success.main"} fontWeight={500}>
-                              DUE
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              fontWeight={600}
-                              color={pi.balance_due > 0 ? "error.main" : "success.main"}
-                            >
-                              {formatCurrency(pi.balance_due)}
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                  </Box>
-
-                  {/* Expanded Details */}
-                  <Collapse in={isExpanded}>
-                    <Box sx={{ px: 3, pb: 2, bgcolor: "#fafafa" }}>
-                      {/* LOSS Warning */}
-                      {pi.profit < 0 && (
-                        <Alert severity="error" sx={{ mb: 2, mt: 1 }}>
-                          <Typography variant="body2" fontWeight={600}>
-                            ⚠️ LOSS WARNING: Your cost ({formatCurrency(pi.purchase_cost)}) is more than sale ({formatCurrency(pi.sell_total)}).
-                            You are losing {formatCurrency(Math.abs(pi.profit))} on this PI!
-                          </Typography>
-                        </Alert>
-                      )}
-
-                      {/* Add Supplier Button */}
-                      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2, mt: 1 }}>
-                        <Typography variant="subtitle2" fontWeight={600}>
-                          Supplier Bills & Payments
-                        </Typography>
-                        <Button
-                          size="small"
-                          variant="contained"
-                          startIcon={<Add />}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setAddSupplierModal({ open: true, pi });
-                          }}
-                          sx={{ textTransform: "none" }}
-                        >
-                          + Add Supplier
-                        </Button>
-                      </Stack>
-
-                      {!hasEntries ? (
-                        <Alert severity="info" sx={{ mb: 2 }}>
-                          No suppliers added. Click "+ Add Supplier" to record a supplier bill.
-                        </Alert>
-                      ) : (
-                        <Box sx={{ mb: 2 }}>
-                          {pi.supplier_entries.map((entry) => {
-                            const isSupplierExpanded = expandedSupplier === `${pi._id}-${entry.id}`;
-                            const paymentCount = (entry.payments || []).length;
-
-                            return (
-                              <Paper
-                                key={entry.id}
-                                variant="outlined"
-                                sx={{ mb: 1.5, overflow: "hidden" }}
-                              >
-                                {/* Supplier Header */}
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    p: 1.5,
-                                    bgcolor: "#f9f9f9",
-                                    borderBottom: isSupplierExpanded ? "1px solid #e0e0e0" : "none",
-                                  }}
-                                >
-                                  <Box sx={{ flex: 1 }}>
-                                    <Typography variant="subtitle2" fontWeight={600}>
-                                      {entry.supplier_name}
-                                    </Typography>
-                                  </Box>
-
-                                  <Stack direction="row" spacing={2} alignItems="center">
-                                    {/* Bill Amount */}
-                                    <Box sx={{ textAlign: "right", minWidth: 90 }}>
-                                      <Typography variant="caption" color="text.secondary">
-                                        BILL
-                                      </Typography>
-                                      <Stack direction="row" alignItems="center" spacing={0.5}>
-                                        <Typography variant="body2" fontWeight={600}>
-                                          {formatCurrency(entry.bill_amount)}
-                                        </Typography>
-                                        <Tooltip title="Edit bill amount">
-                                          <IconButton
-                                            size="small"
-                                            onClick={() => {
-                                              setEditBillModal({ open: true, pi, entry });
-                                              setEditBillAmount(entry.bill_amount?.toString() || "");
-                                            }}
-                                            sx={{ p: 0.25 }}
-                                          >
-                                            <Edit sx={{ fontSize: 14 }} />
-                                          </IconButton>
-                                        </Tooltip>
-                                      </Stack>
-                                    </Box>
-
-                                    {/* Total Paid */}
-                                    <Box sx={{ textAlign: "right", minWidth: 80 }}>
-                                      <Typography variant="caption" color="success.main">
-                                        PAID
-                                      </Typography>
-                                      <Typography variant="body2" fontWeight={600} color="success.main">
-                                        {formatCurrency(entry.total_paid)}
-                                      </Typography>
-                                    </Box>
-
-                                    {/* Due */}
-                                    <Box sx={{ textAlign: "right", minWidth: 80 }}>
-                                      <Typography
-                                        variant="caption"
-                                        color={entry.balance_due > 0 ? "error.main" : "success.main"}
-                                      >
-                                        DUE
-                                      </Typography>
-                                      <Typography
-                                        variant="body2"
-                                        fontWeight={600}
-                                        color={entry.balance_due > 0 ? "error.main" : "success.main"}
-                                      >
-                                        {formatCurrency(entry.balance_due)}
-                                      </Typography>
-                                    </Box>
-
-                                    {/* Actions */}
-                                    <Stack direction="row" spacing={0.5}>
-                                      <Tooltip title="Add payment">
-                                        <IconButton
-                                          size="small"
-                                          color="primary"
-                                          onClick={() => setAddPaymentModal({ open: true, pi, entry })}
-                                        >
-                                          <Payment fontSize="small" />
-                                        </IconButton>
-                                      </Tooltip>
-                                      <Tooltip title={paymentCount > 0 ? `View ${paymentCount} payment(s)` : "No payments"}>
-                                        <IconButton
-                                          size="small"
-                                          onClick={() =>
-                                            setExpandedSupplier(
-                                              isSupplierExpanded ? null : `${pi._id}-${entry.id}`
-                                            )
-                                          }
-                                          disabled={paymentCount === 0}
-                                        >
-                                          <History fontSize="small" />
-                                          {paymentCount > 0 && (
-                                            <Typography
-                                              variant="caption"
-                                              sx={{
-                                                position: "absolute",
-                                                top: -2,
-                                                right: -2,
-                                                bgcolor: "primary.main",
-                                                color: "white",
-                                                borderRadius: "50%",
-                                                width: 16,
-                                                height: 16,
-                                                fontSize: 10,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                              }}
-                                            >
-                                              {paymentCount}
-                                            </Typography>
-                                          )}
-                                        </IconButton>
-                                      </Tooltip>
-                                      <Tooltip title="Delete supplier">
-                                        <IconButton
-                                          size="small"
-                                          color="error"
-                                          onClick={() => handleDeleteEntry(pi._id, entry.id, entry.supplier_name)}
-                                        >
-                                          <Delete fontSize="small" />
-                                        </IconButton>
-                                      </Tooltip>
-                                    </Stack>
-                                  </Stack>
-                                </Box>
-
-                                {/* Payment History (Collapsible) */}
-                                <Collapse in={isSupplierExpanded}>
-                                  <Box sx={{ p: 1.5, bgcolor: "#fff" }}>
-                                    <Typography variant="caption" fontWeight={600} color="text.secondary" sx={{ mb: 1, display: "block" }}>
-                                      PAYMENT HISTORY
-                                    </Typography>
-                                    <Table size="small">
-                                      <TableHead>
-                                        <TableRow sx={{ bgcolor: "#f5f5f5" }}>
-                                          <TableCell sx={{ fontWeight: 600, py: 0.75 }}>Date</TableCell>
-                                          <TableCell align="right" sx={{ fontWeight: 600, py: 0.75 }}>Amount</TableCell>
-                                          <TableCell sx={{ fontWeight: 600, py: 0.75 }}>Method</TableCell>
-                                          <TableCell sx={{ fontWeight: 600, py: 0.75 }}>Notes</TableCell>
-                                          <TableCell align="center" sx={{ fontWeight: 600, py: 0.75, width: 40 }}></TableCell>
-                                        </TableRow>
-                                      </TableHead>
-                                      <TableBody>
-                                        {(entry.payments || []).map((payment) => (
-                                          <TableRow key={payment.id} hover>
-                                            <TableCell sx={{ py: 0.75 }}>
-                                              {formatDate(payment.date)}
-                                            </TableCell>
-                                            <TableCell align="right" sx={{ py: 0.75 }}>
-                                              <Typography variant="body2" fontWeight={500} color="success.main">
-                                                {formatCurrency(payment.amount)}
-                                              </Typography>
-                                            </TableCell>
-                                            <TableCell sx={{ py: 0.75 }}>
-                                              <Chip
-                                                label={payment.method?.replace("_", " ")}
-                                                size="small"
-                                                variant="outlined"
-                                                sx={{ height: 22 }}
-                                              />
-                                            </TableCell>
-                                            <TableCell sx={{ py: 0.75 }}>
-                                              <Typography variant="body2" color="text.secondary">
-                                                {payment.notes || "-"}
-                                              </Typography>
-                                            </TableCell>
-                                            <TableCell align="center" sx={{ py: 0.75 }}>
-                                              <IconButton
-                                                size="small"
-                                                color="error"
-                                                onClick={() => handleDeletePayment(pi._id, entry.id, payment.id)}
-                                                sx={{ p: 0.25 }}
-                                              >
-                                                <Delete sx={{ fontSize: 16 }} />
-                                              </IconButton>
-                                            </TableCell>
-                                          </TableRow>
-                                        ))}
-                                      </TableBody>
-                                    </Table>
-                                  </Box>
-                                </Collapse>
-                              </Paper>
-                            );
-                          })}
-                        </Box>
-                      )}
-
-                      {/* PI Items */}
-                      <Typography variant="subtitle2" fontWeight={600} sx={{ mb: 1.5 }}>
-                        PI Items ({pi.items?.length || 0})
-                      </Typography>
-                      <TableContainer component={Paper} variant="outlined">
-                        <Table size="small">
-                          <TableHead>
-                            <TableRow sx={{ bgcolor: "#f0f0f0" }}>
-                              <TableCell sx={{ fontWeight: 600 }}>Part #</TableCell>
-                              <TableCell sx={{ fontWeight: 600 }}>Product</TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 600 }}>
-                                Qty
-                              </TableCell>
-                              <TableCell align="right" sx={{ fontWeight: 600 }}>
-                                Unit Price
-                              </TableCell>
-                              <TableCell align="right" sx={{ fontWeight: 600 }}>
-                                Total
-                              </TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {(pi.items || []).map((item, idx) => (
-                              <TableRow key={idx}>
-                                <TableCell>
-                                  <Typography variant="body2" fontWeight={500} color="primary.main">
-                                    {item.part_number}
-                                  </Typography>
-                                </TableCell>
-                                <TableCell>
-                                  <Typography variant="body2">
-                                    {item.product_name || item.description}
-                                  </Typography>
-                                </TableCell>
-                                <TableCell align="center">
-                                  <Typography variant="body2">{item.quantity}</Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                  <Typography variant="body2">
-                                    {formatCurrency(item.unit_price)}
-                                  </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                  <Typography variant="body2" fontWeight={500}>
-                                    {formatCurrency(item.total || item.quantity * item.unit_price)}
-                                  </Typography>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </Box>
-                  </Collapse>
+      {/* Allocation Profits Section */}
+      {allocationProfits.length > 0 && (
+        <Paper elevation={0} sx={{ border: "1px solid #e0e0e0", borderRadius: 2, overflow: "hidden", mb: 3 }}>
+          <Box sx={{ p: 2, borderBottom: "1px solid #e0e0e0", bgcolor: "#e8f5e9" }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Box>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <TrendingUp color="success" />
+                  <Typography variant="h6" fontWeight={600} color="success.dark">
+                    Allocation Profit Summary
+                  </Typography>
+                </Stack>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                  Profit calculated from PI Allocation page • {allocationStats.count} PIs allocated
+                </Typography>
+              </Box>
+              <Stack direction="row" spacing={2}>
+                <Box sx={{ textAlign: "center", px: 2, py: 1, bgcolor: "#fff", borderRadius: 1, border: "1px solid #c8e6c9" }}>
+                  <Typography variant="caption" color="text.secondary">Total Sale</Typography>
+                  <Typography variant="h6" fontWeight={600} color="primary.main">
+                    {formatCurrency(allocationStats.totalSelling)}
+                  </Typography>
                 </Box>
-              );
-            })}
+                <Box sx={{ textAlign: "center", px: 2, py: 1, bgcolor: "#fff", borderRadius: 1, border: "1px solid #c8e6c9" }}>
+                  <Typography variant="caption" color="text.secondary">Total Cost</Typography>
+                  <Typography variant="h6" fontWeight={600} color="warning.main">
+                    {formatCurrency(allocationStats.totalCost)}
+                  </Typography>
+                </Box>
+                <Box sx={{ textAlign: "center", px: 2, py: 1, bgcolor: allocationStats.totalProfit >= 0 ? "#e8f5e9" : "#ffebee", borderRadius: 1, border: `1px solid ${allocationStats.totalProfit >= 0 ? "#a5d6a7" : "#ef9a9a"}` }}>
+                  <Typography variant="caption" color={allocationStats.totalProfit >= 0 ? "success.main" : "error.main"}>
+                    {allocationStats.totalProfit >= 0 ? "Total Profit" : "Total Loss"}
+                  </Typography>
+                  <Typography variant="h6" fontWeight={600} color={allocationStats.totalProfit >= 0 ? "success.main" : "error.main"}>
+                    {formatCurrency(Math.abs(allocationStats.totalProfit))}
+                  </Typography>
+                </Box>
+              </Stack>
+            </Stack>
           </Box>
-        )}
-      </Paper>
+
+          <TableContainer>
+            <Table size="small">
+              <TableHead>
+                <TableRow sx={{ bgcolor: "#f5f5f5" }}>
+                  <TableCell sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>PI #</TableCell>
+                  <TableCell sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Invoice</TableCell>
+                  <TableCell sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Customer</TableCell>
+                  <TableCell sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>
+                    <Stack direction="row" alignItems="center" spacing={0.5}>
+                      <LocationOn sx={{ fontSize: 14 }} />
+                      <span>Location</span>
+                    </Stack>
+                  </TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Sale ($)</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Cost ($)</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Cost (₹)</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Profit</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Margin</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600, fontSize: "12px", py: 1.5 }}>Allocated</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allocationProfits.map((pi) => (
+                  <TableRow key={pi._id} hover sx={{ "&:hover": { bgcolor: "#f9fbe7" } }}>
+                    <TableCell sx={{ fontSize: "12px", py: 1 }}>
+                      <Typography variant="body2" fontWeight={600} color="primary.main">
+                        {pi.pi_number}
+                      </Typography>
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "12px", py: 1 }}>
+                      <Stack direction="row" alignItems="center" spacing={0.5}>
+                        <Receipt sx={{ fontSize: 14, color: "text.secondary" }} />
+                        <Typography variant="body2">{pi.invoice_number}</Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "12px", py: 1 }}>
+                      <Typography variant="body2">{pi.customer_name}</Typography>
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "12px", py: 1 }}>
+                      <Chip
+                        icon={<LocationOn sx={{ fontSize: "12px !important" }} />}
+                        label={pi.location}
+                        size="small"
+                        variant="outlined"
+                        sx={{ height: 22, fontSize: "11px" }}
+                      />
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontSize: "12px", py: 1 }}>
+                      <Typography variant="body2" fontWeight={500} color="info.main">
+                        {formatCurrency(pi.totalSellingPrice)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontSize: "12px", py: 1 }}>
+                      <Typography variant="body2" fontWeight={500} color="warning.main">
+                        {formatCurrency(pi.totalAllocationCost)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontSize: "12px", py: 1 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        ₹{(pi.totalAllocationCost * purchaseRate).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontSize: "12px", py: 1 }}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        color={pi.profit >= 0 ? "success.main" : "error.main"}
+                      >
+                        {pi.profit >= 0 ? "+" : ""}{formatCurrency(pi.profit)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "12px", py: 1 }}>
+                      <Chip
+                        label={`${pi.marginPercent.toFixed(0)}%`}
+                        size="small"
+                        sx={{
+                          height: 22,
+                          fontSize: "11px",
+                          fontWeight: 600,
+                          bgcolor: pi.marginPercent >= 20 ? "#e8f5e9" : pi.marginPercent >= 0 ? "#fff8e1" : "#ffebee",
+                          color: pi.marginPercent >= 20 ? "#2e7d32" : pi.marginPercent >= 0 ? "#f57f17" : "#c62828",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "12px", py: 1 }}>
+                      <Chip
+                        label={pi.isFullyAllocated ? "Full" : `${pi.allocatedQty}/${pi.totalQty}`}
+                        size="small"
+                        sx={{
+                          height: 22,
+                          fontSize: "11px",
+                          bgcolor: pi.isFullyAllocated ? "#e8f5e9" : "#fff3e0",
+                          color: pi.isFullyAllocated ? "#2e7d32" : "#e65100",
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      )}
 
       {/* Add Supplier Modal */}
       <Dialog

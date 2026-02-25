@@ -45,6 +45,7 @@ import {
   Settings as SettingsIcon,
   HowToReg,
   Archive as ArchiveIcon,
+  TrendingUp as TrendingUpIcon,
 } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
 import useNotificationStore from "../../stores/useNotificationStore";
@@ -183,6 +184,7 @@ function AdminLayout() {
     { text: "PI Allocation", icon: <Assignment />, path: "/admin/pi-allocation" },
     { text: "Purchase Dashboard", icon: <Dashboard />, path: "/admin/purchase-dashboard" },
     { text: "Statements", icon: <Assignment />, path: "/admin/statements" },
+    { text: "Profit Analysis", icon: <TrendingUpIcon />, path: "/admin/profit-analysis" },
     { divider: true, text: "Legacy Data" },
     { text: "Archives", icon: <ArchiveIcon />, path: "/admin/archives" },
   ];

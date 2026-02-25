@@ -683,32 +683,7 @@ function Statements() {
               <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '18px' }}>
                 Buyer Statement - {selectedStatement?.customer_id}
               </Typography>
-              <Stack direction="row" spacing={1}>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={<Print />}
-                  onClick={handlePrintStatement}
-                  sx={{ fontSize: '13px' }}
-                >
-                  Print
-                </Button>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  color="error"
-                  startIcon={<PictureAsPdf />}
-                  onClick={() => {
-                    if (selectedStatement) {
-                      setBuyerFilter(selectedStatement.customer_id)
-                      handleDownloadPDF()
-                    }
-                  }}
-                  sx={{ fontSize: '13px' }}
-                >
-                  PDF
-                </Button>
-              </Stack>
+               
             </Box>
           </DialogTitle>
           <DialogContent dividers sx={{ p: 0 }} className="print-content">

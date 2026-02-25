@@ -103,7 +103,7 @@ const InvoicePreview = ({
           </Grid>
           <Grid size={{ xs: 6 }} sx={{ textAlign: 'right' }}>
             <Typography variant="h4" fontWeight="bold" sx={{ fontSize: '22px', color: config.color }}>
-              {config.title}
+              {order.invoice_title || config.title}
             </Typography>
             {invoiceType !== 'TAX_INVOICE' && (
               <Typography variant="caption" sx={{ fontSize: '10px', color: 'text.secondary', display: 'block', mt: 0.5 }}>

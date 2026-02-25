@@ -198,7 +198,9 @@ function ManualInvoice() {
 
   // Invoice type and status
   const [invoiceType, setInvoiceType] = useState("TAX_INVOICE");
+  const [invoiceTitle, setInvoiceTitle] = useState("TAX INVOICE"); // Display title on invoice badge
   const [invoiceStatus, setInvoiceStatus] = useState("UNPAID");
+  const invoiceTitleOptions = ['INVOICE', 'TAX INVOICE']; // Preset options for invoice title
 
   // Company details (seller)
   const [companyDetails, setCompanyDetails] = useState(DEFAULT_COMPANY_DETAILS);
@@ -242,6 +244,7 @@ function ManualInvoice() {
   const [awbNumber, setAwbNumber] = useState("");
   const [poNumber, setPoNumber] = useState("");
   const [quoteReference, setQuoteReference] = useState("");
+  const [piNumber, setPiNumber] = useState(""); // Proforma Invoice reference
 
   // Shipping details
   const [shippingMethod, setShippingMethod] = useState("BYAIR");
@@ -582,6 +585,7 @@ function ManualInvoice() {
 
       // Invoice type
       invoice_type: invoiceType,
+      invoice_title: invoiceTitle || "TAX INVOICE",
       source: "MANUAL",
       is_manual: true,
 
@@ -597,6 +601,7 @@ function ManualInvoice() {
       awb_number: awbNumber,
       po_number: poNumber,
       quote_reference: quoteReference,
+      proforma_invoice_number: piNumber, // PI reference
 
       // Shipping details
       shipping_method: shippingMethod,
@@ -949,9 +954,9 @@ function ManualInvoice() {
               </Stack>
               <Stack direction="row" spacing={1}>
                 <Chip
-                  label={invoiceType === "TAX_INVOICE" ? "Tax Invoice" : "Reimbursement"}
+                  label={invoiceType === "TAX_INVOICE" ? "Tax Invoice" : invoiceType === "REIMBURSEMENT" ? "Reimbursement" : invoiceType === "BILL_OF_SUPPLY" ? "Bill of Supply" : invoiceType || "Tax Invoice"}
                   size="small"
-                  color={invoiceType === "TAX_INVOICE" ? "success" : "warning"}
+                  color={invoiceType === "TAX_INVOICE" ? "success" : invoiceType === "REIMBURSEMENT" ? "warning" : invoiceType === "BILL_OF_SUPPLY" ? "info" : "default"}
                   sx={{ fontWeight: "bold" }}
                 />
                 <Chip
@@ -1154,15 +1159,36 @@ function ManualInvoice() {
                     <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1.5 }}>
                       Invoice Type
                     </Typography>
-                    <FormControl fullWidth size="small">
-                      <Select
-                        value={invoiceType}
-                        onChange={(e) => setInvoiceType(e.target.value)}
-                      >
-                        <MenuItem value="TAX_INVOICE">Tax Invoice</MenuItem>
-                        <MenuItem value="REIMBURSEMENT">Reimbursement Invoice</MenuItem>
-                      </Select>
-                    </FormControl>
+                    <Autocomplete
+                      freeSolo
+                      size="small"
+                      options={['TAX_INVOICE', 'REIMBURSEMENT', 'BILL_OF_SUPPLY']}
+                      getOptionLabel={(option) => {
+                        if (option === 'TAX_INVOICE') return 'Tax Invoice';
+                        if (option === 'REIMBURSEMENT') return 'Reimbursement Invoice';
+                        if (option === 'BILL_OF_SUPPLY') return 'Bill of Supply';
+                        return option;
+                      }}
+                      value={invoiceType}
+                      onChange={(e, newValue) => setInvoiceType(newValue || 'TAX_INVOICE')}
+                      onInputChange={(e, newValue) => {
+                        // Only update if user is typing custom value
+                        if (newValue && newValue !== 'Tax Invoice' && newValue !== 'Reimbursement Invoice' && newValue !== 'Bill of Supply') {
+                          setInvoiceType(newValue);
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Select or type custom invoice type"
+                        />
+                      )}
+                      renderOption={(props, option) => (
+                        <li {...props} key={option}>
+                          {option === 'TAX_INVOICE' ? 'Tax Invoice' : option === 'REIMBURSEMENT' ? 'Reimbursement Invoice' : option === 'BILL_OF_SUPPLY' ? 'Bill of Supply' : option}
+                        </li>
+                      )}
+                    />
                   </Box>
 
                   {/* Customer Selection */}
@@ -1646,6 +1672,7 @@ function ManualInvoice() {
                           value={shippingCharge}
                           onChange={(e) => setShippingCharge(Number(e.target.value))}
                           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                          helperText={`≈ ₹${((shippingCharge || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                         />
                       </Grid>
                       <Grid size={{ xs: 6, sm: 4 }}>
@@ -1657,6 +1684,7 @@ function ManualInvoice() {
                           value={freight}
                           onChange={(e) => setFreight(Number(e.target.value))}
                           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                          helperText={`≈ ₹${((freight || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                         />
                       </Grid>
                       <Grid size={{ xs: 6, sm: 4 }}>
@@ -1668,6 +1696,7 @@ function ManualInvoice() {
                           value={customDuty}
                           onChange={(e) => setCustomDuty(Number(e.target.value))}
                           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                          helperText={`≈ ₹${((customDuty || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                         />
                       </Grid>
                       <Grid size={{ xs: 6, sm: 4 }}>
@@ -1679,6 +1708,7 @@ function ManualInvoice() {
                           value={bankCharges}
                           onChange={(e) => setBankCharges(Number(e.target.value))}
                           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                          helperText={`≈ ₹${((bankCharges || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                         />
                       </Grid>
                       <Grid size={{ xs: 6, sm: 4 }}>
@@ -1690,6 +1720,7 @@ function ManualInvoice() {
                           value={logisticCharges}
                           onChange={(e) => setLogisticCharges(Number(e.target.value))}
                           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                          helperText={`≈ ₹${((logisticCharges || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                         />
                       </Grid>
                       <Grid size={{ xs: 6, sm: 4 }}>
@@ -1702,6 +1733,7 @@ function ManualInvoice() {
                           onChange={(e) => setOtherCharges(Number(e.target.value))}
                           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
                           placeholder="0"
+                          helperText={`≈ ₹${((otherCharges || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                         />
                       </Grid>
                       <Grid size={{ xs: 6, sm: 4 }}>
@@ -1737,6 +1769,7 @@ function ManualInvoice() {
                               InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
                               inputProps={{ step: 0.01 }}
                               sx={{ width: 150 }}
+                              helperText={`≈ ₹${((roundOff || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                             />
                           )}
                         </Stack>
@@ -1938,6 +1971,34 @@ function ManualInvoice() {
                         <TextField
                           fullWidth
                           size="small"
+                          label="PI Number"
+                          value={piNumber}
+                          onChange={(e) => setPiNumber(e.target.value)}
+                          placeholder="e.g., PI-00001"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <Autocomplete
+                          freeSolo
+                          size="small"
+                          options={invoiceTitleOptions}
+                          value={invoiceTitle}
+                          onChange={(e, newValue) => setInvoiceTitle(newValue || 'TAX INVOICE')}
+                          onInputChange={(e, newValue) => setInvoiceTitle(newValue || 'TAX INVOICE')}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Invoice Title"
+                              placeholder="Title shown on invoice"
+                              helperText="e.g., INVOICE, TAX INVOICE, BILL OF SUPPLY"
+                            />
+                          )}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          fullWidth
+                          size="small"
                           label="HSN/SAC Code"
                           value={hsnSac}
                           onChange={(e) => setHsnSac(e.target.value)}
@@ -2059,6 +2120,7 @@ function ManualInvoice() {
                           value={amountPaid}
                           onChange={(e) => setAmountPaid(Number(e.target.value))}
                           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                          helperText={`≈ ₹${((amountPaid || 0) * effectiveExchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                         />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 4 }}>
@@ -2425,7 +2487,7 @@ function ManualInvoice() {
                 borderRadius: "4px",
                 letterSpacing: "1px",
               }}>
-                {invoiceType === "TAX_INVOICE" ? "INVOICE" : "REIMBURSEMENT"}
+                {invoiceTitle || "TAX INVOICE"}
               </div>
             </div>
 
@@ -2520,6 +2582,12 @@ function ManualInvoice() {
                 <div style={{ fontSize: "8px", color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px", fontWeight: 600 }}>PO Number</div>
                 <div style={{ fontSize: "11px", color: "#333", fontWeight: 600 }}>{poNumber || "-"}</div>
               </div>
+              {piNumber && (
+                <div style={{ flex: "1 1 calc(33.33% - 10px)", minWidth: "150px", padding: "10px 12px", backgroundColor: "#fff", borderRadius: "4px", border: "1px solid #e0e0e0" }}>
+                  <div style={{ fontSize: "8px", color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px", fontWeight: 600 }}>PI Number</div>
+                  <div style={{ fontSize: "11px", color: "#333", fontWeight: 600 }}>{piNumber}</div>
+                </div>
+              )}
               <div style={{ flex: "1 1 calc(33.33% - 10px)", minWidth: "150px", padding: "10px 12px", backgroundColor: "#fff", borderRadius: "4px", border: "1px solid #e0e0e0" }}>
                 <div style={{ fontSize: "8px", color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px", fontWeight: 600 }}>Due Date</div>
                 <div style={{ fontSize: "11px", color: "#333", fontWeight: 600 }}>{dueDate ? new Date(dueDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "2-digit" }).replace(/ /g, "-") : "-"}</div>

@@ -176,8 +176,12 @@ function PerformaInvoices() {
     shipping_by: '',
     custom_invoice_number: '',
     generate_invoice: true, // Auto-generate invoice on dispatch
-    shipping_notes: ''
+    shipping_notes: '',
+    invoice_title: 'TAX INVOICE' // Default invoice title
   })
+
+  // Invoice title options for dispatch
+  const invoiceTitleOptions = ['INVOICE', 'TAX INVOICE']
 
   // Common shipping providers for autocomplete
   const shippingProviders = ['FedEx', 'DHL', 'UPS', 'BlueDart', 'DTDC', 'Delhivery', 'IndiaPost', 'Aramex', 'TNT', 'Other']
@@ -883,7 +887,7 @@ function PerformaInvoices() {
     }
   }
 
-  const handleDispatch = (pi) => {
+  const handleDispatch = async (pi) => {
     setSelectedPI(pi)
     // Reset dispatch options
     setDispatchWithoutPayment(false)
@@ -908,19 +912,63 @@ function PerformaInvoices() {
       shipping_notes: ''
     })
 
-    // Initialize invoice items with editable quantities and manual inventory tracking
-    const items = pi.items.map(item => {
-      return {
+    // Fetch dispatch summary to get remaining quantities per item
+    let sourceItemsFromAPI = null
+    try {
+      const summaryResult = await dispatchesService.getSummary('PROFORMA_INVOICE', pi._id)
+      // Backend returns 'items' field with remaining_quantity for each item
+      if (summaryResult.success && summaryResult.data?.items) {
+        sourceItemsFromAPI = summaryResult.data.items
+      }
+    } catch (error) {
+      console.error('Error fetching dispatch summary:', error)
+    }
+
+    // Initialize invoice items with remaining quantities
+    let items = []
+
+    if (sourceItemsFromAPI && sourceItemsFromAPI.length > 0) {
+      // Use source_items from API which already has correct remaining_quantity
+      items = sourceItemsFromAPI.map((apiItem, index) => {
+        // Find matching PI item to get additional fields like has_inventory
+        const piItem = pi.items[index] || pi.items.find(p =>
+          (p.product_id && p.product_id === apiItem.product_id) ||
+          (p.part_number && p.part_number === apiItem.part_number) ||
+          (p.product_name && p.product_name === apiItem.product_name)
+        ) || {}
+
+        return {
+          ...piItem,
+          product_id: apiItem.product_id,
+          product_name: apiItem.product_name,
+          part_number: apiItem.part_number,
+          unit_price: apiItem.unit_price || piItem.unit_price || 0,
+          invoice_quantity: apiItem.remaining_quantity,
+          original_quantity: apiItem.remaining_quantity, // Max they can dispatch
+          total_original_quantity: apiItem.original_quantity, // Original PI quantity
+          dispatched_quantity: apiItem.dispatched_quantity || 0,
+          hsn_code: apiItem.hsn_code || piItem.hsn_code || "",
+          has_inventory: piItem.has_inventory || false,
+          inventory_quantity: piItem.inventory_quantity || 0
+        }
+      })
+    } else {
+      // Fallback: No dispatches yet, use PI items with original quantities
+      items = pi.items.map(item => ({
         ...item,
         invoice_quantity: item.quantity,
         original_quantity: item.quantity,
+        total_original_quantity: item.quantity,
+        dispatched_quantity: 0,
         hsn_code: item.hsn_code || "",
-        // Set has_inventory from item data if available, otherwise default to false (no inventory)
         has_inventory: item.has_inventory || false,
         inventory_quantity: item.inventory_quantity || 0
-      }
-    })
-    setInvoiceItems(items)
+      }))
+    }
+
+    // Filter out items with 0 remaining quantity (fully dispatched)
+    const itemsWithRemaining = items.filter(item => item.original_quantity > 0)
+    setInvoiceItems(itemsWithRemaining.length > 0 ? itemsWithRemaining : items)
     setShowDispatchModal(true)
   }
 
@@ -1083,6 +1131,7 @@ function PerformaInvoices() {
       project_name: dispatchWithoutPayment ? projectName : null,
       generate_invoice: dispatchShippingInfo.generate_invoice || false,
       invoice_number: dispatchShippingInfo.generate_invoice ? dispatchShippingInfo.custom_invoice_number : null,
+      invoice_title: dispatchShippingInfo.invoice_title || 'TAX INVOICE',
       exchange_rate: invoiceExchangeRate,
       notes: dispatchShippingInfo.shipping_notes || ''
     }
@@ -3249,6 +3298,7 @@ function PerformaInvoices() {
                           {paymentForm.currency === 'USD' ? '$' : '₹'}
                         </InputAdornment>,
                       }}
+                      helperText={paymentForm.currency === 'USD' && paymentForm.payment_exchange_rate ? `≈ ₹${((parseFloat(paymentForm.amount) || 0) * parseFloat(paymentForm.payment_exchange_rate)).toLocaleString('en-IN', { maximumFractionDigits: 2 })}` : ''}
                     />
                   </Grid>
                   <Grid size={{ xs: 12, md: 6 }}>
@@ -3905,6 +3955,25 @@ function PerformaInvoices() {
                     />
                   </Grid>
                   <Grid size={{ xs: 12, md: 3 }}>
+                    <Autocomplete
+                      size="small"
+                      freeSolo
+                      options={invoiceTitleOptions}
+                      value={dispatchShippingInfo.invoice_title}
+                      onChange={(e, newValue) => setDispatchShippingInfo(prev => ({ ...prev, invoice_title: newValue || 'TAX INVOICE' }))}
+                      onInputChange={(e, newValue) => setDispatchShippingInfo(prev => ({ ...prev, invoice_title: newValue || 'TAX INVOICE' }))}
+                      disabled={!dispatchShippingInfo.generate_invoice}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Invoice Title"
+                          placeholder="Select or type title"
+                          sx={{ '& input': { fontSize: '13px', fontWeight: 500 }, bgcolor: 'white' }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 3 }}>
                     <TextField
                       size="small"
                       fullWidth
@@ -3977,8 +4046,8 @@ function PerformaInvoices() {
                         <TableCell sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Product</TableCell>
                         <TableCell sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Part Number</TableCell>
                         <TableCell align="center" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Inventory</TableCell>
-                        <TableCell align="center" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Original Qty</TableCell>
-                        <TableCell align="center" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Invoice Qty</TableCell>
+                        <TableCell align="center" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Remaining of Total</TableCell>
+                        <TableCell align="center" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Dispatch Qty</TableCell>
                         <TableCell align="right" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Unit Price</TableCell>
                         <TableCell align="right" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Line Total</TableCell>
                         <TableCell align="center" sx={{ bgcolor: '#f5f5f5', fontWeight: 600, fontSize: '13px', py: 1.5 }}>Action</TableCell>
@@ -4025,9 +4094,16 @@ function PerformaInvoices() {
                             </Stack>
                           </TableCell>
                           <TableCell align="center" sx={{ py: 1.5 }}>
-                            <Typography variant="body2" sx={{ fontSize: '14px', fontWeight: 500 }}>
-                              {item.original_quantity}
-                            </Typography>
+                            <Stack spacing={0.3} alignItems="center">
+                              <Typography variant="body2" sx={{ fontSize: '14px', fontWeight: 600, color: 'success.main' }}>
+                                {item.original_quantity} of {item.total_original_quantity || item.original_quantity}
+                              </Typography>
+                              {item.total_original_quantity && item.total_original_quantity > item.original_quantity && (
+                                <Typography variant="caption" color="warning.main" sx={{ fontSize: '11px', fontWeight: 500 }}>
+                                  {item.total_original_quantity - item.original_quantity} dispatched
+                                </Typography>
+                              )}
+                            </Stack>
                           </TableCell>
                           <TableCell align="center" sx={{ py: 1.5 }}>
                             <TextField
@@ -4128,17 +4204,17 @@ function PerformaInvoices() {
                           <Grid size={{ xs: 6 }}>
                             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', border: '1px solid #e0e0e0', borderRadius: 1 }}>
                               <Typography variant="caption" color="text.secondary" sx={{ fontSize: '12px' }}>
-                                Total Quantity
+                                Qty (Remaining of Total)
                               </Typography>
-                              <Typography variant="h5" fontWeight="bold" sx={{ fontSize: '24px', mt: 0.5 }}>
-                                {invoiceItems.reduce((sum, item) => sum + item.invoice_quantity, 0)}
+                              <Typography variant="h5" fontWeight="bold" color="success.main" sx={{ fontSize: '24px', mt: 0.5 }}>
+                                {invoiceItems.reduce((sum, item) => sum + (item.original_quantity || 0), 0)} of {invoiceItems.reduce((sum, item) => sum + (item.total_original_quantity || item.original_quantity || 0), 0)}
                               </Typography>
                             </Box>
                           </Grid>
                           <Grid size={{ xs: 12 }}>
                             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', border: '1px solid #e0e0e0', borderRadius: 1 }}>
                               <Typography variant="caption" color="text.secondary" sx={{ fontSize: '12px' }}>
-                                Invoice Total
+                                This Dispatch Total
                               </Typography>
                               <Typography variant="h5" fontWeight="bold" color="primary.main" sx={{ fontSize: '24px', mt: 0.5 }}>
                                 ${summary.invoiceTotal.toFixed(2)}
@@ -4178,7 +4254,7 @@ function PerformaInvoices() {
                             </Stack>
                             <Divider />
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }}>This Invoice Total:</Typography>
+                              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '12px' }}>This Dispatch Total:</Typography>
                               <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '13px' }}>
                                 ${summary.invoiceTotal.toFixed(2)}
                               </Typography>

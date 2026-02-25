@@ -46,6 +46,7 @@ import AdminBrands from "./admin/pages/Brands.jsx";
 import AdminQuotations from "./admin/pages/Quotations.jsx";
 import AdminPaymentRecords from "./admin/pages/PaymentRecords.jsx";
 import AdminArchives from "./admin/pages/Archives.jsx";
+import AdminProfitAnalysis from "./admin/pages/ProfitAnalysis.jsx";
 
 // Import Buyer Components
 import BuyerLayout from "./buyer/layout/BuyerLayout.jsx";
@@ -66,8 +67,7 @@ import BuyerProformaInvoices from "./buyer/pages/ProformaInvoices.jsx";
 import BuyerQuoteRequest from "./buyer/pages/QuoteRequest.jsx";
 
 // Import Auth Components
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
+import AuthPage from "./pages/AuthPage.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -101,8 +101,8 @@ const theme = createTheme({
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<AuthPage />} />
+      <Route path="/register" element={<AuthPage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Admin Routes - Protected */}
@@ -137,6 +137,7 @@ const router = createBrowserRouter(
         <Route path="pi-allocation" element={<AdminPIAllocation />} />
         <Route path="purchase-dashboard" element={<AdminPurchaseDashboard />} />
         <Route path="archives" element={<AdminArchives />} />
+        <Route path="profit-analysis" element={<AdminProfitAnalysis />} />
       </Route>
 
       {/* Buyer Routes - Protected */}

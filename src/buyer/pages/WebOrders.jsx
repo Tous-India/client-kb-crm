@@ -873,7 +873,7 @@ function WebOrders() {
               </Typography>
               <Stack direction="row" spacing={2} sx={{ mb: 3 }} alignItems="center">
                 <Autocomplete
-                  options={productsData.products}
+                  options={productsData?.products || []}
                   getOptionLabel={(option) =>
                     `${option.part_number} - ${option.product_name}`
                   }

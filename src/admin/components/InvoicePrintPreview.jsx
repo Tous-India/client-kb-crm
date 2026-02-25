@@ -284,7 +284,7 @@ const InvoicePrintPreview = forwardRef(({ invoice, companyDetails, bankDetails, 
       <div style={styles.header}>
         <Logo width={55} height={55} variant="print" />
         <div style={styles.companyName}>KB ENTERPRISES</div>
-        <div style={styles.invoiceTag}>INVOICE</div>
+        <div style={styles.invoiceTag}>{invoice?.invoice_title || 'INVOICE'}</div>
       </div>
 
       {/* FROM / TO ADDRESSES */}
@@ -362,6 +362,12 @@ const InvoicePrintPreview = forwardRef(({ invoice, companyDetails, bankDetails, 
           <div style={styles.infoLabel}>Order Date</div>
           <div style={styles.infoValue}>{formatDate(invoice?.order_date)}</div>
         </div>
+        {(invoice?.proforma_invoice_number || invoice?.pi_number) && (
+          <div style={styles.infoItem}>
+            <div style={styles.infoLabel}>PI Number</div>
+            <div style={styles.infoValue}>{invoice?.proforma_invoice_number || invoice?.pi_number}</div>
+          </div>
+        )}
         <div style={styles.infoItem}>
           <div style={styles.infoLabel}>Shipping Method</div>
           <div style={styles.infoValue}>{invoice?.shipping_method || 'BY AIR'}</div>

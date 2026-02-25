@@ -134,7 +134,7 @@ export const useUpdateProduct = () => {
       }
       return result.data?.product;
     },
-    onSuccess: (data, variables) => {
+    onSuccess: () => {
       // Invalidate all product-related queries to ensure fresh data
       queryClient.invalidateQueries({ queryKey: productKeys.all });
       showSuccess('Product updated successfully');

@@ -300,6 +300,8 @@ function Orders() {
           quantity: item.remaining_quantity, // Remaining quantity
           invoice_quantity: item.remaining_quantity, // Pre-fill with remaining
           original_quantity: item.remaining_quantity, // Max is remaining
+          total_original_quantity: item.original_quantity, // Original order quantity
+          dispatched_quantity: item.dispatched_quantity || 0,
           unit_price: item.unit_price || 0,
           hsn_code: item.hsn_code || "",
           has_inventory: false,
@@ -312,6 +314,8 @@ function Orders() {
         product_id: item.product_id || item.part_number,
         invoice_quantity: item.quantity,
         original_quantity: item.quantity,
+        total_original_quantity: item.quantity,
+        dispatched_quantity: 0,
         hsn_code: item.hsn_code || "",
         has_inventory: item.has_inventory || false,
         inventory_quantity: item.inventory_quantity || 0,
@@ -1593,7 +1597,7 @@ function Orders() {
                               py: 1.5,
                             }}
                           >
-                            Original Qty
+                            Remaining of Total
                           </TableCell>
                           <TableCell
                             align="center"
@@ -1662,12 +1666,19 @@ function Orders() {
                               </Typography>
                             </TableCell>
                             <TableCell align="center" sx={{ py: 1.5 }}>
-                              <Typography
-                                variant="body2"
-                                sx={{ fontSize: "14px", fontWeight: 500 }}
-                              >
-                                {item.original_quantity}
-                              </Typography>
+                              <Stack spacing={0.3} alignItems="center">
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontSize: "14px", fontWeight: 600, color: "success.main" }}
+                                >
+                                  {item.original_quantity} of {item.total_original_quantity || item.original_quantity}
+                                </Typography>
+                                {item.total_original_quantity && item.total_original_quantity > item.original_quantity && (
+                                  <Typography variant="caption" color="warning.main" sx={{ fontSize: "11px", fontWeight: 500 }}>
+                                    {item.total_original_quantity - item.original_quantity} dispatched
+                                  </Typography>
+                                )}
+                              </Stack>
                             </TableCell>
                             <TableCell align="center" sx={{ py: 1.5 }}>
                               <TextField
@@ -1845,6 +1856,27 @@ function Orders() {
                                 ).length
                               }{" "}
                               of {invoiceItems.length}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography
+                              variant="body2"
+                              sx={{ fontSize: "13px" }}
+                            >
+                              Qty (Remaining of Total):
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight="bold"
+                              color="success.main"
+                              sx={{ fontSize: "13px" }}
+                            >
+                              {invoiceItems.reduce((sum, item) => sum + (item.original_quantity || 0), 0)} of {invoiceItems.reduce((sum, item) => sum + (item.total_original_quantity || item.original_quantity || 0), 0)}
                             </Typography>
                           </Box>
                         </Stack>

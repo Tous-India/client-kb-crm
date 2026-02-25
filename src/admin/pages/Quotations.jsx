@@ -1007,7 +1007,7 @@ function Quotations() {
                               <TextField
                                 type="number"
                                 size="small"
-                                value={adjustment?.adjusted_price_usd?.toFixed(2) || "0.00"}
+                                value={adjustment?.adjusted_price_usd ?? ""}
                                 onChange={(e) => handlePriceAdjustmentUSD(item.product_id, e.target.value)}
                                 slotProps={{
                                   input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
@@ -1019,7 +1019,7 @@ function Quotations() {
                               <TextField
                                 type="number"
                                 size="small"
-                                value={adjustment?.adjusted_price_inr?.toFixed(2) || "0.00"}
+                                value={adjustment?.adjusted_price_inr ?? ""}
                                 onChange={(e) => handlePriceAdjustmentINR(item.product_id, e.target.value)}
                                 slotProps={{
                                   input: { startAdornment: <InputAdornment position="start">₹</InputAdornment> },
@@ -1055,6 +1055,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((quoteForm.logisticCharges || 0) * quoteForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                   <Grid size={{ xs: 6, sm: 3 }}>
@@ -1068,6 +1069,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((quoteForm.customDuty || 0) * quoteForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                   <Grid size={{ xs: 6, sm: 3 }}>
@@ -1081,6 +1083,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((quoteForm.debetNote || 0) * quoteForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                   <Grid size={{ xs: 6, sm: 3 }}>
@@ -1094,6 +1097,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((quoteForm.bankCharges || 0) * quoteForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                 </Grid>
@@ -1579,7 +1583,7 @@ function Quotations() {
                             <TextField
                               type="number"
                               size="small"
-                              value={item.unit_price_usd.toFixed(2)}
+                              value={item.unit_price_usd ?? ""}
                               onChange={(e) => handlePIItemPriceUSD(idx, e.target.value)}
                               slotProps={{
                                 input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
@@ -1591,7 +1595,7 @@ function Quotations() {
                             <TextField
                               type="number"
                               size="small"
-                              value={item.unit_price_inr.toFixed(2)}
+                              value={item.unit_price_inr ?? ""}
                               onChange={(e) => handlePIItemPriceINR(idx, e.target.value)}
                               slotProps={{
                                 input: { startAdornment: <InputAdornment position="start">₹</InputAdornment> },
@@ -1626,6 +1630,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((piForm.logisticCharges || 0) * piForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                   <Grid size={{ xs: 6, sm: 3 }}>
@@ -1639,6 +1644,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((piForm.customDuty || 0) * piForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                   <Grid size={{ xs: 6, sm: 3 }}>
@@ -1652,6 +1658,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((piForm.bankCharges || 0) * piForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                   <Grid size={{ xs: 6, sm: 3 }}>
@@ -1665,6 +1672,7 @@ function Quotations() {
                       slotProps={{
                         input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
                       }}
+                      helperText={`≈ ₹${((piForm.otherCharges || 0) * piForm.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
                     />
                   </Grid>
                 </Grid>

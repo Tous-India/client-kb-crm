@@ -32,6 +32,7 @@ import {
   ListItemSecondaryAction,
   CircularProgress,
   LinearProgress,
+  Autocomplete,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import {
@@ -51,6 +52,7 @@ import {
   Cancel,
   Visibility,
   Email,
+  Edit,
 } from "@mui/icons-material";
 import { useCurrency } from "../../context/CurrencyContext";
 import { useInvoices } from "../../hooks/useInvoices";
@@ -108,6 +110,13 @@ function Invoices() {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [emailInvoice, setEmailInvoice] = useState(null);
   const [buyerCurrentEmail, setBuyerCurrentEmail] = useState(null);
+
+  // Edit invoice title modal state
+  const [showEditTitleModal, setShowEditTitleModal] = useState(false);
+  const [editingInvoice, setEditingInvoice] = useState(null);
+  const [editInvoiceTitle, setEditInvoiceTitle] = useState("");
+  const [savingTitle, setSavingTitle] = useState(false);
+  const invoiceTitleOptions = ['INVOICE', 'TAX INVOICE'];
 
   // Get computed values from store
   const filteredInvoices = getFilteredInvoices(invoices);
@@ -207,6 +216,28 @@ function Invoices() {
       case 'BILL_OF_SUPPLY': return 'info';
       case 'TAX_INVOICE':
       default: return 'success';
+    }
+  };
+
+  // Handle saving invoice title
+  const handleSaveInvoiceTitle = async () => {
+    if (!editingInvoice || !editInvoiceTitle.trim()) return;
+
+    setSavingTitle(true);
+    try {
+      await apiClient.put(ENDPOINTS.INVOICES.UPDATE(editingInvoice._id), {
+        invoice_title: editInvoiceTitle.trim()
+      });
+      toast.success("Invoice title updated successfully");
+      refetch(); // Refresh the invoices list
+      setShowEditTitleModal(false);
+      setEditingInvoice(null);
+      setEditInvoiceTitle("");
+    } catch (err) {
+      console.error('[Invoices] Error updating invoice title:', err);
+      toast.error(err.response?.data?.message || "Failed to update invoice title");
+    } finally {
+      setSavingTitle(false);
     }
   };
 
@@ -790,6 +821,19 @@ function Invoices() {
                               <Visibility fontSize="small" />
                             </IconButton>
                           </Tooltip>
+                          <Tooltip title="Edit Invoice Title">
+                            <IconButton
+                              size="small"
+                              color="secondary"
+                              onClick={() => {
+                                setEditingInvoice(invoice);
+                                setEditInvoiceTitle(invoice.invoice_title || 'TAX INVOICE');
+                                setShowEditTitleModal(true);
+                              }}
+                            >
+                              <Edit fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title="Send Email">
                             <IconButton
                               size="small"
@@ -1189,6 +1233,68 @@ function Invoices() {
           <DialogActions>
             <Button onClick={closeSeriesModal} sx={{ fontSize: "13px" }}>
               Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Edit Invoice Title Modal */}
+        <Dialog
+          open={showEditTitleModal}
+          onClose={() => {
+            setShowEditTitleModal(false);
+            setEditingInvoice(null);
+            setEditInvoiceTitle("");
+          }}
+          maxWidth="xs"
+          fullWidth
+        >
+          <DialogTitle sx={{ borderBottom: '1px solid #e0e0e0', pb: 1.5 }}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Edit color="primary" />
+              <Typography variant="h6" sx={{ fontSize: '16px' }}>Edit Invoice Title</Typography>
+            </Stack>
+          </DialogTitle>
+          <DialogContent sx={{ pt: 3 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '12px' }}>
+              Invoice: <strong>{editingInvoice?.invoice_number}</strong>
+            </Typography>
+            <Autocomplete
+              freeSolo
+              options={invoiceTitleOptions}
+              value={editInvoiceTitle}
+              onChange={(e, newValue) => setEditInvoiceTitle(newValue || '')}
+              onInputChange={(e, newValue) => setEditInvoiceTitle(newValue || '')}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Invoice Title"
+                  placeholder="Select or type title"
+                  fullWidth
+                  size="small"
+                  helperText="Choose from list or type a custom title"
+                />
+              )}
+            />
+          </DialogContent>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button
+              onClick={() => {
+                setShowEditTitleModal(false);
+                setEditingInvoice(null);
+                setEditInvoiceTitle("");
+              }}
+              disabled={savingTitle}
+              sx={{ fontSize: '13px' }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleSaveInvoiceTitle}
+              disabled={savingTitle || !editInvoiceTitle.trim()}
+              sx={{ fontSize: '13px' }}
+            >
+              {savingTitle ? <CircularProgress size={20} /> : 'Save'}
             </Button>
           </DialogActions>
         </Dialog>

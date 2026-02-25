@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import {
   Box,
   Paper,
@@ -33,8 +33,180 @@ import { CircularProgress, Alert } from "@mui/material";
 import suppliersService from "../../services/suppliers.service";
 import piAllocationsService from "../../services/piAllocations.service";
 import proformaInvoicesService from "../../services/proformaInvoices.service";
+import { useCurrency } from "../../context/CurrencyContext";
+
+// Payment options for supplier allocation
+const paymentOptions = [
+  { value: "ADVANCE", label: "Adv" },
+  { value: "COD", label: "COD" },
+  { value: "CREDIT_30", label: "30D" },
+  { value: "CREDIT_60", label: "60D" },
+  { value: "CREDIT_90", label: "90D" },
+];
+
+// Compact supplier selection component - moved outside to prevent re-creation on each render
+const SupplierSelect = memo(({
+  piId,
+  productId,
+  slot,
+  maxQty,
+  disabled,
+  sellingPrice,
+  alloc,
+  remaining,
+  activeSuppliers,
+  updateAllocation,
+  inrRate
+}) => {
+  const currentQty = parseInt(alloc.quantity) || 0;
+  const maxAllowed = remaining + currentQty;
+  const selectedSupplier = activeSuppliers.find((s) => s.supplier_id === alloc.supplier_id);
+
+  // Calculate profit/loss
+  const unitCost = parseFloat(alloc.unit_cost) || 0;
+  const qty = parseInt(alloc.quantity) || 0;
+  const totalCost = unitCost * qty;
+  const totalSelling = (sellingPrice || 0) * qty;
+  const profitLoss = totalSelling - totalCost;
+  const marginPercent = totalSelling > 0 ? ((profitLoss / totalSelling) * 100).toFixed(0) : 0;
+  const hasData = alloc.supplier_id && qty > 0 && unitCost > 0;
+
+  // INR conversion
+  const totalCostInr = totalCost * (inrRate || 83);
+
+  return (
+    <Box
+      sx={{
+        p: 0.5,
+        borderRadius: 1,
+        bgcolor: hasData ? (profitLoss >= 0 ? "#f0fdf4" : "#fef2f2") : "#fff",
+        border: "1px solid",
+        borderColor: hasData ? (profitLoss >= 0 ? "#bbf7d0" : "#fecaca") : "#e5e7eb",
+        minWidth: 128,
+      }}
+    >
+      {/* Supplier Dropdown */}
+      <Autocomplete
+        size="small"
+        options={activeSuppliers}
+        getOptionLabel={(opt) => opt.supplier_name || ""}
+        value={selectedSupplier || null}
+        onChange={(e, val) => updateAllocation(piId, productId, slot, "supplier_id", val?.supplier_id || "")}
+        disabled={disabled}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder="Supplier"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                fontSize: "12px",
+                minHeight: 28,
+                bgcolor: "white",
+                "& fieldset": { borderColor: "#e5e7eb" }
+              },
+              "& input": { py: "2px !important", px: "6px !important" }
+            }}
+          />
+        )}
+        renderOption={(props, opt) => (
+          <Box component="li" {...props} key={opt.supplier_id} sx={{ py: 0.5 }}>
+            <Typography sx={{ fontSize: "12px" }}>{opt.supplier_name}</Typography>
+          </Box>
+        )}
+        sx={{ mb: 0.5 }}
+      />
+
+      {/* Cost, Qty, Payment Row */}
+      <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="space-between">
+        <TextField
+          size="small"
+          type="number"
+          placeholder="$"
+          value={alloc.unit_cost || ""}
+          onChange={(e) => updateAllocation(piId, productId, slot, "unit_cost", e.target.value)}
+          disabled={disabled || !alloc.supplier_id}
+          sx={{
+            flex: 1,
+            "& .MuiOutlinedInput-root": {
+              bgcolor: "white",
+              minHeight: 26,
+              "& fieldset": { borderColor: "#e5e7eb" }
+            },
+            "& input": { py: "2px", px: "4px", fontSize: "12px", textAlign: "center" }
+          }}
+          slotProps={{ htmlInput: { min: 0, step: 0.01 } }}
+        />
+        <TextField
+          size="small"
+          type="number"
+          placeholder="Q"
+          value={alloc.quantity || ""}
+          onChange={(e) => {
+            const val = Math.min(parseInt(e.target.value) || 0, maxAllowed);
+            updateAllocation(piId, productId, slot, "quantity", val || "");
+          }}
+          disabled={disabled || !alloc.supplier_id}
+          sx={{
+            width: 36,
+            "& .MuiOutlinedInput-root": {
+              bgcolor: "white",
+              minHeight: 26,
+              "& fieldset": { borderColor: "#e5e7eb" }
+            },
+            "& input": { py: "2px", px: "4px", fontSize: "12px", textAlign: "center" }
+          }}
+          slotProps={{ htmlInput: { min: 0, max: maxAllowed } }}
+        />
+        <FormControl size="small" sx={{ minWidth: 44 }}>
+          <Select
+            value={alloc.payment_term || ""}
+            onChange={(e) => updateAllocation(piId, productId, slot, "payment_term", e.target.value)}
+            disabled={disabled || !alloc.supplier_id}
+            displayEmpty
+            sx={{
+              fontSize: "12px",
+              bgcolor: "white",
+              minHeight: 26,
+              "& .MuiSelect-select": { py: "2px", px: "4px" },
+              "& fieldset": { borderColor: "#e5e7eb" }
+            }}
+          >
+            <MenuItem value="" sx={{ fontSize: "12px" }}>-</MenuItem>
+            {paymentOptions.map((opt) => (
+              <MenuItem key={opt.value} value={opt.value} sx={{ fontSize: "12px" }}>
+                {opt.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
+
+      {/* Profit/Loss Summary - Only show when data exists */}
+      {hasData && (
+        <Stack sx={{ mt: 0.5, pt: 0.5 }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Typography sx={{ fontSize: "11px", fontWeight: 500, color: "#64748b" }}>
+              ${totalCost.toFixed(2)}
+            </Typography>
+            <Typography sx={{
+              fontSize: "12px",
+              fontWeight: 700,
+              color: profitLoss >= 0 ? "#16a34a" : "#dc2626"
+            }}>
+              {profitLoss >= 0 ? "+" : ""}{marginPercent}%
+            </Typography>
+          </Stack>
+          <Typography sx={{ fontSize: "10px", color: "#94a3b8" }}>
+            ₹{totalCostInr.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+          </Typography>
+        </Stack>
+      )}
+    </Box>
+  );
+});
 
 function PIAllocation() {
+  const { inrRate } = useCurrency();
   const [pis, setPis] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,12 +220,23 @@ function PIAllocation() {
   // Allocations state
   const [allocations, setAllocations] = useState({});
 
+  // Purchase conversion rate (separate from sales rate)
+  const [purchaseRate, setPurchaseRate] = useState(() => {
+    const saved = localStorage.getItem("purchaseInrRate");
+    return saved ? parseFloat(saved) : (inrRate || 83);
+  });
+
   // Saving states
   const [saving, setSaving] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   // Track saved PIs (to show checkmark)
   const [savedPIs, setSavedPIs] = useState(new Set());
+
+  // Save purchase rate to localStorage
+  useEffect(() => {
+    localStorage.setItem("purchaseInrRate", purchaseRate.toString());
+  }, [purchaseRate]);
 
   // Fetch suppliers from API
   const fetchSuppliers = async () => {
@@ -183,7 +366,7 @@ function PIAllocation() {
   const getAllocation = (piId, productId, slot) => {
     const key = `${piId}_${productId}`;
     const itemAllocs = allocations[key] || [];
-    return itemAllocs[slot - 1] || { supplier_id: "", quantity: "" };
+    return itemAllocs[slot - 1] || { supplier_id: "", quantity: "", payment_term: "", unit_cost: "" };
   };
 
   // Update allocation
@@ -191,11 +374,11 @@ function PIAllocation() {
     const key = `${piId}_${productId}`;
 
     setAllocations((prev) => {
-      const itemAllocs = [...(prev[key] || [{}, {}, {}])];
+      const itemAllocs = [...(prev[key] || [{}, {}, {}, {}])];
 
-      // Ensure array has 3 slots
-      while (itemAllocs.length < 3) {
-        itemAllocs.push({ supplier_id: "", quantity: "" });
+      // Ensure array has 4 slots
+      while (itemAllocs.length < 4) {
+        itemAllocs.push({ supplier_id: "", quantity: "", payment_term: "", unit_cost: "" });
       }
 
       if (field === "supplier_id") {
@@ -516,49 +699,6 @@ function PIAllocation() {
     printWindow.document.close();
   };
 
-  // Supplier selection component
-  const SupplierSelect = ({ piId, productId, slot, maxQty, disabled }) => {
-    const alloc = getAllocation(piId, productId, slot);
-    const { remaining } = getItemTotals(piId, productId, maxQty);
-    const currentQty = parseInt(alloc.quantity) || 0;
-    const maxAllowed = remaining + currentQty;
-
-    return (
-      <Stack direction="row" spacing={1} alignItems="center">
-        <Autocomplete
-          size="small"
-          sx={{ width: 160 }}
-          options={activeSuppliers}
-          getOptionLabel={(opt) => opt.supplier_name || ""}
-          value={activeSuppliers.find((s) => s.supplier_id === alloc.supplier_id) || null}
-          onChange={(e, val) => updateAllocation(piId, productId, slot, "supplier_id", val?.supplier_id || "")}
-          disabled={disabled}
-          renderInput={(params) => (
-            <TextField {...params} placeholder="Select" size="small" />
-          )}
-          renderOption={(props, opt) => (
-            <Box component="li" {...props} key={opt.supplier_id}>
-              <Typography variant="body2">{opt.supplier_name}</Typography>
-            </Box>
-          )}
-        />
-        <TextField
-          size="small"
-          type="number"
-          placeholder="Qty"
-          sx={{ width: 70 }}
-          value={alloc.quantity || ""}
-          onChange={(e) => {
-            const val = Math.min(parseInt(e.target.value) || 0, maxAllowed);
-            updateAllocation(piId, productId, slot, "quantity", val || "");
-          }}
-          disabled={disabled || !alloc.supplier_id}
-          slotProps={{ htmlInput: { min: 0, max: maxAllowed } }}
-        />
-      </Stack>
-    );
-  };
-
   // PI List View
   if (!selectedPI) {
     return (
@@ -736,64 +876,107 @@ function PIAllocation() {
   return (
     <Box>
       {/* Header */}
-      <Paper elevation={0} sx={{ p: 2, mb: 2, border: "1px solid #e0e0e0", borderRadius: 2 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <IconButton onClick={() => setSelectedPI(null)} size="small">
-            <ArrowBack />
+      <Paper elevation={0} sx={{ p: 1.5, mb: 1.5, border: "1px solid #e5e7eb", borderRadius: 1.5, bgcolor: "#f8fafc" }}>
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <IconButton onClick={() => setSelectedPI(null)} size="small" sx={{ bgcolor: "#fff", border: "1px solid #e2e8f0" }}>
+            <ArrowBack sx={{ fontSize: 18 }} />
           </IconButton>
           <Box sx={{ flexGrow: 1 }}>
             <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography variant="h6" fontWeight={600}>
+              <Typography sx={{ fontSize: "15px", fontWeight: 700, color: "#1e293b" }}>
                 {piNumber}
               </Typography>
+              <Chip
+                label={selectedPI.status}
+                size="small"
+                sx={{
+                  height: 20,
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  bgcolor: selectedPI.status === "APPROVED" ? "#dcfce7" : "#fef3c7",
+                  color: selectedPI.status === "APPROVED" ? "#16a34a" : "#d97706",
+                  "& .MuiChip-label": { px: 1 }
+                }}
+              />
               {savedPIs.has(piId) && (
                 <Chip
-                  icon={<CheckCircle sx={{ fontSize: 16 }} />}
+                  icon={<CheckCircle sx={{ fontSize: 12 }} />}
                   label="Saved"
                   size="small"
-                  color="success"
-                  variant="outlined"
+                  sx={{
+                    height: 20,
+                    fontSize: "10px",
+                    fontWeight: 600,
+                    bgcolor: "#dcfce7",
+                    color: "#16a34a",
+                    "& .MuiChip-label": { px: 0.5 },
+                    "& .MuiChip-icon": { ml: 0.5 }
+                  }}
                 />
               )}
             </Stack>
-            <Typography variant="body2" color="text.secondary">
+            <Typography sx={{ fontSize: "11px", color: "#64748b", mt: 0.25 }}>
               {customerName} &bull; {formatDate(piDate)} &bull; {selectedPI.items?.length} items
             </Typography>
           </Box>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Button
-              variant="outlined"
+          {/* Purchase INR Rate Input */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, bgcolor: "#fff", border: "1px solid #e2e8f0", borderRadius: 1, px: 1, py: 0.5 }}>
+            <Typography sx={{ fontSize: "11px", color: "#64748b", whiteSpace: "nowrap" }}>₹/$:</Typography>
+            <TextField
               size="small"
-              startIcon={saving ? <CircularProgress size={16} /> : <Save />}
-              onClick={saveAllocationsToBackend}
-              disabled={saving}
-              sx={{ textTransform: "none" }}
-            >
-              {saving ? "Saving..." : "Save Allocations"}
-            </Button>
-            <Chip
-              label={selectedPI.status}
-              size="small"
-              color={selectedPI.status === "APPROVED" ? "success" : "warning"}
+              type="number"
+              value={purchaseRate}
+              onChange={(e) => setPurchaseRate(parseFloat(e.target.value) || 83)}
+              sx={{
+                width: 60,
+                "& .MuiOutlinedInput-root": {
+                  fontSize: "12px",
+                  minHeight: 28,
+                  "& fieldset": { borderColor: "#e5e7eb" }
+                },
+                "& input": { py: "4px", px: "6px", textAlign: "center" }
+              }}
+              slotProps={{ htmlInput: { min: 1, step: 0.01 } }}
             />
-          </Stack>
+          </Box>
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={saving ? <CircularProgress size={14} color="inherit" /> : <Save sx={{ fontSize: 16 }} />}
+            onClick={saveAllocationsToBackend}
+            disabled={saving}
+            sx={{
+              textTransform: "none",
+              fontSize: "12px",
+              fontWeight: 600,
+              py: 0.75,
+              px: 2,
+              bgcolor: "#1976d2",
+              "&:hover": { bgcolor: "#1565c0" },
+              boxShadow: "none"
+            }}
+          >
+            {saving ? "Saving..." : "Save"}
+          </Button>
         </Stack>
       </Paper>
 
       {/* Allocation Table */}
-      <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e0e0e0", borderRadius: 2 }}>
-        <Table size="small">
+      <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb", borderRadius: 1.5, overflow: "auto" }}>
+        <Table size="small" sx={{ minWidth: 1000 }}>
           <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0", width: 50 }}>#</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0", width: 120 }}>Part Number</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0" }}>Product Name</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0", width: 60 }}>Qty</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0" }}>Supplier 1</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0" }}>Supplier 2</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0" }}>Supplier 3</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0", width: 80 }}>Allocated</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 600, color: "text.secondary", borderBottom: "2px solid #e0e0e0", width: 80 }}>Remaining</TableCell>
+            <TableRow sx={{ bgcolor: "#fff" }}>
+              <TableCell sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", width: 25, px: 1 }}>#</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", width: 90, px: 1 }}>Part No.</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", width: 120, px: 1 }}>Product</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", width: 40, px: 0.5 }}>Qty</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", width: 50, px: 1 }}>Sell $</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", minWidth: 140, px: 0.5 }}>Supplier 1</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", minWidth: 140, px: 0.5 }}>Supplier 2</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", minWidth: 140, px: 0.5 }}>Supplier 3</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", minWidth: 140, px: 0.5 }}>Supplier 4</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", width: 40, px: 0.5 }}>Done</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600, color: "#64748b", fontSize: "12px", py: 1.25, borderBottom: "1px solid #e5e7eb", width: 40, px: 0.5 }}>Left</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -807,62 +990,114 @@ function PIAllocation() {
               const isComplete = remaining === 0;
 
               return (
-                <TableRow key={productId} hover>
-                  <TableCell>
-                    <Typography variant="body2" color="text.secondary">{idx + 1}</Typography>
+                <TableRow
+                  key={productId}
+                  sx={{
+                    bgcolor: "#fff",
+                    "&:hover": { bgcolor: "#f8fafc" },
+                  }}
+                >
+                  <TableCell sx={{ py: 1.5, px: 1, borderBottom: "1px solid #f1f5f9" }}>
+                    <Typography sx={{ fontSize: "12px", color: "#94a3b8" }}>{idx + 1}</Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" fontWeight={600} color="primary.main">
+                  <TableCell sx={{ py: 1.5, px: 1, borderBottom: "1px solid #f1f5f9" }}>
+                    <Typography sx={{ fontSize: "12px", fontWeight: 600, color: "#1976d2" }}>
                       {item.part_number || "-"}
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" sx={{ maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <TableCell sx={{ py: 1.5, px: 1, borderBottom: "1px solid #f1f5f9" }}>
+                    <Typography sx={{ fontSize: "12px", color: "#334155", maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={item.product_name}>
                       {item.product_name || "-"}
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="body2" fontWeight={600}>{item.quantity}</Typography>
+                  <TableCell align="center" sx={{ py: 1.5, px: 0.5, borderBottom: "1px solid #f1f5f9" }}>
+                    <Box sx={{
+                      display: "inline-flex",
+                      bgcolor: "#e0f2fe",
+                      borderRadius: 1.5,
+                      px: 0.75,
+                      py: 0.25,
+                      minWidth: 24
+                    }}>
+                      <Typography sx={{ fontSize: "12px", fontWeight: 600, color: "#0369a1" }}>{item.quantity}</Typography>
+                    </Box>
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="right" sx={{ py: 1.5, px: 1, borderBottom: "1px solid #f1f5f9" }}>
+                    <Typography sx={{ fontSize: "12px", fontWeight: 600, color: "#059669" }}>
+                      ${(item.unit_price || 0).toFixed(2)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ py: 0.5, px: 0.5, borderBottom: "1px solid #f1f5f9" }}>
                     <SupplierSelect
                       piId={piId}
                       productId={productId}
                       slot={1}
                       maxQty={item.quantity}
+                      sellingPrice={item.unit_price}
+                      alloc={getAllocation(piId, productId, 1)}
+                      remaining={remaining}
+                      activeSuppliers={activeSuppliers}
+                      updateAllocation={updateAllocation}
+                      inrRate={purchaseRate}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ py: 0.5, px: 0.5, borderBottom: "1px solid #f1f5f9" }}>
                     <SupplierSelect
                       piId={piId}
                       productId={productId}
                       slot={2}
                       maxQty={item.quantity}
+                      sellingPrice={item.unit_price}
+                      alloc={getAllocation(piId, productId, 2)}
+                      remaining={remaining}
+                      activeSuppliers={activeSuppliers}
+                      updateAllocation={updateAllocation}
+                      inrRate={purchaseRate}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ py: 0.5, px: 0.5, borderBottom: "1px solid #f1f5f9" }}>
                     <SupplierSelect
                       piId={piId}
                       productId={productId}
                       slot={3}
                       maxQty={item.quantity}
+                      sellingPrice={item.unit_price}
+                      alloc={getAllocation(piId, productId, 3)}
+                      remaining={remaining}
+                      activeSuppliers={activeSuppliers}
+                      updateAllocation={updateAllocation}
+                      inrRate={purchaseRate}
                     />
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography
-                      variant="body2"
-                      fontWeight={600}
-                      color={isComplete ? "success.main" : allocated > 0 ? "warning.main" : "text.secondary"}
-                    >
+                  <TableCell sx={{ py: 0.5, px: 0.5, borderBottom: "1px solid #f1f5f9" }}>
+                    <SupplierSelect
+                      piId={piId}
+                      productId={productId}
+                      slot={4}
+                      maxQty={item.quantity}
+                      sellingPrice={item.unit_price}
+                      alloc={getAllocation(piId, productId, 4)}
+                      remaining={remaining}
+                      activeSuppliers={activeSuppliers}
+                      updateAllocation={updateAllocation}
+                      inrRate={purchaseRate}
+                    />
+                  </TableCell>
+                  <TableCell align="center" sx={{ py: 1.5, px: 0.5, borderBottom: "1px solid #f1f5f9" }}>
+                    <Typography sx={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: isComplete ? "#16a34a" : allocated > 0 ? "#d97706" : "#94a3b8"
+                    }}>
                       {allocated}
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography
-                      variant="body2"
-                      fontWeight={600}
-                      color={remaining > 0 ? "error.main" : "success.main"}
-                    >
+                  <TableCell align="center" sx={{ py: 1.5, px: 0.5, borderBottom: "1px solid #f1f5f9" }}>
+                    <Typography sx={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: remaining > 0 ? "#dc2626" : "#16a34a"
+                    }}>
                       {remaining}
                     </Typography>
                   </TableCell>
@@ -874,65 +1109,78 @@ function PIAllocation() {
       </TableContainer>
 
       {/* Summary */}
-      <Paper elevation={0} sx={{ p: 2, mt: 2, border: "1px solid #e0e0e0", borderRadius: 2 }}>
-        <Stack direction="row" spacing={6} justifyContent="flex-end">
-          <Box textAlign="right">
-            <Typography variant="caption" color="text.secondary">Total Items</Typography>
-            <Typography variant="h6" fontWeight={600}>{selectedPI.items?.length || 0}</Typography>
-          </Box>
-          <Box textAlign="right">
-            <Typography variant="caption" color="text.secondary">Total Quantity</Typography>
-            <Typography variant="h6" fontWeight={600}>
-              {selectedPI.items?.reduce((sum, i) => sum + i.quantity, 0) || 0}
-            </Typography>
-          </Box>
-          <Box textAlign="right">
-            <Typography variant="caption" color="text.secondary">Fully Allocated</Typography>
-            <Typography variant="h6" fontWeight={600} color="success.main">
-              {selectedPI.items?.filter((item, idx) => {
-                const productId = item.product_id || item._id || `item_${idx}`;
-                const { remaining } = getItemTotals(piId, productId, item.quantity);
-                return remaining === 0;
-              }).length || 0}
-            </Typography>
-          </Box>
-          <Box textAlign="right">
-            <Typography variant="caption" color="text.secondary">Pending</Typography>
-            <Typography variant="h6" fontWeight={600} color="error.main">
-              {selectedPI.items?.filter((item, idx) => {
-                const productId = item.product_id || item._id || `item_${idx}`;
-                const { remaining } = getItemTotals(piId, productId, item.quantity);
-                return remaining > 0;
-              }).length || 0}
-            </Typography>
-          </Box>
+      <Paper elevation={0} sx={{ p: 1.5, mt: 1.5, border: "1px solid #e5e7eb", borderRadius: 1.5, bgcolor: "#f8fafc" }}>
+        <Stack direction="row" spacing={3} justifyContent="flex-end" alignItems="center">
+          <Stack direction="row" spacing={0.75} alignItems="center">
+            <Typography sx={{ fontSize: "11px", color: "#64748b" }}>Items:</Typography>
+            <Box sx={{ bgcolor: "#e2e8f0", borderRadius: 1, px: 1, py: 0.25 }}>
+              <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "#334155" }}>
+                {selectedPI.items?.length || 0}
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={0.75} alignItems="center">
+            <Typography sx={{ fontSize: "11px", color: "#64748b" }}>Total Qty:</Typography>
+            <Box sx={{ bgcolor: "#e2e8f0", borderRadius: 1, px: 1, py: 0.25 }}>
+              <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "#334155" }}>
+                {selectedPI.items?.reduce((sum, i) => sum + i.quantity, 0) || 0}
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={0.75} alignItems="center">
+            <Typography sx={{ fontSize: "11px", color: "#64748b" }}>Allocated:</Typography>
+            <Box sx={{ bgcolor: "#dcfce7", borderRadius: 1, px: 1, py: 0.25 }}>
+              <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "#16a34a" }}>
+                {selectedPI.items?.filter((item, idx) => {
+                  const productId = item.product_id || item._id || `item_${idx}`;
+                  const { remaining } = getItemTotals(piId, productId, item.quantity);
+                  return remaining === 0;
+                }).length || 0}
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={0.75} alignItems="center">
+            <Typography sx={{ fontSize: "11px", color: "#64748b" }}>Pending:</Typography>
+            <Box sx={{ bgcolor: "#fee2e2", borderRadius: 1, px: 1, py: 0.25 }}>
+              <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "#dc2626" }}>
+                {selectedPI.items?.filter((item, idx) => {
+                  const productId = item.product_id || item._id || `item_${idx}`;
+                  const { remaining } = getItemTotals(piId, productId, item.quantity);
+                  return remaining > 0;
+                }).length || 0}
+              </Typography>
+            </Box>
+          </Stack>
         </Stack>
       </Paper>
 
       {/* Supplier Download Options - Shows after allocation */}
       {suppliersWithAllocs.length > 0 && (
-        <Paper elevation={0} sx={{ p: 2, mt: 2, border: "1px solid #e0e0e0", borderRadius: 2 }}>
-          <Typography variant="body2" fontWeight={600} sx={{ mb: 1.5 }}>
-            Download Purchase Orders
-          </Typography>
-          <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+        <Paper elevation={0} sx={{ p: 1.5, mt: 1.5, border: "1px solid #e5e7eb", borderRadius: 1.5, bgcolor: "#fff" }}>
+          <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap" useFlexGap>
+            <Typography sx={{ fontSize: "11px", fontWeight: 600, color: "#64748b" }}>
+              Download PO:
+            </Typography>
             {suppliersWithAllocs.map((supplierData) => (
               <Button
                 key={supplierData.supplier?.supplier_id}
                 variant="outlined"
                 size="small"
-                startIcon={<Download sx={{ fontSize: 16 }} />}
+                startIcon={<Download sx={{ fontSize: 14 }} />}
                 onClick={() => generateSupplierPDF(supplierData)}
                 sx={{
                   textTransform: "none",
-                  py: 0.75,
-                  px: 1.5,
-                  borderColor: "#1976d2",
-                  color: "#1976d2",
-                  fontSize: "0.8125rem",
+                  py: 0.5,
+                  px: 1.25,
+                  borderColor: "#cbd5e1",
+                  color: "#475569",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  minHeight: 28,
                   "&:hover": {
-                    borderColor: "#1565c0",
-                    bgcolor: "#e3f2fd"
+                    borderColor: "#1976d2",
+                    bgcolor: "#f0f9ff",
+                    color: "#1976d2"
                   }
                 }}
               >

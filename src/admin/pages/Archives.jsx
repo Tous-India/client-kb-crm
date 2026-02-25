@@ -35,14 +35,300 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
   FileDownload as DownloadIcon,
+  Print as PrintIcon,
   Assessment as StatsIcon,
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
+import html2pdf from 'html2pdf.js';
 import archivesService from '../../services/archives.service';
 import useArchivesStore from '../../stores/useArchivesStore';
 
 const DOCUMENT_TYPES = ['INVOICE', 'ORDER', 'QUOTATION', 'PI', 'PAYMENT', 'OTHER'];
 const PAYMENT_STATUSES = ['PAID', 'PARTIAL', 'UNPAID', 'REFUNDED', 'CANCELLED'];
+
+// Helper function to convert number to words (Indian format)
+const numberToWords = (num) => {
+  if (num === 0) return 'ZERO';
+
+  const ones = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE',
+    'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN', 'EIGHTEEN', 'NINETEEN'];
+  const tens = ['', '', 'TWENTY', 'THIRTY', 'FORTY', 'FIFTY', 'SIXTY', 'SEVENTY', 'EIGHTY', 'NINETY'];
+
+  const numToWords = (n) => {
+    if (n < 20) return ones[n];
+    if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
+    if (n < 1000) return ones[Math.floor(n / 100)] + ' HUNDRED' + (n % 100 ? ' ' + numToWords(n % 100) : '');
+    if (n < 100000) return numToWords(Math.floor(n / 1000)) + ' THOUSAND' + (n % 1000 ? ' ' + numToWords(n % 1000) : '');
+    if (n < 10000000) return numToWords(Math.floor(n / 100000)) + ' LAKH' + (n % 100000 ? ' ' + numToWords(n % 100000) : '');
+    return numToWords(Math.floor(n / 10000000)) + ' CRORE' + (n % 10000000 ? ' ' + numToWords(n % 10000000) : '');
+  };
+
+  const rupees = Math.floor(num);
+  const paise = Math.round((num - rupees) * 100);
+
+  let result = numToWords(rupees) + ' RUPEE';
+  if (paise > 0) {
+    result += ' AND ' + numToWords(paise) + ' PAISE';
+  }
+  return result;
+};
+
+// Generate print HTML with proper styling
+const generatePrintHTML = (archive) => {
+  const items = archive.items || [];
+  const seller = archive.original_data?.seller || {};
+  const buyer = archive.original_data?.buyer || {};
+  const shipTo = archive.original_data?.ship_to || {};
+  const taxBreakdown = archive.original_data?.tax_breakdown || {};
+  const bankDetails = archive.original_data?.bank_details || {};
+  const terms = archive.original_data?.terms || [];
+
+  // Detect if this invoice has qty_ordered/qty_delivered/pending columns
+  const hasDeliveryTracking = items.some(item => item.qty_ordered !== undefined || item.qty_delivered !== undefined);
+  const isHighSeaSale = archive.original_data?.invoice_type === 'BILL OF SUPPLY - HIGH SEA SALE';
+  const hasShipTo = shipTo.name || shipTo.address;
+
+  // Calculate totals
+  const totalQtyOrdered = archive.original_data?.total_qty_ordered || items.reduce((sum, item) => sum + (item.qty_ordered || item.quantity || 0), 0);
+  const totalQtyDelivered = archive.original_data?.total_qty_delivered || items.reduce((sum, item) => sum + (item.qty_delivered || 0), 0);
+  const totalQtyPending = archive.original_data?.total_qty_pending || items.reduce((sum, item) => sum + (item.pending || 0), 0);
+  const totalQty = archive.original_data?.total_qty || totalQtyOrdered;
+
+  const docDate = archive.document_date ? new Date(archive.document_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : '';
+  const shippingMethod = archive.original_data?.shipping_method || '';
+
+  // Default terms if not provided
+  const defaultTerms = [
+    "IGST as per applicable",
+    "Freight, Custom Clearance, Duty and CHA charges charged @actual third party invoices",
+    "Freight charges @actual as per freight carrier invoices",
+    "Typo errors are subjected to correction and then considerable",
+    "Bank Charges extra (as per actual)"
+  ];
+  const displayTerms = terms.length > 0 ? terms : defaultTerms;
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>${archive.original_reference || archive.archive_id}</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; font-size: 11px; padding: 15px; background: white; }
+        table { border-collapse: collapse; width: 100%; }
+        .header { display: flex; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
+        .logo { width: 60px; height: 60px; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-right: 15px; }
+        .title { flex: 1; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+        .subtitle { text-align: center; font-weight: bold; text-decoration: underline; border-bottom: 1px solid #000; padding: 5px 0; margin-bottom: 10px; }
+        .info-section { display: flex; border: 1px solid #000; margin-bottom: 10px; }
+        .info-box { flex: 1; padding: 8px; border-right: 1px solid #000; font-size: 10px; }
+        .info-box:last-child { border-right: none; }
+        .label { font-weight: bold; text-decoration: underline; margin-bottom: 3px; }
+        .company { font-weight: bold; font-size: 11px; }
+        .highlight-row { background: #ffff00; }
+        .details-row { display: flex; border: 1px solid #000; margin-bottom: 10px; font-size: 10px; }
+        .details-cell { padding: 5px 8px; border-right: 1px solid #000; }
+        .details-cell:last-child { border-right: none; }
+        .details-cell.gray { background: #f0f0f0; }
+        .items-table { border: 1px solid #000; margin-bottom: 10px; }
+        .items-table th, .items-table td { border: 1px solid #ccc; padding: 3px 5px; font-size: 9px; }
+        .items-table th { background: #ffff00; font-weight: bold; }
+        .items-table tr:nth-child(even) { background: #fafafa; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .pending { color: #ed6c02; }
+        .delivered { color: #2e7d32; }
+        .summary-section { display: flex; gap: 15px; margin-bottom: 10px; }
+        .summary-left { flex: 1; }
+        .summary-right { width: 40%; }
+        .total-box { border: 1px solid #000; padding: 8px; }
+        .total-box.no-top { border-top: none; }
+        .tax-table { border: 1px solid #000; }
+        .tax-table td { border: 1px solid #000; padding: 3px 8px; font-size: 10px; }
+        .tax-table .highlight { background: #f0f0f0; font-weight: bold; }
+        .terms { margin-bottom: 10px; }
+        .terms-title { font-weight: bold; text-decoration: underline; margin-bottom: 3px; }
+        .terms p { font-size: 9px; margin: 2px 0; }
+        .footer { display: flex; justify-content: space-between; margin-top: 15px; }
+        .bank-details { font-size: 10px; }
+        .bank-table { border: 1px solid #000; }
+        .bank-table td { border: 1px solid #000; padding: 3px 8px; font-size: 10px; }
+        .signature-box { border: 1px solid #000; padding: 10px 20px; text-align: center; min-width: 160px; }
+        .signature-name { font-style: italic; margin-top: 25px; font-size: 12px; }
+        @media print { body { padding: 10px; } }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="logo">KB</div>
+        <div class="title">BILL OF SUPPLY</div>
+      </div>
+
+      ${isHighSeaSale ? '<div class="subtitle">HIGH SEA SALE</div>' : ''}
+
+      <div class="info-section">
+        <div class="info-box">
+          <div class="label">FROM:-</div>
+          <div class="company">${seller.name || 'KB ENTERPRISES'}</div>
+          <div>${seller.address || 'PLOT NO 145 GF POCKET 25 SECTOR 24 ROHINI EAST DELHI 110085'}</div>
+          <div>GSTIN – ${seller.gstin || '07CARPR7906M1ZR'}</div>
+          <div>ATTN.:- ${seller.contact_person || 'MR. NITIN'}, ${seller.phone || '9315151910'}</div>
+          <div>EMAIL:- ${seller.email || 'INFO@KBENTERPRISE.ORG'}</div>
+          ${archive.original_data?.hss_number ? `<div style="background:#ffff00;margin-top:3px"><strong>HSS:-</strong> ${archive.original_data.hss_number}</div>` : ''}
+        </div>
+        <div class="info-box">
+          <div class="label">BILL TO:-</div>
+          <div class="company">${archive.buyer_company || ''}</div>
+          <div>${buyer.address || ''}</div>
+          <div>GSTIN- ${buyer.gstin || ''}</div>
+          <div>ATTN.:- ${archive.buyer_name || ''}</div>
+          <div>CONTACT:- ${buyer.phone || ''}</div>
+          <div>EMAIL:- ${archive.buyer_email || ''}</div>
+          ${archive.original_data?.awb_number ? `<div style="background:#ffff00;margin-top:3px"><strong>AWB NO:-</strong> ${archive.original_data.awb_number}</div>` : ''}
+        </div>
+        <div class="info-box">
+          <div class="label">SHIP TO:-</div>
+          ${hasShipTo ? `
+            <div class="company">${shipTo.name || ''}</div>
+            <div>${shipTo.address || ''}</div>
+            <div>GSTIN- ${shipTo.gstin || ''}</div>
+            <div>ATTN.:- ${shipTo.contact_person || ''}</div>
+            <div>CONTACT:- ${shipTo.phone || ''}</div>
+            <div>EMAIL:- ${shipTo.email || ''}</div>
+          ` : ''}
+          ${archive.original_data?.usd_rate_consideration ? `<div style="background:#ffff00;margin-top:3px"><strong>USD RATE CONSIDERATION</strong> ${archive.original_data.usd_rate_consideration}</div>` : ''}
+        </div>
+      </div>
+
+      <div class="details-row">
+        <div class="details-cell gray" style="width:10%"><strong>QuoteRef.:-</strong><br><strong>Dated:-</strong></div>
+        <div class="details-cell" style="width:12%">${archive.original_data?.quote_ref || 'BYMAIL'}<br>${archive.original_data?.quote_date || ''}</div>
+        <div class="details-cell gray" style="width:10%"><strong>Invoice No.:-</strong><br><strong>Dated:-</strong></div>
+        <div class="details-cell" style="width:15%;background:#ffff00"><strong>${archive.original_reference || ''}</strong><br>${docDate}</div>
+        <div class="details-cell gray" style="width:10%"><strong>Shipping:-</strong><br><strong>Payment:-</strong></div>
+        <div class="details-cell" style="flex:1;background:#ffff00"><strong>${shippingMethod}</strong><br><strong>${archive.original_data?.payment_terms || '100%PREPAID'}</strong></div>
+      </div>
+
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th style="width:3%">S/n.</th>
+            <th style="width:18%">Item Description</th>
+            <th style="width:15%">Part Number</th>
+            ${hasDeliveryTracking ? `
+              <th style="width:6%" class="text-center">Qty. Order</th>
+              <th style="width:6%" class="text-center">Qty delivered</th>
+              <th style="width:5%" class="text-center">Pending</th>
+            ` : `
+              <th style="width:6%" class="text-center">Qty.</th>
+            `}
+            <th style="width:4%" class="text-center">UOM</th>
+            <th style="width:8%" class="text-center">STATUS</th>
+            <th style="width:10%" class="text-right">UNIT PRICE INR</th>
+            <th style="width:12%" class="text-right">TOTAL PRICE INR</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map((item, index) => {
+            const isPending = (item.pending > 0) || item.status === 'Pending' || item.description?.includes('PENDING');
+            return `
+            <tr>
+              <td>${item.sn || index + 1}</td>
+              <td>${item.product_name || ''}</td>
+              <td>${item.part_number || ''}</td>
+              ${hasDeliveryTracking ? `
+                <td class="text-center">${item.qty_ordered ?? item.quantity ?? ''}</td>
+                <td class="text-center">${item.qty_delivered ?? ''}</td>
+                <td class="text-center">${item.pending ?? ''}</td>
+              ` : `
+                <td class="text-center">${item.quantity || ''}</td>
+              `}
+              <td class="text-center">${item.uom || 'EA'}</td>
+              <td class="text-center ${isPending ? 'pending' : 'delivered'}">
+                ${isPending ? 'Pending' : 'Delivered'}
+              </td>
+              <td class="text-right">${(item.unit_price || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+              <td class="text-right">${(item.total_price || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+            </tr>
+          `}).join('')}
+          ${hasDeliveryTracking ? `
+            <tr style="font-weight:bold;background:#f0f0f0">
+              <td colspan="3" class="text-right">TOTAL</td>
+              <td class="text-center">${totalQtyOrdered}</td>
+              <td class="text-center">${totalQtyDelivered}</td>
+              <td class="text-center">${totalQtyPending}</td>
+              <td colspan="4"></td>
+            </tr>
+          ` : ''}
+        </tbody>
+      </table>
+
+      <div class="summary-section">
+        <div class="summary-left">
+          ${!hasDeliveryTracking ? `
+            <div class="total-box" style="display:flex;justify-content:space-between">
+              <strong>TOTAL QTY:</strong>
+              <strong>${totalQty}</strong>
+            </div>
+          ` : ''}
+          <div class="total-box ${!hasDeliveryTracking ? 'no-top' : ''}">
+            <strong>AMOUNT IN INR</strong><br>
+            ${numberToWords(archive.total_amount || 0)}
+          </div>
+          <div class="terms" style="margin-top:10px">
+            <div class="terms-title">QuotTerms:-</div>
+            ${displayTerms.map((term, i) => `<p>${i + 1}. ${term}</p>`).join('')}
+          </div>
+        </div>
+        <div class="summary-right">
+          <table class="tax-table">
+            <tr><td colspan="2" class="text-right"><strong>TOTAL</strong></td><td class="text-right"><strong>${(archive.total_amount || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong></td></tr>
+            <tr><td colspan="2"><strong>IGST@5%:-</strong></td><td class="text-right">${(taxBreakdown['IGST @ 5%'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td></tr>
+            <tr><td colspan="2"><strong>IGST@18%:-</strong></td><td class="text-right">${(taxBreakdown['IGST @ 18%'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td></tr>
+            <tr><td colspan="2"><strong>IGST@28%:-</strong></td><td class="text-right">${(taxBreakdown['IGST @ 28%'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td></tr>
+            <tr><td colspan="2"><strong>Freight:-</strong></td><td class="text-right">${(taxBreakdown['Freight'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td></tr>
+            <tr><td colspan="2"><strong>Round Off:-</strong></td><td class="text-right"></td></tr>
+            <tr class="highlight"><td colspan="2"><strong>GrandTotal:-</strong></td><td class="text-right"><strong>${(archive.total_amount || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong></td></tr>
+          </table>
+          <div class="signature-box" style="margin-top:10px">
+            <div>For KB ENTERPRISES</div>
+            <div style="margin-top:30px"><strong>AUTH. SIGNATORY</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <table class="bank-table">
+          <tr>
+            <td><strong>Bank</strong></td>
+            <td>${bankDetails.bank || 'ICICI bank ltd'}</td>
+            <td><strong>Branch</strong></td>
+            <td>${bankDetails.branch || 'Sec 11 Rohini'}</td>
+          </tr>
+          <tr>
+            <td><strong>Acc no</strong></td>
+            <td>${bankDetails.account_no || '036705501190'}</td>
+            <td><strong>IFSC</strong></td>
+            <td>${bankDetails.ifsc || 'ICIC0000367'}</td>
+          </tr>
+        </table>
+      </div>
+    </body>
+    </html>
+  `;
+};
+
+// Print function - opens in new window
+const handlePrint = (archive) => {
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(generatePrintHTML(archive));
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 300);
+};
 
 const Archives = () => {
   const [archives, setArchives] = useState([]);
@@ -545,193 +831,340 @@ const Archives = () => {
         />
       </Paper>
 
-      {/* Detail Modal */}
+      {/* Detail Modal - Invoice Style */}
       <Dialog
         open={isDetailModalOpen}
         onClose={closeDetailModal}
-        maxWidth="md"
+        maxWidth="lg"
         fullWidth
+        PaperProps={{ sx: { maxHeight: '95vh' } }}
       >
-        <DialogTitle>
-          Archive Details
-          {selectedArchive && (
-            <Chip
-              label={selectedArchive.archive_id}
-              size="small"
-              color="primary"
-              className="ml-2"
-            />
-          )}
-        </DialogTitle>
-        <DialogContent dividers>
-          {selectedArchive && (
-            <Box>
-              {/* Header Info */}
-              <Grid container spacing={2} className="mb-4">
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Document Type
-                  </Typography>
-                  <Typography>{selectedArchive.document_type}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Original Reference
-                  </Typography>
-                  <Typography>{selectedArchive.original_reference || '-'}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Document Date
-                  </Typography>
-                  <Typography>
-                    {selectedArchive.document_date
-                      ? new Date(selectedArchive.document_date).toLocaleDateString()
-                      : '-'
-                    }
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Fiscal Year
-                  </Typography>
-                  <Typography>{selectedArchive.fiscal_year || '-'}</Typography>
-                </Grid>
-              </Grid>
+        <DialogContent sx={{ p: 0, bgcolor: '#fff' }}>
+          {selectedArchive && (() => {
+            const hasDeliveryTracking = selectedArchive.items?.some(item => item.qty_ordered !== undefined || item.qty_delivered !== undefined);
+            const isHighSeaSale = selectedArchive.original_data?.invoice_type === 'BILL OF SUPPLY - HIGH SEA SALE';
+            const shipTo = selectedArchive.original_data?.ship_to || {};
+            const hasShipTo = shipTo.name || shipTo.address;
+            const terms = selectedArchive.original_data?.terms || [];
+            const defaultTerms = [
+              "IGST as per applicable",
+              "Freight, Custom Clearance, Duty and CHA charges charged @actual third party invoices",
+              "Freight charges @actual as per freight carrier invoices",
+              "Typo errors are subjected to correction and then considerable",
+              "Bank Charges extra (as per actual)"
+            ];
+            const displayTerms = terms.length > 0 ? terms : defaultTerms;
 
-              {/* Buyer Info */}
-              <Typography variant="h6" className="mb-2">Buyer Information</Typography>
-              <Grid container spacing={2} className="mb-4">
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Buyer Name
+            return (
+            <Box
+              sx={{
+                p: 4,
+                bgcolor: '#fff',
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '12px',
+                lineHeight: 1.4,
+              }}
+              id="invoice-print-area"
+            >
+              {/* Invoice Header */}
+              <Box sx={{ display: 'flex', alignItems: 'center', borderBottom: '2px solid #000', pb: 2, mb: 2 }}>
+                <Box sx={{
+                  width: 70,
+                  height: 70,
+                  border: '2px solid #000',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '20px',
+                  mr: 2
+                }}>
+                  KB
+                </Box>
+                <Box sx={{ flex: 1, textAlign: 'center' }}>
+                  <Typography sx={{ fontSize: '28px', fontWeight: 'bold', letterSpacing: 2 }}>
+                    BILL OF SUPPLY
                   </Typography>
-                  <Typography>{selectedArchive.buyer_name || '-'}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Company
-                  </Typography>
-                  <Typography>{selectedArchive.buyer_company || '-'}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Email
-                  </Typography>
-                  <Typography>{selectedArchive.buyer_email || '-'}</Typography>
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
 
-              {/* Financial Info */}
-              <Typography variant="h6" className="mb-2">Financial Information</Typography>
-              <Grid container spacing={2} className="mb-4">
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Subtotal
-                  </Typography>
-                  <Typography>${(selectedArchive.subtotal || 0).toLocaleString()}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Tax
-                  </Typography>
-                  <Typography>${(selectedArchive.tax || 0).toLocaleString()}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Total Amount (USD)
-                  </Typography>
-                  <Typography className="font-bold">
-                    ${(selectedArchive.total_amount || 0).toLocaleString()}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Total Amount (INR)
-                  </Typography>
-                  <Typography className="font-bold">
-                    ₹{(selectedArchive.total_amount_inr || 0).toLocaleString()}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="caption" color="textSecondary">
-                    Payment Status
-                  </Typography>
-                  <Chip
-                    label={selectedArchive.payment_status}
-                    size="small"
-                    color={
-                      selectedArchive.payment_status === 'PAID' ? 'success' :
-                      selectedArchive.payment_status === 'PARTIAL' ? 'warning' :
-                      'error'
-                    }
-                  />
-                </Grid>
-              </Grid>
-
-              {/* Items */}
-              {selectedArchive.items && selectedArchive.items.length > 0 && (
-                <>
-                  <Typography variant="h6" className="mb-2">Items</Typography>
-                  <TableContainer>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>#</TableCell>
-                          <TableCell>Part Number</TableCell>
-                          <TableCell>Product Name</TableCell>
-                          <TableCell align="right">Qty</TableCell>
-                          <TableCell align="right">Unit Price</TableCell>
-                          <TableCell align="right">Total</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {selectedArchive.items.map((item, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{item.sn || index + 1}</TableCell>
-                            <TableCell>{item.part_number}</TableCell>
-                            <TableCell>{item.product_name}</TableCell>
-                            <TableCell align="right">{item.quantity}</TableCell>
-                            <TableCell align="right">
-                              ${(item.unit_price || 0).toLocaleString()}
-                            </TableCell>
-                            <TableCell align="right">
-                              ${(item.total_price || 0).toLocaleString()}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </>
-              )}
-
-              {/* Notes */}
-              {selectedArchive.notes && (
-                <Box className="mt-4">
-                  <Typography variant="h6" className="mb-2">Notes</Typography>
-                  <Typography variant="body2" className="text-gray-600">
-                    {selectedArchive.notes}
+              {/* High Sea Sale Banner - only show if applicable */}
+              {isHighSeaSale && (
+                <Box sx={{ textAlign: 'center', borderBottom: '1px solid #000', py: 0.5, mb: 2 }}>
+                  <Typography sx={{ fontWeight: 'bold', textDecoration: 'underline', fontSize: '14px' }}>
+                    HIGH SEA SALE
                   </Typography>
                 </Box>
               )}
 
-              {/* Tags */}
-              {selectedArchive.tags && selectedArchive.tags.length > 0 && (
-                <Box className="mt-4">
-                  <Typography variant="h6" className="mb-2">Tags</Typography>
-                  <Box className="flex gap-1 flex-wrap">
-                    {selectedArchive.tags.map((tag, index) => (
-                      <Chip key={index} label={tag} size="small" />
+              {/* From / Bill To / Ship To Section */}
+              <Box sx={{ display: 'flex', border: '1px solid #000', mb: 2 }}>
+                <Box sx={{ flex: 1, borderRight: '1px solid #000', p: 1.5 }}>
+                  <Typography sx={{ fontWeight: 'bold', textDecoration: 'underline', mb: 0.5, fontSize: '11px' }}>FROM:-</Typography>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '12px' }}>
+                    {selectedArchive.original_data?.seller?.name || 'KB ENTERPRISES'}
+                  </Typography>
+                  <Typography sx={{ fontSize: '10px' }}>
+                    {selectedArchive.original_data?.seller?.address || 'PLOT NO 145 GF POCKET 25 SECTOR 24 ROHINI EAST DELHI 110085'}
+                  </Typography>
+                  <Typography sx={{ fontSize: '10px' }}>GSTIN – {selectedArchive.original_data?.seller?.gstin || '07CARPR7906M1ZR'}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>ATTN.:- {selectedArchive.original_data?.seller?.contact_person || 'MR. NITIN'}, {selectedArchive.original_data?.seller?.phone || '9315151910'}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>EMAIL:- {selectedArchive.original_data?.seller?.email || 'INFO@KBENTERPRISE.ORG'}</Typography>
+                  {selectedArchive.original_data?.hss_number && (
+                    <Typography sx={{ fontSize: '10px', bgcolor: '#ffff00', mt: 0.5, p: 0.3 }}>
+                      <strong>HSS:-</strong> {selectedArchive.original_data.hss_number}
+                    </Typography>
+                  )}
+                </Box>
+                <Box sx={{ flex: 1, borderRight: '1px solid #000', p: 1.5 }}>
+                  <Typography sx={{ fontWeight: 'bold', textDecoration: 'underline', mb: 0.5, fontSize: '11px' }}>BILL TO:-</Typography>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '12px' }}>{selectedArchive.buyer_company}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>{selectedArchive.original_data?.buyer?.address || ''}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>GSTIN- {selectedArchive.original_data?.buyer?.gstin || ''}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>ATTN.:- {selectedArchive.buyer_name}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>CONTACT:- {selectedArchive.original_data?.buyer?.phone || ''}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>EMAIL:- {selectedArchive.buyer_email}</Typography>
+                  {selectedArchive.original_data?.awb_number && (
+                    <Typography sx={{ fontSize: '10px', bgcolor: '#ffff00', mt: 0.5, p: 0.3 }}>
+                      <strong>AWB NO:-</strong> {selectedArchive.original_data.awb_number}
+                    </Typography>
+                  )}
+                </Box>
+                <Box sx={{ flex: 1, p: 1.5 }}>
+                  <Typography sx={{ fontWeight: 'bold', textDecoration: 'underline', mb: 0.5, fontSize: '11px' }}>SHIP TO:-</Typography>
+                  {hasShipTo ? (
+                    <>
+                      <Typography sx={{ fontWeight: 'bold', fontSize: '12px' }}>{shipTo.name}</Typography>
+                      <Typography sx={{ fontSize: '10px' }}>{shipTo.address}</Typography>
+                      <Typography sx={{ fontSize: '10px' }}>GSTIN- {shipTo.gstin || ''}</Typography>
+                      <Typography sx={{ fontSize: '10px' }}>ATTN.:- {shipTo.contact_person || ''}</Typography>
+                      <Typography sx={{ fontSize: '10px' }}>CONTACT:- {shipTo.phone || ''}</Typography>
+                      <Typography sx={{ fontSize: '10px' }}>EMAIL:- {shipTo.email || ''}</Typography>
+                    </>
+                  ) : null}
+                  {selectedArchive.original_data?.usd_rate_consideration && (
+                    <Typography sx={{ fontSize: '10px', bgcolor: '#ffff00', mt: 0.5, p: 0.3 }}>
+                      <strong>USD RATE CONSIDERATION</strong> {selectedArchive.original_data.usd_rate_consideration}
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+
+              {/* Invoice Details Row */}
+              <Box sx={{ display: 'flex', border: '1px solid #000', mb: 2, fontSize: '10px' }}>
+                <Box sx={{ width: '10%', borderRight: '1px solid #000', p: 0.6, bgcolor: '#f5f5f5' }}>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>QuoteRef.:-</Typography>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>Dated:-</Typography>
+                </Box>
+                <Box sx={{ width: '12%', borderRight: '1px solid #000', p: 0.6 }}>
+                  <Typography sx={{ fontSize: '10px' }}>{selectedArchive.original_data?.quote_ref || 'BYMAIL'}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>{selectedArchive.original_data?.quote_date || ''}</Typography>
+                </Box>
+                <Box sx={{ width: '10%', borderRight: '1px solid #000', p: 0.6, bgcolor: '#f5f5f5' }}>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>Invoice No:-</Typography>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>Dated:-</Typography>
+                </Box>
+                <Box sx={{ width: '15%', borderRight: '1px solid #000', p: 0.6, bgcolor: '#ffff00' }}>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '11px' }}>{selectedArchive.original_reference}</Typography>
+                  <Typography sx={{ fontSize: '10px' }}>
+                    {selectedArchive.document_date ? new Date(selectedArchive.document_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : ''}
+                  </Typography>
+                </Box>
+                <Box sx={{ width: '10%', borderRight: '1px solid #000', p: 0.6, bgcolor: '#f5f5f5' }}>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>Shipping:-</Typography>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>Payment:-</Typography>
+                </Box>
+                <Box sx={{ flex: 1, p: 0.6, bgcolor: '#ffff00' }}>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>{selectedArchive.original_data?.shipping_method || ''}</Typography>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>{selectedArchive.original_data?.payment_terms || '100%PREPAID'}</Typography>
+                </Box>
+              </Box>
+
+              {/* Items Table */}
+              <TableContainer sx={{ border: '1px solid #000', mb: 2 }}>
+                <Table size="small" sx={{ '& td, & th': { fontSize: '9px', py: 0.2, px: 0.4 } }}>
+                  <TableHead>
+                    <TableRow sx={{ bgcolor: '#ffff00' }}>
+                      <TableCell sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '3%' }}>S/n.</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: hasDeliveryTracking ? '16%' : '22%' }}>Item Description</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '14%' }}>Part Number</TableCell>
+                      {hasDeliveryTracking ? (
+                        <>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '6%' }}>Qty. Order</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '6%' }}>Qty delivered</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '5%' }}>Pending</TableCell>
+                        </>
+                      ) : (
+                        <TableCell align="center" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '6%' }}>Qty.</TableCell>
+                      )}
+                      <TableCell align="center" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '4%' }}>UOM</TableCell>
+                      <TableCell align="center" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '8%' }}>STATUS</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', width: '10%' }}>UNIT PRICE INR</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 'bold', width: '12%' }}>TOTAL PRICE INR</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {selectedArchive.items?.map((item, index) => {
+                      const isPending = (item.pending > 0) || item.status === 'Pending' || item.description?.includes('PENDING');
+                      return (
+                        <TableRow key={index} sx={{ '&:nth-of-type(even)': { bgcolor: '#fafafa' } }}>
+                          <TableCell sx={{ borderRight: '1px solid #eee' }}>{item.sn || index + 1}</TableCell>
+                          <TableCell sx={{ borderRight: '1px solid #eee' }}>{item.product_name}</TableCell>
+                          <TableCell sx={{ borderRight: '1px solid #eee' }}>{item.part_number}</TableCell>
+                          {hasDeliveryTracking ? (
+                            <>
+                              <TableCell align="center" sx={{ borderRight: '1px solid #eee' }}>{item.qty_ordered ?? item.quantity}</TableCell>
+                              <TableCell align="center" sx={{ borderRight: '1px solid #eee' }}>{item.qty_delivered ?? ''}</TableCell>
+                              <TableCell align="center" sx={{ borderRight: '1px solid #eee' }}>{item.pending ?? ''}</TableCell>
+                            </>
+                          ) : (
+                            <TableCell align="center" sx={{ borderRight: '1px solid #eee' }}>{item.quantity}</TableCell>
+                          )}
+                          <TableCell align="center" sx={{ borderRight: '1px solid #eee' }}>{item.uom || 'EA'}</TableCell>
+                          <TableCell align="center" sx={{ borderRight: '1px solid #eee', color: isPending ? '#ed6c02' : '#2e7d32' }}>
+                            {isPending ? 'Pending' : 'Delivered'}
+                          </TableCell>
+                          <TableCell align="right" sx={{ borderRight: '1px solid #eee' }}>{item.unit_price?.toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                          <TableCell align="right">{item.total_price?.toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {hasDeliveryTracking && (
+                      <TableRow sx={{ bgcolor: '#f0f0f0', fontWeight: 'bold' }}>
+                        <TableCell colSpan={3} align="right" sx={{ fontWeight: 'bold' }}>TOTAL</TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                          {selectedArchive.original_data?.total_qty_ordered || selectedArchive.items?.reduce((sum, item) => sum + (item.qty_ordered || item.quantity || 0), 0)}
+                        </TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                          {selectedArchive.original_data?.total_qty_delivered || selectedArchive.items?.reduce((sum, item) => sum + (item.qty_delivered || 0), 0)}
+                        </TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                          {selectedArchive.original_data?.total_qty_pending || selectedArchive.items?.reduce((sum, item) => sum + (item.pending || 0), 0)}
+                        </TableCell>
+                        <TableCell colSpan={4}></TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+              {/* Total and Tax Section */}
+              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                <Box sx={{ flex: 1 }}>
+                  {!hasDeliveryTracking && (
+                    <Box sx={{ border: '1px solid #000', p: 1, display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography sx={{ fontWeight: 'bold', fontSize: '12px' }}>TOTAL QTY:</Typography>
+                      <Typography sx={{ fontWeight: 'bold', fontSize: '12px' }}>
+                        {selectedArchive.original_data?.total_qty || selectedArchive.items?.reduce((sum, item) => sum + (item.quantity || 0), 0)}
+                      </Typography>
+                    </Box>
+                  )}
+                  <Box sx={{ border: '1px solid #000', borderTop: hasDeliveryTracking ? '1px solid #000' : 0, p: 1 }}>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: '10px' }}>AMOUNT IN INR</Typography>
+                    <Typography sx={{ fontSize: '10px', mt: 0.5 }}>
+                      {numberToWords(selectedArchive.total_amount || 0)}
+                    </Typography>
+                  </Box>
+                  {/* Terms Section */}
+                  <Box sx={{ mt: 1 }}>
+                    <Typography sx={{ fontWeight: 'bold', textDecoration: 'underline', mb: 0.5, fontSize: '10px' }}>QuotTerms:-</Typography>
+                    {displayTerms.map((term, i) => (
+                      <Typography key={i} sx={{ fontSize: '9px' }}>{i + 1}. {term}</Typography>
                     ))}
                   </Box>
                 </Box>
-              )}
+                <Box sx={{ width: '40%' }}>
+                  <Table size="small" sx={{ border: '1px solid #000', '& td': { fontSize: '10px', py: 0.3, px: 1, borderBottom: '1px solid #000' } }}>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }} align="right">TOTAL</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 'bold' }}>{(selectedArchive.total_amount || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>IGST@5%:-</TableCell>
+                        <TableCell align="right">{(selectedArchive.original_data?.tax_breakdown?.['IGST @ 5%'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>IGST@18%:-</TableCell>
+                        <TableCell align="right">{(selectedArchive.original_data?.tax_breakdown?.['IGST @ 18%'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>IGST@28%:-</TableCell>
+                        <TableCell align="right">{(selectedArchive.original_data?.tax_breakdown?.['IGST @ 28%'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>Freight:-</TableCell>
+                        <TableCell align="right">{(selectedArchive.original_data?.tax_breakdown?.['Freight'] || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>Round Off:-</TableCell>
+                        <TableCell align="right"></TableCell>
+                      </TableRow>
+                      <TableRow sx={{ bgcolor: '#f5f5f5' }}>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>GrandTotal:-</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: '11px' }}>{(selectedArchive.total_amount || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                  {/* Signature Box */}
+                  <Box sx={{ border: '1px solid #000', p: 2, textAlign: 'center', mt: 1 }}>
+                    <Typography sx={{ fontSize: '10px' }}>For KB ENTERPRISES</Typography>
+                    <Typography sx={{ mt: 4, fontWeight: 'bold', fontSize: '10px' }}>AUTH. SIGNATORY</Typography>
+                  </Box>
+                </Box>
+              </Box>
+
+              {/* Footer - Bank Details */}
+              <Box sx={{ mt: 2 }}>
+                <Table size="small" sx={{ border: '1px solid #000', width: 'auto', '& td': { fontSize: '10px', py: 0.3, px: 1, border: '1px solid #000' } }}>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Bank</TableCell>
+                      <TableCell>{selectedArchive.original_data?.bank_details?.bank || 'ICICI bank ltd'}</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Branch</TableCell>
+                      <TableCell>{selectedArchive.original_data?.bank_details?.branch || 'Sec 11 Rohini'}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Acc no</TableCell>
+                      <TableCell>{selectedArchive.original_data?.bank_details?.account_no || '036705501190'}</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>IFSC</TableCell>
+                      <TableCell>{selectedArchive.original_data?.bank_details?.ifsc || 'ICIC0000367'}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Box>
             </Box>
-          )}
+          );
+          })()}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDetailModal}>Close</Button>
+        <DialogActions sx={{ borderTop: '1px solid #e0e0e0', p: 2, justifyContent: 'space-between' }}>
+          <Button onClick={closeDetailModal} color="inherit">Close</Button>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              variant="outlined"
+              startIcon={<PrintIcon />}
+              onClick={() => handlePrint(selectedArchive)}
+            >
+              Print
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<DownloadIcon />}
+              onClick={() => {
+                const element = document.getElementById('invoice-print-area');
+                const opt = {
+                  margin: [10, 10, 10, 10],
+                  filename: `${selectedArchive.original_reference || selectedArchive.archive_id}.pdf`,
+                  image: { type: 'jpeg', quality: 0.98 },
+                  html2canvas: { scale: 2, useCORS: true },
+                  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+              }}
+            >
+              Download PDF
+            </Button>
+          </Box>
         </DialogActions>
       </Dialog>
 
